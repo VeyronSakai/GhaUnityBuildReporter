@@ -2,42 +2,34 @@
 // This software is released under the MIT License.
 
 using System;
-using System.IO;
 using UnityEngine;
 
 namespace UnityBuildReportAction.Editor
 {
     internal sealed class EnvironmentVariableRepository
     {
+        private const string GitHubStepSummary = "GITHUB_STEP_SUMMARY";
+        private const string GitHubActions = "GITHUB_ACTIONS";
+        private const string GhaUnityBuildReporterOptOut = "GHA_UNITY_BUILD_REPORTER_OPTOUT";
+        private const string True = "true";
+
         internal static string GetGitHubStepSummaryPath()
         {
-            Debug.Log($"GITHUB_STEP_SUMMARY: {Environment.GetEnvironmentVariable("GITHUB_STEP_SUMMARY")}");
-            var githubStepSummaryPath = Environment.GetEnvironmentVariable("GITHUB_STEP_SUMMARY");
-            if (string.IsNullOrEmpty(githubStepSummaryPath))
-            {
-                return string.Empty;
-            }
-
-            var directoryPath = Directory.GetParent(githubStepSummaryPath)?.FullName;
-            if (!string.IsNullOrEmpty(directoryPath) && !Directory.Exists(directoryPath))
-            {
-                Directory.CreateDirectory(directoryPath);
-            }
-
-            return githubStepSummaryPath;
+            Debug.Log($"{GitHubStepSummary}: {Environment.GetEnvironmentVariable(GitHubStepSummary)}");
+            return Environment.GetEnvironmentVariable(GitHubStepSummary);
         }
 
         internal static bool IsGitHubActions()
         {
-            Debug.Log($"GITHUB_ACTIONS: {Environment.GetEnvironmentVariable("GITHUB_ACTIONS")}");
-            return Environment.GetEnvironmentVariable("GITHUB_ACTIONS") == "true";
+            Debug.Log($"{GitHubActions}: {Environment.GetEnvironmentVariable(GitHubActions)}");
+            return Environment.GetEnvironmentVariable(GitHubActions) == True;
         }
 
-        internal static bool IsOptOut()
+        internal static bool IsDisabled()
         {
-            var envVar = Environment.GetEnvironmentVariable("UNITY_BUILD_REPORTER_OPTOUT");
-            Debug.Log($"UNITY_BUILD_REPORTER_OPTOUT: {envVar}");
-            return envVar == "true" || envVar == "1";
+            var envVar = Environment.GetEnvironmentVariable(GhaUnityBuildReporterOptOut);
+            Debug.Log($"{GhaUnityBuildReporterOptOut}: {envVar}");
+            return envVar?.ToLower() is True or "1";
         }
     }
 }

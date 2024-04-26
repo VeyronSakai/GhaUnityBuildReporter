@@ -2,7 +2,6 @@
 // This software is released under the MIT License.
 
 using UnityEditor;
-using UnityEngine;
 
 namespace UnityBuildReportAction.Editor
 {
@@ -19,9 +18,8 @@ namespace UnityBuildReportAction.Editor
             s_gitHubStepSummaryPath = EnvironmentVariableRepository.GetGitHubStepSummaryPath();
 
             if (!EnvironmentVariableRepository.IsGitHubActions() || string.IsNullOrEmpty(s_gitHubStepSummaryPath) ||
-                EnvironmentVariableRepository.IsOptOut())
+                EnvironmentVariableRepository.IsDisabled())
             {
-                Debug.Log("UnityBuildReportAction: Opt-out or not GitHub Actions.");
                 return;
             }
 
@@ -32,7 +30,6 @@ namespace UnityBuildReportAction.Editor
         {
             if (!ExecutesUnityBuild)
             {
-                Debug.Log("UnityBuildReportAction: Not executes Unity build.");
                 return;
             }
 
@@ -40,7 +37,6 @@ namespace UnityBuildReportAction.Editor
             var buildReport = buildReportRepository.GetBuildReport();
             if (buildReport == null)
             {
-                Debug.Log("UnityBuildReportAction: BuildReport is null.");
                 return;
             }
 
