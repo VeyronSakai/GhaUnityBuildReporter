@@ -14,7 +14,7 @@ namespace UnityBuildReportAction.Editor
             _gitHubStepSummaryPath = gitHubStepSummaryPath;
         }
 
-        void IJobSummaryRepository.AppendText(string text)
+        public void AppendText(string text)
         {
             File.AppendAllText(_gitHubStepSummaryPath, text);
         }
