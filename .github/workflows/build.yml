@@ -1,39 +1,40 @@
 name: Build
 on:
-  push:
-    branches:
-      - main
   pull_request:
   workflow_dispatch:
+    inputs:
+      clean:
+        type: boolean
+        default: false
+        description: "clean"
+
+env:
+  CLEAN: ${{ github.event.inputs.clean || false }}
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  build:
-    if: ${{ github.event_name != 'push' }}
+  macos:
     runs-on: ubuntu-latest
     steps:
+      - name: Switch workspace
+        uses: DeNA/setup-job-workspace-action@v2
       - uses: actions/checkout@v4
-      - uses: actions/cache/restore@v4
         with:
-          path: Library
-          key: ${{ runner.os }}-Library
-      - uses: VeyronSakai/unity-builder@main
+          clean: "${{ env.CLEAN }}"
+      - name: Get Unity version
+        run: |
+          echo "UNITY_VERSION=$(grep "m_EditorVersion:" < ProjectSettings/ProjectVersion.txt | cut -d" " -f2)" >> "${GITHUB_ENV}"
+      - name: Android Build
         env:
-          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-        with:
-          targetPlatform: Android
-
-  cache:
-    if: ${{ github.event_name == 'push' }}
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/cache/save@v4
-        with:
-          path: Library
-          key: ${{ runner.os }}-Library
+          ANDROID_NDK_ROOT: "/Applications/Unity/Hub/Editor/${UNITY_VERSION}/PlaybackEngines/AndroidPlayer/NDK"
+        run: |
+          /Applications/Unity/Hub/Editor/"${UNITY_VERSION}"/Unity.app/Contents/MacOS/Unity \
+            -quit \
+            -batchmode \
+            -nographics \
+            -projectPath "$(pwd)" \
+            -buildTarget Android \
+            -executeMethod Editor.BuildEntryPoint.Build \
