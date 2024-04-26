@@ -1,4 +1,4 @@
-name: Build
+name: BuildTest
 on:
   pull_request:
   workflow_dispatch:
@@ -16,8 +16,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  macos:
-    runs-on: ubuntu-latest
+  android:
+    runs-on: [self-hosted, macOS]
     steps:
       - name: Switch workspace
         uses: DeNA/setup-job-workspace-action@v2
