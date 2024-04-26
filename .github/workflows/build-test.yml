@@ -77,3 +77,23 @@ jobs:
             -nographics \
             -projectPath "$(pwd)" \
             -executeMethod Editor.BuildEntryPoint.BuildMacOS
+
+  webgl:
+    runs-on: [ self-hosted, macOS ]
+    steps:
+      - name: Switch workspace
+        uses: DeNA/setup-job-workspace-action@fea4ef4d011492fe235833241acbb4fced82da27
+      - uses: actions/checkout@v4
+        with:
+          clean: "${{ env.CLEAN }}"
+      - name: Get Unity version
+        run: |
+          echo "UNITY_VERSION=$(grep "m_EditorVersion:" < ProjectSettings/ProjectVersion.txt | cut -d" " -f2)" >> "${GITHUB_ENV}"
+      - name: macOS Build
+        run: |
+          /Applications/Unity/Hub/Editor/"${UNITY_VERSION}"/Unity.app/Contents/MacOS/Unity \
+            -quit \
+            -batchmode \
+            -nographics \
+            -projectPath "$(pwd)" \
+            -executeMethod Editor.BuildEntryPoint.BuildWebGL

@@ -1,3 +1,4 @@
+using Codice.Client.BaseCommands;
 using UnityEditor;
 
 namespace Editor
@@ -5,12 +6,14 @@ namespace Editor
     // ReSharper disable once UnusedMember.Global
     public sealed class BuildEntryPoint
     {
+        private const string Scenes = "Assets/Scenes/SampleScene.unity";
+
         // ReSharper disable once UnusedMember.Global
         public static void BuildAndroid()
         {
             var buildPlayerOptions = new BuildPlayerOptions
             {
-                scenes = new[] { "Assets/Scenes/SampleScene.unity" },
+                scenes = new[] { Scenes },
                 locationPathName = "Outputs/Android/Sample.apk",
                 target = BuildTarget.Android,
                 options = BuildOptions.Development,
@@ -24,8 +27,8 @@ namespace Editor
         {
             var buildPlayerOptions = new BuildPlayerOptions
             {
-                scenes = new[] { "Assets/Scenes/SampleScene.unity" },
-                locationPathName = "Outputs/IOS/",
+                scenes = new[] { Scenes },
+                locationPathName = "Outputs/IOS",
                 target = BuildTarget.iOS,
                 options = BuildOptions.Development,
             };
@@ -38,9 +41,23 @@ namespace Editor
         {
             var buildPlayerOptions = new BuildPlayerOptions
             {
-                scenes = new[] { "Assets/Scenes/SampleScene.unity" },
-                locationPathName = "Outputs/MacOS/Sample.app",
+                scenes = new[] { Scenes },
+                locationPathName = "Outputs/MacOS",
                 target = BuildTarget.StandaloneOSX,
+                options = BuildOptions.Development,
+            };
+
+            BuildPipeline.BuildPlayer(buildPlayerOptions);
+        }
+
+        // ReSharper disable once UnusedMember.Global
+        public static void BuildWebGL()
+        {
+            var buildPlayerOptions = new BuildPlayerOptions
+            {
+                scenes = new[] { Scenes },
+                locationPathName = "Outputs/WebGL",
+                target = BuildTarget.WebGL,
                 options = BuildOptions.Development,
             };
 
