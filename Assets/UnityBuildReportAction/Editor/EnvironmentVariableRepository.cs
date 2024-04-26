@@ -2,6 +2,7 @@
 // This software is released under the MIT License.
 
 using System;
+using System.IO;
 using UnityEngine;
 
 namespace UnityBuildReportAction.Editor
@@ -11,7 +12,19 @@ namespace UnityBuildReportAction.Editor
         internal static string GetGitHubStepSummaryPath()
         {
             Debug.Log($"GITHUB_STEP_SUMMARY: {Environment.GetEnvironmentVariable("GITHUB_STEP_SUMMARY")}");
-            return Environment.GetEnvironmentVariable("GITHUB_STEP_SUMMARY");
+            var githubStepSummaryPath = Environment.GetEnvironmentVariable("GITHUB_STEP_SUMMARY");
+            if (string.IsNullOrEmpty(githubStepSummaryPath))
+            {
+                return string.Empty;
+            }
+
+            var directoryPath = Directory.GetParent(githubStepSummaryPath)?.FullName;
+            if (!string.IsNullOrEmpty(directoryPath) && !Directory.Exists(directoryPath))
+            {
+                Directory.CreateDirectory(directoryPath);
+            }
+
+            return githubStepSummaryPath;
         }
 
         internal static bool IsGitHubActions()
