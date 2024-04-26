@@ -3,7 +3,7 @@
 
 using System.IO;
 
-namespace UnityBuildReportAction.Editor
+namespace GhaUnityBuildReporter.Editor
 {
     internal sealed class GitHubJobSummaryRepository : IJobSummaryRepository
     {

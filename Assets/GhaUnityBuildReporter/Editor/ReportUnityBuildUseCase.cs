@@ -7,7 +7,7 @@ using System.Linq;
 using UnityEditor.Build.Reporting;
 using UnityEngine;
 
-namespace UnityBuildReportAction.Editor
+namespace GhaUnityBuildReporter.Editor
 {
     internal sealed class ReportUnityBuildUseCase
     {

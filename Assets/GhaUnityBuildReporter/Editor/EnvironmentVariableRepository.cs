@@ -4,7 +4,7 @@
 using System;
 using UnityEngine;
 
-namespace UnityBuildReportAction.Editor
+namespace GhaUnityBuildReporter.Editor
 {
     internal sealed class EnvironmentVariableRepository
     {

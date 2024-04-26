@@ -3,17 +3,17 @@
 
 using UnityEditor;
 
-namespace UnityBuildReportAction.Editor
+namespace GhaUnityBuildReporter.Editor
 {
     [InitializeOnLoad]
-    internal sealed class EditorQuitEntryPoint
+    internal sealed class Bootstrap
     {
         internal static bool ExecutesUnityBuild;
         private static readonly string s_gitHubStepSummaryPath;
 
-        // The 'report' argument passed to IPostprocessBuildWithReport.OnPostprocessBuild() contains incorrect information, so read Library/LastBuild.buildreport instead.
+        // The 'report' argument passed to IPolsstprocessBuildWithReport.OnPostprocessBuild() contains incorrect information, so read Library/LastBuild.buildreport instead.
         // see: https://issuetracker.unity3d.com/issues/buildreport-report-in-ipostprocessbuildwithreport-provides-incorrect-information
-        static EditorQuitEntryPoint()
+        static Bootstrap()
         {
             s_gitHubStepSummaryPath = EnvironmentVariableRepository.GetGitHubStepSummaryPath();
 
