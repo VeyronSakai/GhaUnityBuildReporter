@@ -8,7 +8,7 @@ using UnityEditor;
 using UnityEditor.Build.Reporting;
 using UnityEngine;
 
-namespace UnityBuildReportAction.Editor
+namespace GhaUnityBuildReporter.Editor
 {
     internal sealed class BuildReportRepository : IDisposable
     {

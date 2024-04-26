@@ -4,7 +4,7 @@
 using UnityEditor.Build;
 using UnityEditor.Build.Reporting;
 
-namespace UnityBuildReportAction.Editor
+namespace GhaUnityBuildReporter.Editor
 {
     internal sealed class Preprocessor : IPreprocessBuildWithReport
     {
@@ -17,7 +17,7 @@ namespace UnityBuildReportAction.Editor
                 return;
             }
 
-            EditorQuitEntryPoint.ExecutesUnityBuild = true;
+            Bootstrap.ExecutesUnityBuild = true;
         }
     }
 }

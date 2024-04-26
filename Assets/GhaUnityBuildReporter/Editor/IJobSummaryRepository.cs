@@ -1,7 +1,7 @@
 // Copyright (c) 2020-2024 VeyronSakai.
 // This software is released under the MIT License.
 
-namespace UnityBuildReportAction.Editor
+namespace GhaUnityBuildReporter.Editor
 {
     internal interface IJobSummaryRepository
     {
