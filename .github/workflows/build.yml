@@ -20,7 +20,7 @@ jobs:
         with:
           path: Library
           key: ${{ runner.os }}-Library
-      - uses: game-ci/unity-builder@v4
+      - uses: VeyronSakai/unity-builder@main
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
