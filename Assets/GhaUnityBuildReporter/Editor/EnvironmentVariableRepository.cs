@@ -15,20 +15,17 @@ namespace GhaUnityBuildReporter.Editor
 
         internal static string GetGitHubStepSummaryPath()
         {
-            Debug.Log($"{GitHubStepSummary}: {Environment.GetEnvironmentVariable(GitHubStepSummary)}");
             return Environment.GetEnvironmentVariable(GitHubStepSummary);
         }
 
         internal static bool IsGitHubActions()
         {
-            Debug.Log($"{GitHubActions}: {Environment.GetEnvironmentVariable(GitHubActions)}");
             return Environment.GetEnvironmentVariable(GitHubActions) == True;
         }
 
         internal static bool IsDisabled()
         {
             var envVar = Environment.GetEnvironmentVariable(GhaUnityBuildReporterOptOut);
-            Debug.Log($"{GhaUnityBuildReporterOptOut}: {envVar}");
             return envVar?.ToLower() is True or "1";
         }
     }

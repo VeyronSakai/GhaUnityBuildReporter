@@ -17,7 +17,7 @@ namespace GhaUnityBuildReporter.Editor
                 return;
             }
 
-            Bootstrap.ExecutesUnityBuild = true;
+            EditorQuitEntryPoint.ExecutesUnityBuild = true;
         }
     }
 }
