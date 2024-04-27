@@ -1,0 +1,36 @@
+name-template: "$RESOLVED_VERSION"
+tag-template: "$RESOLVED_VERSION"
+categories:
+  - title: "Breaking Changes"
+    labels:
+      - "breaking changes"
+  - title: "Features"
+    labels:
+      - "enhancement"
+  - title: "Bug Fixes"
+    labels:
+      - "bug"
+change-template: "- $TITLE @$AUTHOR (#$NUMBER)"
+change-title-escapes: '\<*_&'
+version-resolver:
+  major:
+    labels:
+      - "breaking changes"
+  minor:
+    labels:
+      - "enhancement"
+  patch:
+    labels:
+      - "bug"
+  default: patch
+autolabeler:
+  - label: "bug"
+    branch:
+      - '/fix\/.+/'
+  - label: "enhancement"
+    branch:
+      - '/feature\/.+/'
+template: |
+  ## Changes
+
+  $CHANGES
