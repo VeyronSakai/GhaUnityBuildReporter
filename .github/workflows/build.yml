@@ -18,6 +18,7 @@ concurrency:
 jobs:
   paths-filter:
     name: Paths Filter
+    if: ${{ github.event_name == 'pull_request' }}
     runs-on: ubuntu-latest
     outputs:
       should-build: ${{ steps.filter.outputs.should-build }}
@@ -35,7 +36,7 @@ jobs:
   get-unity-version:
     name: Get Unity Version
     needs: paths-filter
-    if: ${{ (github.event_name == 'pull_request' && needs.paths-filter.outputs.should-build == 'true') || github.event_name == 'workflow_dispatch'}}
+    if: ${{ (github.event_name == 'pull_request' && needs.paths-filter.result == 'success'  && needs.paths-filter.outputs.should-build == 'true') || github.event_name == 'workflow_dispatch'}}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
