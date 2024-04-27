@@ -30,12 +30,12 @@ namespace GhaUnityBuildReporter.Editor
             WriteIncludedModulesInfo();
         }
 
-        void WriteTitle()
+        private void WriteTitle()
         {
             _jobSummaryRepository.AppendText($"# Unity Build Report{Environment.NewLine}");
         }
 
-        void WriteSummary()
+        private void WriteSummary()
         {
             _jobSummaryRepository.AppendText($"## Basic Info{Environment.NewLine}");
 
@@ -54,7 +54,7 @@ namespace GhaUnityBuildReporter.Editor
             _jobSummaryRepository.AppendText(basicInfo);
         }
 
-        void WriteBuildStepsInfo()
+        private void WriteBuildStepsInfo()
         {
             if (_buildReport.steps.Length <= 0)
             {
@@ -108,7 +108,7 @@ namespace GhaUnityBuildReporter.Editor
             _jobSummaryRepository.AppendText($"</details>{Environment.NewLine}{Environment.NewLine}");
         }
 
-        void WriteSourceAssetsInfo()
+        private void WriteSourceAssetsInfo()
         {
             if (!_buildReport.packedAssets.Any())
             {
@@ -149,7 +149,7 @@ namespace GhaUnityBuildReporter.Editor
             }
         }
 
-        void WriteOutputFilesInfo()
+        private void WriteOutputFilesInfo()
         {
             var files = GetBuildFiles();
             if (files.Length == 0)
@@ -177,7 +177,7 @@ namespace GhaUnityBuildReporter.Editor
             _jobSummaryRepository.AppendText($"</details>{Environment.NewLine}{Environment.NewLine}");
         }
 
-        void WriteIncludedModulesInfo()
+        private void WriteIncludedModulesInfo()
         {
             if (_buildReport.strippingInfo == null)
             {
@@ -197,7 +197,7 @@ namespace GhaUnityBuildReporter.Editor
             _jobSummaryRepository.AppendText($"</details>{Environment.NewLine}{Environment.NewLine}");
         }
 
-        void WriteIncludedModuleInfoInternal(string item, uint depth)
+        private void WriteIncludedModuleInfoInternal(string item, uint depth)
         {
             _jobSummaryRepository.AppendText(depth == 0
                 ? $@"- **{item}**{Environment.NewLine}"
@@ -215,7 +215,7 @@ namespace GhaUnityBuildReporter.Editor
             }
         }
 
-        BuildFile[] GetBuildFiles()
+        private BuildFile[] GetBuildFiles()
         {
 #if UNITY_2022_1_OR_NEWER
             return _buildReport.GetFiles();
@@ -224,7 +224,7 @@ namespace GhaUnityBuildReporter.Editor
 #endif
         }
 
-        static string GetFormattedSize(ulong size)
+        private static string GetFormattedSize(ulong size)
         {
             return size switch
             {

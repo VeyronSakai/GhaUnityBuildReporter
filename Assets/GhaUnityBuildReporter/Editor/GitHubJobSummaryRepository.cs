@@ -16,6 +16,17 @@ namespace GhaUnityBuildReporter.Editor
 
         public void AppendText(string text)
         {
+            var dir = Path.GetDirectoryName(_gitHubStepSummaryPath);
+            if (string.IsNullOrEmpty(dir))
+            {
+                return;
+            }
+
+            if (!Directory.Exists(dir))
+            {
+                Directory.CreateDirectory(dir);
+            }
+
             File.AppendAllText(_gitHubStepSummaryPath, text);
         }
     }
