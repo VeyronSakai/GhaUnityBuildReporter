@@ -203,12 +203,7 @@ namespace GhaUnityBuildReporter.Editor
                 ? $@"- **{item}**{Environment.NewLine}"
                 : $@"{new string(' ', (int)(depth * 2))} - {item}{Environment.NewLine}");
 
-            var reasons = _buildReport.strippingInfo.GetReasonsForIncluding(item).ToArray();
-            if (!reasons.Any())
-            {
-                return;
-            }
-
+            var reasons = _buildReport.strippingInfo.GetReasonsForIncluding(item);
             foreach (var reason in reasons)
             {
                 WriteIncludedModuleInfoInternal(reason, depth + 1);
