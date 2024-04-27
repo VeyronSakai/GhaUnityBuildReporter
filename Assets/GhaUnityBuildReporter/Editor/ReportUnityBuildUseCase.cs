@@ -4,6 +4,8 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using UnityEditor.Build.Reporting;
 using UnityEngine;
 
@@ -20,24 +22,25 @@ namespace GhaUnityBuildReporter.Editor
             _buildReport = buildReport;
         }
 
-        public void WriteAll()
+        public async ValueTask WriteAllAsync(CancellationToken cancellationToken)
         {
-            WriteTitle();
-            WriteSummary();
-            WriteBuildStepsInfo();
-            WriteSourceAssetsInfo();
-            WriteOutputFilesInfo();
-            WriteIncludedModulesInfo();
+            await WriteTitleAsync(cancellationToken);
+            await WriteSummaryAsync(cancellationToken);
+            await WriteBuildStepsInfoAsync(cancellationToken);
+            await WriteSourceAssetsInfoAsync(cancellationToken);
+            await WriteOutputFilesInfoAsync(cancellationToken);
+            await WriteIncludedModulesInfoAsync(cancellationToken);
         }
 
-        private void WriteTitle()
+        private async ValueTask WriteTitleAsync(CancellationToken cancellationToken)
         {
-            _jobSummaryRepository.AppendText($"# Unity Build Report{Environment.NewLine}");
+            await _jobSummaryRepository.AppendTextAsync($"# Unity Build Report{Environment.NewLine}",
+                cancellationToken);
         }
 
-        private void WriteSummary()
+        private async ValueTask WriteSummaryAsync(CancellationToken cancellationToken)
         {
-            _jobSummaryRepository.AppendText($"## Basic Info{Environment.NewLine}");
+            await _jobSummaryRepository.AppendTextAsync($"## Basic Info{Environment.NewLine}", cancellationToken);
 
             var summary = _buildReport.summary;
 
@@ -51,38 +54,35 @@ namespace GhaUnityBuildReporter.Editor
                 + $"| Total Errors | {summary.totalErrors} |{Environment.NewLine}"
                 + $"| Total Warnings | {summary.totalWarnings} |{Environment.NewLine}";
 
-            _jobSummaryRepository.AppendText(basicInfo);
+            await _jobSummaryRepository.AppendTextAsync(basicInfo, cancellationToken);
         }
 
-        private void WriteBuildStepsInfo()
+        private async ValueTask WriteBuildStepsInfoAsync(CancellationToken cancellationToken)
         {
             if (_buildReport.steps.Length <= 0)
             {
                 return;
             }
 
-            _jobSummaryRepository.AppendText($"## Build Steps{Environment.NewLine}");
+            await _jobSummaryRepository.AppendTextAsync($"## Build Steps{Environment.NewLine}", cancellationToken);
 
-            _jobSummaryRepository.AppendText(
-                $"<details><summary>Details</summary>{Environment.NewLine}{Environment.NewLine}");
+            await _jobSummaryRepository.AppendTextAsync(
+                $"<details><summary>Details</summary>{Environment.NewLine}{Environment.NewLine}", cancellationToken);
 
             foreach (var step in _buildReport.steps)
             {
                 switch (step.depth)
                 {
                     case 0:
-                        _jobSummaryRepository.AppendText(
-                            $@"### {step.name} ({step.duration:hh\:mm\:ss\.fff}){Environment.NewLine}");
+                        await _jobSummaryRepository.AppendTextAsync(
+                            $@"### {step.name} ({step.duration:hh\:mm\:ss\.fff}){Environment.NewLine}",
+                            cancellationToken);
                         break;
                     case >= 1:
                         {
-                            _jobSummaryRepository.AppendText(
-                                $@"{new string(' ', (step.depth - 1) * 2)}- **{step.name}** ({step.duration:hh\:mm\:ss\.fff}){Environment.NewLine}");
-
-                            if (step.messages.Length <= 0)
-                            {
-                                continue;
-                            }
+                            await _jobSummaryRepository.AppendTextAsync(
+                                $@"{new string(' ', (step.depth - 1) * 2)}- **{step.name}** ({step.duration:hh\:mm\:ss\.fff}){Environment.NewLine}",
+                                cancellationToken);
 
                             foreach (var message in step.messages)
                             {
@@ -96,8 +96,9 @@ namespace GhaUnityBuildReporter.Editor
                                     _ => ":question:"
                                 };
 
-                                _jobSummaryRepository.AppendText(
-                                    $@"{new string(' ', step.depth * 2)}- {emoji} {message.content}{Environment.NewLine}");
+                                await _jobSummaryRepository.AppendTextAsync(
+                                    $@"{new string(' ', step.depth * 2)}- {emoji} {message.content}{Environment.NewLine}",
+                                    cancellationToken);
                             }
 
                             break;
@@ -105,17 +106,18 @@ namespace GhaUnityBuildReporter.Editor
                 }
             }
 
-            _jobSummaryRepository.AppendText($"</details>{Environment.NewLine}{Environment.NewLine}");
+            await _jobSummaryRepository.AppendTextAsync($"</details>{Environment.NewLine}{Environment.NewLine}",
+                cancellationToken);
         }
 
-        private void WriteSourceAssetsInfo()
+        private async ValueTask WriteSourceAssetsInfoAsync(CancellationToken cancellationToken)
         {
             if (!_buildReport.packedAssets.Any())
             {
                 return;
             }
 
-            _jobSummaryRepository.AppendText($"## Source Assets{Environment.NewLine}");
+            await _jobSummaryRepository.AppendTextAsync($"## Source Assets{Environment.NewLine}", cancellationToken);
 
             foreach (var packedAsset in _buildReport.packedAssets)
             {
@@ -124,14 +126,16 @@ namespace GhaUnityBuildReporter.Editor
 
                 var topAssets = packedAsset.contents.OrderByDescending(x => x.packedSize);
 
-                _jobSummaryRepository.AppendText(
-                    $"### {packedAsset.shortPath} ({GetFormattedSize(totalSize)}){Environment.NewLine}");
+                await _jobSummaryRepository.AppendTextAsync(
+                    $"### {packedAsset.shortPath} ({GetFormattedSize(totalSize)}){Environment.NewLine}",
+                    cancellationToken);
 
-                _jobSummaryRepository.AppendText(
-                    $"<details><summary>Details</summary>{Environment.NewLine}{Environment.NewLine}");
+                await _jobSummaryRepository.AppendTextAsync(
+                    $"<details><summary>Details</summary>{Environment.NewLine}{Environment.NewLine}",
+                    cancellationToken);
 
-                _jobSummaryRepository.AppendText(
-                    $"| Asset | Size |{Environment.NewLine}| --- | --- |{Environment.NewLine}");
+                await _jobSummaryRepository.AppendTextAsync(
+                    $"| Asset | Size |{Environment.NewLine}| --- | --- |{Environment.NewLine}", cancellationToken);
 
                 foreach (var assetInfo in topAssets)
                 {
@@ -142,14 +146,15 @@ namespace GhaUnityBuildReporter.Editor
                     var assetDetails =
                         $"| {assetPath} | {GetFormattedSize(assetInfo.packedSize)} |{Environment.NewLine}";
 
-                    _jobSummaryRepository.AppendText(assetDetails);
+                    await _jobSummaryRepository.AppendTextAsync(assetDetails, cancellationToken);
                 }
 
-                _jobSummaryRepository.AppendText($"</details>{Environment.NewLine}{Environment.NewLine}");
+                await _jobSummaryRepository.AppendTextAsync($"</details>{Environment.NewLine}{Environment.NewLine}",
+                    cancellationToken);
             }
         }
 
-        private void WriteOutputFilesInfo()
+        private async ValueTask WriteOutputFilesInfoAsync(CancellationToken cancellationToken)
         {
             var files = GetBuildFiles();
             if (files.Length == 0)
@@ -157,56 +162,59 @@ namespace GhaUnityBuildReporter.Editor
                 return;
             }
 
-            _jobSummaryRepository.AppendText($"## Output Files{Environment.NewLine}");
+            await _jobSummaryRepository.AppendTextAsync($"## Output Files{Environment.NewLine}", cancellationToken);
 
-            _jobSummaryRepository.AppendText(
-                $"<details><summary>Details</summary>{Environment.NewLine}{Environment.NewLine}");
+            await _jobSummaryRepository.AppendTextAsync(
+                $"<details><summary>Details</summary>{Environment.NewLine}{Environment.NewLine}", cancellationToken);
 
-            _jobSummaryRepository.AppendText($"| File | Size |{Environment.NewLine}"
-                                             + $"| --- | --- |{Environment.NewLine}");
+            await _jobSummaryRepository.AppendTextAsync($"| File | Size |{Environment.NewLine}"
+                                                        + $"| --- | --- |{Environment.NewLine}", cancellationToken);
 
             var projectRootPath = Directory.GetParent(Application.dataPath)?.FullName;
 
             foreach (var file in files)
             {
                 var relativePath = Path.GetRelativePath(projectRootPath, file.path);
-                _jobSummaryRepository.AppendText(
-                    $"| {relativePath} | {GetFormattedSize(file.size)} |{Environment.NewLine}");
+                await _jobSummaryRepository.AppendTextAsync(
+                    $"| {relativePath} | {GetFormattedSize(file.size)} |{Environment.NewLine}", cancellationToken);
             }
 
-            _jobSummaryRepository.AppendText($"</details>{Environment.NewLine}{Environment.NewLine}");
+            await _jobSummaryRepository.AppendTextAsync($"</details>{Environment.NewLine}{Environment.NewLine}",
+                cancellationToken);
         }
 
-        private void WriteIncludedModulesInfo()
+        private async ValueTask WriteIncludedModulesInfoAsync(CancellationToken cancellationToken)
         {
             if (_buildReport.strippingInfo == null)
             {
                 return;
             }
 
-            _jobSummaryRepository.AppendText($"## Included Modules{Environment.NewLine}");
+            await _jobSummaryRepository.AppendTextAsync($"## Included Modules{Environment.NewLine}", cancellationToken);
 
-            _jobSummaryRepository.AppendText(
-                $"<details><summary>Details</summary>{Environment.NewLine}{Environment.NewLine}");
+            await _jobSummaryRepository.AppendTextAsync(
+                $"<details><summary>Details</summary>{Environment.NewLine}{Environment.NewLine}", cancellationToken);
 
             foreach (var item in _buildReport.strippingInfo.includedModules)
             {
-                WriteIncludedModuleInfoInternal(item, 0);
+                await WriteIncludedModuleInfoInternalAsync(item, 0, cancellationToken);
             }
 
-            _jobSummaryRepository.AppendText($"</details>{Environment.NewLine}{Environment.NewLine}");
+            await _jobSummaryRepository.AppendTextAsync($"</details>{Environment.NewLine}{Environment.NewLine}",
+                cancellationToken);
         }
 
-        private void WriteIncludedModuleInfoInternal(string item, uint depth)
+        private async ValueTask WriteIncludedModuleInfoInternalAsync(string item, uint depth,
+            CancellationToken cancellationToken)
         {
-            _jobSummaryRepository.AppendText(depth == 0
+            await _jobSummaryRepository.AppendTextAsync(depth == 0
                 ? $@"- **{item}**{Environment.NewLine}"
-                : $@"{new string(' ', (int)(depth * 2))} - {item}{Environment.NewLine}");
+                : $@"{new string(' ', (int)(depth * 2))} - {item}{Environment.NewLine}", cancellationToken);
 
             var reasons = _buildReport.strippingInfo.GetReasonsForIncluding(item);
             foreach (var reason in reasons)
             {
-                WriteIncludedModuleInfoInternal(reason, depth + 1);
+                await WriteIncludedModuleInfoInternalAsync(reason, depth + 1, cancellationToken);
             }
         }
 

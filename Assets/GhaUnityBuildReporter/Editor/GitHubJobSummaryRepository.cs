@@ -2,6 +2,8 @@
 // This software is released under the MIT License.
 
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace GhaUnityBuildReporter.Editor
 {
@@ -14,7 +16,7 @@ namespace GhaUnityBuildReporter.Editor
             _gitHubStepSummaryPath = gitHubStepSummaryPath;
         }
 
-        public void AppendText(string text)
+        public async ValueTask AppendTextAsync(string text, CancellationToken cancellationToken)
         {
             var dir = Path.GetDirectoryName(_gitHubStepSummaryPath);
             if (string.IsNullOrEmpty(dir))
@@ -27,7 +29,7 @@ namespace GhaUnityBuildReporter.Editor
                 Directory.CreateDirectory(dir);
             }
 
-            File.AppendAllText(_gitHubStepSummaryPath, text);
+            await File.AppendAllTextAsync(_gitHubStepSummaryPath, text, cancellationToken);
         }
     }
 }

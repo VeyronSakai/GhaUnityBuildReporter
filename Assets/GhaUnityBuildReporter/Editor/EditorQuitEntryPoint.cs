@@ -1,6 +1,8 @@
 // Copyright (c) 2020-2024 VeyronSakai.
 // This software is released under the MIT License.
 
+using System.Threading;
+using System.Threading.Tasks;
 using UnityEditor;
 
 namespace GhaUnityBuildReporter.Editor
@@ -26,7 +28,7 @@ namespace GhaUnityBuildReporter.Editor
             EditorApplication.quitting += Quit;
         }
 
-        private static void Quit()
+        private static async void Quit()
         {
             if (!ExecutesUnityBuild)
             {
@@ -42,7 +44,8 @@ namespace GhaUnityBuildReporter.Editor
 
             var jobSummaryRepository = new GitHubJobSummaryRepository(s_gitHubStepSummaryPath);
             var useCase = new ReportUnityBuildUseCase(jobSummaryRepository, buildReport);
-            useCase.WriteAll();
+            var cancellationTokenSource = new CancellationTokenSource();
+            await useCase.WriteAllAsync(cancellationTokenSource.Token);
         }
     }
 }
