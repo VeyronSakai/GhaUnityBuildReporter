@@ -1,9 +1,8 @@
-using Codice.Client.BaseCommands;
 using UnityEditor;
 
 namespace Editor
 {
-    // ReSharper disable once UnusedMember.Global
+    // ReSharper disable once UnusedType.Global
     public sealed class BuildEntryPoint
     {
         private const string Scenes = "Assets/Scenes/SampleScene.unity";
