@@ -131,17 +131,15 @@ jobs:
         if: ${{ steps.semver.outputs.minor != '0.0' }}
         run: |
           git push -f origin "refs/tags/${VERSION}:refs/tags/${{ steps.semver.outputs.minor }}"
-
-    #   - name: Export unitypackage
-    #     uses: game-ci/unity-builder@v4
-    #     env:
-    #       UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-    #       UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-    #       UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-    #     with:
-    #       projectPath: ./VContainerAnalyzer.Unity
-    #       targetPlatform: StandaloneLinux64
-    #       buildMethod: Editor.PackageExporter.Export
-    #   - name: Upload unitypackage
-    #     run: |
-    #       gh release upload "${VERSION}" "VContainerAnalyzer.Unity/VContainerAnalyzer.unitypackage"
+      - name: Export unitypackage
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+        with:
+          targetPlatform: StandaloneLinux64
+          buildMethod: Editor.PackageExporter.Export
+      - name: Upload unitypackage
+        run: |
+          gh release upload "${VERSION}" "GhaUnityBuildReporter.unitypackage"
