@@ -86,9 +86,6 @@ jobs:
           message: "Update README.md"
           add: "README.md"
           new_branch: ${{ env.SOURCE_BRANCH }}
-      - uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: "7.0.x"
       - name: Create pull request and merge
         if: ${{ steps.commit-package-json.outputs.committed == 'true' || steps.commit-readme.outputs.committed == 'true'}}
         env:
