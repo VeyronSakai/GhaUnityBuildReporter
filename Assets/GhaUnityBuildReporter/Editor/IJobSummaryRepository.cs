@@ -8,6 +8,6 @@ namespace GhaUnityBuildReporter.Editor
 {
     internal interface IJobSummaryRepository
     {
-        ValueTask AppendTextAsync(string text, CancellationToken cancellationToken);
+        Task AppendTextAsync(string text, CancellationToken cancellationToken);
     }
 }

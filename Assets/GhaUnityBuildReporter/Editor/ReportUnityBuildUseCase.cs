@@ -22,7 +22,7 @@ namespace GhaUnityBuildReporter.Editor
             _buildReport = buildReport;
         }
 
-        public async ValueTask WriteAllAsync(CancellationToken cancellationToken)
+        public async Task WriteAllAsync(CancellationToken cancellationToken)
         {
             await WriteTitleAsync(cancellationToken);
             await WriteSummaryAsync(cancellationToken);
@@ -32,13 +32,13 @@ namespace GhaUnityBuildReporter.Editor
             await WriteIncludedModulesInfoAsync(cancellationToken);
         }
 
-        private async ValueTask WriteTitleAsync(CancellationToken cancellationToken)
+        private async Task WriteTitleAsync(CancellationToken cancellationToken)
         {
             await _jobSummaryRepository.AppendTextAsync($"# Unity Build Report{Environment.NewLine}",
                 cancellationToken);
         }
 
-        private async ValueTask WriteSummaryAsync(CancellationToken cancellationToken)
+        private async Task WriteSummaryAsync(CancellationToken cancellationToken)
         {
             await _jobSummaryRepository.AppendTextAsync($"## Basic Info{Environment.NewLine}", cancellationToken);
 
@@ -57,7 +57,7 @@ namespace GhaUnityBuildReporter.Editor
             await _jobSummaryRepository.AppendTextAsync(basicInfo, cancellationToken);
         }
 
-        private async ValueTask WriteBuildStepsInfoAsync(CancellationToken cancellationToken)
+        private async Task WriteBuildStepsInfoAsync(CancellationToken cancellationToken)
         {
             if (_buildReport.steps.Length <= 0)
             {
@@ -110,7 +110,7 @@ namespace GhaUnityBuildReporter.Editor
                 cancellationToken);
         }
 
-        private async ValueTask WriteSourceAssetsInfoAsync(CancellationToken cancellationToken)
+        private async Task WriteSourceAssetsInfoAsync(CancellationToken cancellationToken)
         {
             if (!_buildReport.packedAssets.Any())
             {
@@ -154,7 +154,7 @@ namespace GhaUnityBuildReporter.Editor
             }
         }
 
-        private async ValueTask WriteOutputFilesInfoAsync(CancellationToken cancellationToken)
+        private async Task WriteOutputFilesInfoAsync(CancellationToken cancellationToken)
         {
             var files = GetBuildFiles();
             if (files.Length == 0)
@@ -183,7 +183,7 @@ namespace GhaUnityBuildReporter.Editor
                 cancellationToken);
         }
 
-        private async ValueTask WriteIncludedModulesInfoAsync(CancellationToken cancellationToken)
+        private async Task WriteIncludedModulesInfoAsync(CancellationToken cancellationToken)
         {
             if (_buildReport.strippingInfo == null)
             {
@@ -204,7 +204,7 @@ namespace GhaUnityBuildReporter.Editor
                 cancellationToken);
         }
 
-        private async ValueTask WriteIncludedModuleInfoInternalAsync(string item, uint depth,
+        private async Task WriteIncludedModuleInfoInternalAsync(string item, uint depth,
             CancellationToken cancellationToken)
         {
             await _jobSummaryRepository.AppendTextAsync(depth == 0

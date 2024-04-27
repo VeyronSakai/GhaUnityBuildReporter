@@ -16,7 +16,7 @@ namespace GhaUnityBuildReporter.Editor
             _gitHubStepSummaryPath = gitHubStepSummaryPath;
         }
 
-        public async ValueTask AppendTextAsync(string text, CancellationToken cancellationToken)
+        public async Task AppendTextAsync(string text, CancellationToken cancellationToken)
         {
             var dir = Path.GetDirectoryName(_gitHubStepSummaryPath);
             if (string.IsNullOrEmpty(dir))
