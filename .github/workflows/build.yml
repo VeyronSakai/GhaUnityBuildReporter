@@ -16,8 +16,26 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  paths-filter:
+    name: Paths Filter
+    runs-on: ubuntu-latest
+    outputs:
+      should-build: ${{ steps.filter.outputs.should-build }}
+    steps:
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            should-build:
+              - Assets/**/*
+              - ProjectSettings/**/*
+              - Packages/**/*
+              - .github/workflows/build.yml
+
   get-unity-version:
     name: Get Unity Version
+    needs: paths-filter
+    if: ${{ (github.event_name == 'pull_request' && needs.paths-filter.outputs.should-build == 'true') || github.event_name == 'workflow_dispatch'}}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -98,7 +116,7 @@ jobs:
   webgl:
     name: WebGL
     needs: get-unity-version
-    runs-on: [ self-hosted, macOS ]
+    runs-on: [self-hosted, macOS]
     steps:
       - name: Switch workspace
         uses: DeNA/setup-job-workspace-action@fea4ef4d011492fe235833241acbb4fced82da27
