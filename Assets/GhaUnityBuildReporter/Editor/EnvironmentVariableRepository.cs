@@ -2,7 +2,6 @@
 // This software is released under the MIT License.
 
 using System;
-using UnityEngine;
 
 namespace GhaUnityBuildReporter.Editor
 {

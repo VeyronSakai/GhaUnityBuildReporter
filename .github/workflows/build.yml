@@ -1,4 +1,4 @@
-name: BuildTest
+name: Build
 on:
   pull_request:
   workflow_dispatch:
@@ -16,7 +16,20 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  get-unity-version:
+    name: Get Unity Version
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          clean: "${{ env.CLEAN }}"
+      - name: Get Unity version
+        run: |
+          echo "UNITY_VERSION=$(grep "m_EditorVersion:" < ProjectSettings/ProjectVersion.txt | cut -d" " -f2)" >> "${GITHUB_ENV}"
+
   android:
+    name: Android
+    needs: get-unity-version
     runs-on: [self-hosted, macOS]
     steps:
       - name: Switch workspace
@@ -39,6 +52,8 @@ jobs:
             -executeMethod Editor.BuildEntryPoint.BuildAndroid
 
   ios:
+    name: iOS
+    needs: get-unity-version
     runs-on: [self-hosted, macOS]
     steps:
       - name: Switch workspace
@@ -59,6 +74,8 @@ jobs:
             -executeMethod Editor.BuildEntryPoint.BuildIOS
 
   macos:
+    name: macOS
+    needs: get-unity-version
     runs-on: [self-hosted, macOS]
     steps:
       - name: Switch workspace
@@ -79,6 +96,8 @@ jobs:
             -executeMethod Editor.BuildEntryPoint.BuildMacOS
 
   webgl:
+    name: WebGL
+    needs: get-unity-version
     runs-on: [ self-hosted, macOS ]
     steps:
       - name: Switch workspace
