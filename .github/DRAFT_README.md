@@ -64,17 +64,17 @@ Information about the native engine modules included in the build and why they w
 
 ## Setup
 
-Basically, the setup is completed by simply adding GhaUnityBuildReporter to the Unity project by following the steps below;
+Because all the processing is done in Unity post-processing, the setup is basically completed by simply adding GhaUnityBuildReporter to the Unity project by following the steps below;
 
 1. Open the Package Manager in the UnityEditor.
-2. Select the + button in the upper left corner.
+2. Select the `+` button in the upper left corner.
 3. Select Add package from git URL.
 4. Enter https://github.com/VeyronSakai/GhaUnityBuildReporter.git?path=Assets/GhaUnityBuildReporter and Select Add button.
 
-The Workflow file of GitHub Actions basically does not need to be changed.
+It can also be installed by downloading .unitypackage from [Releases](https://github.com/VeyronSakai/GhaUnityBuildReporter/releases/latest).
 
 > [!WARNING]
-> If you are using Docker to build Unity, you need to copy the files at $GITHUB_STEP_SUMMARY in the docker container to the same path on the host machine after building with Unity.
+> The Workflow file of GitHub Actions basically does not need to be changed, but if you use Docker to build Unity, you must copy the files at `$GITHUB_STEP_SUMMARY` in the Docker container to the same path on the host machine after building with Unity.
 
 ## License
 
