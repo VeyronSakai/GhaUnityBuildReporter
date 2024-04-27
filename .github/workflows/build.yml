@@ -41,6 +41,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          sparse-checkout: ProjectSettings/ProjectVersion.txt
           clean: "${{ env.CLEAN }}"
       - name: Get Unity version
         run: |
