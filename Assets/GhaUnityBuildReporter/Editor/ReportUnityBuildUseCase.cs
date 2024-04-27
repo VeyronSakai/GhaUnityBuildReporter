@@ -16,20 +16,23 @@ namespace GhaUnityBuildReporter.Editor
         private readonly IJobSummaryRepository _jobSummaryRepository;
         private readonly BuildReport _buildReport;
 
+        private CancellationTokenSource _cts = new();
+
         public ReportUnityBuildUseCase(IJobSummaryRepository jobSummaryRepository, BuildReport buildReport)
         {
             _jobSummaryRepository = jobSummaryRepository;
             _buildReport = buildReport;
         }
 
-        public async Task WriteAllAsync(CancellationToken cancellationToken)
+        public async Task WriteAllAsync()
         {
-            await WriteTitleAsync(cancellationToken);
-            await WriteSummaryAsync(cancellationToken);
-            await WriteBuildStepsInfoAsync(cancellationToken);
-            await WriteSourceAssetsInfoAsync(cancellationToken);
-            await WriteOutputFilesInfoAsync(cancellationToken);
-            await WriteIncludedModulesInfoAsync(cancellationToken);
+            var token = _cts.Token;
+            await WriteTitleAsync(token);
+            await WriteSummaryAsync(token);
+            await WriteBuildStepsInfoAsync(token);
+            await WriteSourceAssetsInfoAsync(token);
+            await WriteOutputFilesInfoAsync(token);
+            await WriteIncludedModulesInfoAsync(token);
         }
 
         private async Task WriteTitleAsync(CancellationToken cancellationToken)

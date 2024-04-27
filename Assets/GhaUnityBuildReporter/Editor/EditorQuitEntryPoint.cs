@@ -13,6 +13,8 @@ namespace GhaUnityBuildReporter.Editor
         internal static bool ExecutesUnityBuild;
         private static readonly string s_gitHubStepSummaryPath;
 
+        private static readonly CancellationTokenSource cts = new();
+
         // The 'report' argument passed to IPolsstprocessBuildWithReport.OnPostprocessBuild() contains incorrect information, so read Library/LastBuild.buildreport instead.
         // see: https://issuetracker.unity3d.com/issues/buildreport-report-in-ipostprocessbuildwithreport-provides-incorrect-information
         static EditorQuitEntryPoint()
@@ -28,7 +30,7 @@ namespace GhaUnityBuildReporter.Editor
             EditorApplication.quitting += Quit;
         }
 
-        private static async void Quit()
+        private static void Quit()
         {
             if (!ExecutesUnityBuild)
             {
@@ -44,8 +46,7 @@ namespace GhaUnityBuildReporter.Editor
 
             var jobSummaryRepository = new GitHubJobSummaryRepository(s_gitHubStepSummaryPath);
             var useCase = new ReportUnityBuildUseCase(jobSummaryRepository, buildReport);
-            var cancellationTokenSource = new CancellationTokenSource();
-            await useCase.WriteAllAsync(cancellationTokenSource.Token);
+            useCase.WriteAllAsync();
         }
     }
 }
