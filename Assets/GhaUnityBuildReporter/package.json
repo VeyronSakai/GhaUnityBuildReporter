@@ -1,0 +1,10 @@
+{
+  "name": "com.veyron-sakai.gha-unity-build-reporter",
+  "displayName": "GhaUnityBuildReporter",
+  "version": "0.0.1",
+  "unity": "2022.3",
+  "description": "Automatically posts the build report to GitHub's Job Summaries upon completion of a Unity Build using GitHub Actions.",
+  "author": {
+    "name": "Yuki Sakai"
+  }
+}
