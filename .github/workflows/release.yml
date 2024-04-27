@@ -1,0 +1,147 @@
+name: Release
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - closed
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  PACKAGE_JSON_PATH: GhaUnityBuildReporter/Assets/GhaUnityBuildReporter/package.json
+  GITHUB_BOT_NAME: github-actions[bot]
+  GITHUB_BOT_EMAIL: github-actions[bot]@users.noreply.github.com
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  paths-filter:
+    name: Paths Filter
+    if: ${{ github.event_name == 'pull_request' }}
+    runs-on: ubuntu-latest
+    outputs:
+      package_json: ${{ steps.filter.outputs.package_json }}
+    steps:
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            package_json:
+              - ${{ env.PACKAGE_JSON_PATH }}
+
+  update-draft:
+    name: Update Draft
+    if: ${{ (github.event_name == 'pull_request' && github.event.pull_request.base.ref == 'main') || github.event_name == 'workflow_dispatch'}}
+    runs-on: ubuntu-latest
+    outputs:
+      tag_name: ${{ steps.release-drafter.outputs.tag_name }}
+    steps:
+      - uses: release-drafter/release-drafter@v6
+        id: release-drafter
+        with:
+          commitish: main
+
+  update-files:
+    name: Update Files
+    needs: update-draft
+    if: ${{ github.event_name == 'workflow_dispatch' }}
+    runs-on: ubuntu-latest
+    env:
+      VERSION: ${{ needs.update-draft.outputs.tag_name }}
+      SOURCE_BRANCH: github-actions/update-files/${{ github.run_number }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Update package.json
+        shell: pwsh
+        run: |
+          $jsonContent = Get-Content -Path $env:PACKAGE_JSON_PATH | ConvertFrom-Json
+          $jsonContent.version = $env:VERSION
+          $jsonContent | ConvertTo-Json | Set-Content -Path $env:PACKAGE_JSON_PATH
+      - name: Commit package.json
+        uses: EndBug/add-and-commit@v9
+        id: commit-package-json
+        with:
+          author_name: ${{ env.GITHUB_BOT_NAME }}
+          author_email: ${{ env.GITHUB_BOT_EMAIL }}
+          message: "Update package.json"
+          add: ${{ env.PACKAGE_JSON_PATH }}
+          new_branch: ${{ env.SOURCE_BRANCH }}
+      # - name: Update README.md
+      #   run: |
+      #     cp -f .github/DRAFT_README.md README.md
+      # - name: Commit README.md
+      #   uses: EndBug/add-and-commit@v9
+      #   id: commit-readme
+      #   with:
+      #     author_name: ${{ env.GITHUB_BOT_NAME }}
+      #     author_email: ${{ env.GITHUB_BOT_EMAIL }}
+      #     message: "Update README.md"
+      #     add: "README.md"
+      #     new_branch: ${{ env.SOURCE_BRANCH }}
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "7.0.x"
+      - name: Create pull request and merge
+        if: ${{ steps.commit-package-json.outputs.committed == 'true' }}
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          gh pr create --title "Update files for release" --body "Update files for release" --base main --head "${SOURCE_BRANCH}"
+          gh pr merge "${SOURCE_BRANCH}" --auto --merge
+
+  release:
+    name: Release
+    needs: [update-draft, paths-filter]
+    environment: Release
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.ref == 'main' && github.event.pull_request.merged && needs.paths-filter.outputs.package_json == 'true' }}
+    env:
+      VERSION: ${{ needs.update-draft.outputs.tag_name }}
+    steps:
+      - uses: release-drafter/release-drafter@v6
+        id: release-drafter
+        with:
+          publish: true
+          commitish: main
+      - name: Create semver outputs
+        uses: actions/github-script@v7
+        id: semver
+        with:
+          script: |
+            const matched = "${{ env.VERSION }}".match(/(((\d+)\.\d+).\d+)/)
+            core.setOutput('major', matched[3])
+            core.setOutput('minor', matched[2])
+            core.setOutput('patch', matched[1])
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.VERSION }}
+      - name: Update major tag
+        if: ${{ steps.semver.outputs.major != '0' }}
+        run: |
+          git push -f origin "refs/tags/${VERSION}:refs/tags/${{ steps.semver.outputs.major }}"
+      - name: Update minor tag
+        if: ${{ steps.semver.outputs.minor != '0.0' }}
+        run: |
+          git push -f origin "refs/tags/${VERSION}:refs/tags/${{ steps.semver.outputs.minor }}"
+
+    #   - name: Export unitypackage
+    #     uses: game-ci/unity-builder@v4
+    #     env:
+    #       UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+    #       UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+    #       UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+    #     with:
+    #       projectPath: ./VContainerAnalyzer.Unity
+    #       targetPlatform: StandaloneLinux64
+    #       buildMethod: Editor.PackageExporter.Export
+    #   - name: Upload unitypackage
+    #     run: |
+    #       gh release upload "${VERSION}" "VContainerAnalyzer.Unity/VContainerAnalyzer.unitypackage"
