@@ -64,10 +64,10 @@ Information about the native engine modules included in the build and why they w
 
 ## Setup
 
-Basically, the setup is completed by simply adding GhaUnityBuildReporter to the Unity project by following the steps below;
+Because all the processing is done in Unity post-processing, the setup is basically completed by simply adding GhaUnityBuildReporter to the Unity project by following the steps below;
 
 1. Open the Package Manager in the UnityEditor.
-2. Select the + button in the upper left corner.
+2. Select the `+` button in the upper left corner.
 3. Select Add package from git URL.
 4. Enter https://github.com/VeyronSakai/GhaUnityBuildReporter.git?path=Assets/GhaUnityBuildReporter and Select Add button.
 
