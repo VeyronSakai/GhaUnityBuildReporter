@@ -74,18 +74,18 @@ jobs:
           message: "Update package.json"
           add: ${{ env.PACKAGE_JSON_PATH }}
           new_branch: ${{ env.SOURCE_BRANCH }}
-      # - name: Update README.md
-      #   run: |
-      #     cp -f .github/DRAFT_README.md README.md
-      # - name: Commit README.md
-      #   uses: EndBug/add-and-commit@v9
-      #   id: commit-readme
-      #   with:
-      #     author_name: ${{ env.GITHUB_BOT_NAME }}
-      #     author_email: ${{ env.GITHUB_BOT_EMAIL }}
-      #     message: "Update README.md"
-      #     add: "README.md"
-      #     new_branch: ${{ env.SOURCE_BRANCH }}
+      - name: Update README.md
+        run: |
+          cp -f .github/DRAFT_README.md README.md
+      - name: Commit README.md
+        uses: EndBug/add-and-commit@v9
+        id: commit-readme
+        with:
+          author_name: ${{ env.GITHUB_BOT_NAME }}
+          author_email: ${{ env.GITHUB_BOT_EMAIL }}
+          message: "Update README.md"
+          add: "README.md"
+          new_branch: ${{ env.SOURCE_BRANCH }}
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: "7.0.x"
