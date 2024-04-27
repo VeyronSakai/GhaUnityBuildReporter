@@ -34,7 +34,6 @@ namespace GhaUnityBuildReporter.Editor
             var lastBuildReportPath = $"{Path.Combine(projectRootPath, LibraryDirectoryName, LastBuildReportFileName)}";
             if (!File.Exists(lastBuildReportPath))
             {
-                Debug.LogError($"{lastBuildReportPath} not exists");
                 return null;
             }
 
