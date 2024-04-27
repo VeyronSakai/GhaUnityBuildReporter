@@ -27,6 +27,7 @@ namespace GhaUnityBuildReporter.Editor
                 Directory.CreateDirectory(dir);
             }
 
+            // UnityEditor cannot wait for asynchronous processing when exiting, use synchronous version instead
             File.AppendAllText(_gitHubStepSummaryPath, text);
         }
     }
