@@ -28,14 +28,13 @@ namespace GhaUnityBuildReporter.Editor
             var projectRootPath = Directory.GetParent(Application.dataPath)?.FullName;
             if (string.IsNullOrEmpty(projectRootPath))
             {
-                return null;
+                return default;
             }
 
             var lastBuildReportPath = $"{Path.Combine(projectRootPath, LibraryDirectoryName, LastBuildReportFileName)}";
             if (!File.Exists(lastBuildReportPath))
             {
-                Debug.LogError($"{lastBuildReportPath} not exists");
-                return null;
+                return default;
             }
 
             if (!Directory.Exists(_buildReportDir))

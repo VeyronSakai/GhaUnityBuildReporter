@@ -35,7 +35,7 @@ namespace GhaUnityBuildReporter.Editor
 
             using var buildReportRepository = new BuildReportRepository();
             var buildReport = buildReportRepository.GetBuildReport();
-            if (buildReport == null)
+            if (buildReport == default)
             {
                 return;
             }
