@@ -4,6 +4,8 @@ GhaUnityBuildReporter is a Unity package that automatically reflects [build repo
 
 <img width="400" alt="top" src="https://github.com/VeyronSakai/GhaUnityBuildReporter/assets/43900255/ce50ca9a-928d-458a-8350-ff0630bdea0a">
 
+[Here](https://github.com/VeyronSakai/GhaUnityBuildReporter/actions/runs/8864812982) is an example of a specific build report.
+
 This package is inspired by [Unity-Technologies/BuildReportInspector](https://github.com/Unity-Technologies/BuildReportInspector).
 
 ## Features
@@ -12,6 +14,7 @@ GhaUnityBuildReporter specifically reflects the following information in the Job
 
 - Basic Info
 - Build Steps
+- Source Assets
 - Output Files
 - Included Modules
 
@@ -50,15 +53,21 @@ Each emoji corresponds to the following [LogType](https://docs.unity3d.com/Scrip
 | :boom: | Exception |
 | :question: | Unknown |
 
+### Source Assets
+
+All asset names used in the build and their asset sizes.
+
+<img width="650" alt="output-files" src="https://github.com/VeyronSakai/GhaUnityBuildReporter/assets/43900255/dd07dd3e-cbdd-46c4-831d-83465fe05e17">
+
 ### Output Files
 
-List of file paths output during the build and their sizes.
+File paths output during the build and their sizes.
 
 <img width="600" alt="output-files" src="https://github.com/VeyronSakai/GhaUnityBuildReporter/assets/43900255/20bd078a-8608-4efd-a665-19635ffe7b10">
 
 ### Included Modules
 
-Information about the native engine modules included in the build and why they were included.
+The names of the native engine module included in the build and the reasons the module was included in the build.
 
 <img width="300" alt="include-modules" src="https://github.com/VeyronSakai/GhaUnityBuildReporter/assets/43900255/af5fffda-d336-4653-a449-c8035383c179">
 
@@ -74,7 +83,13 @@ Because all the processing is done in Unity post-processing, the setup is basica
 It can also be installed by downloading .unitypackage from [Releases](https://github.com/VeyronSakai/GhaUnityBuildReporter/releases/latest).
 
 > [!WARNING]
-> The Workflow file of GitHub Actions basically does not need to be changed, but if you use Docker to build Unity, you must copy the files at `$GITHUB_STEP_SUMMARY` in the Docker container to the same path on the host machine after building with Unity.
+> The Workflow file of GitHub Actions basically does not need to be changed, but if you use Docker to build Unity, you must copy the files at `$GITHUB_STEP_SUMMARY` in the Docker container to the path at `$GITHUB_STEP_SUMMARY` on the host machine after building with Unity.
+
+## How to surpress GhaUnityBuildReporter
+
+Perhaps there is a Workflow or Job for which you would like to surpress GhaUnityBuildReporter.
+
+In such cases, setting the environment variable `GHA_UNITY_BUILD_REPORTER_OPTOUT` to `1` or `true` will suppress GhaUnityBuildReporter in the scope where that environment variable is valid.
 
 ## License
 
