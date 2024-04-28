@@ -85,11 +85,15 @@ It can also be installed by downloading .unitypackage from [Releases](https://gi
 > [!WARNING]
 > The Workflow file of GitHub Actions basically does not need to be changed, but if you use Docker to build Unity, you must copy the files at `$GITHUB_STEP_SUMMARY` in the Docker container to the path at `$GITHUB_STEP_SUMMARY` on the host machine after building with Unity.
 
-## How to surpress GhaUnityBuildReporter
+## How to suppress GhaUnityBuildReporter
 
-Perhaps there is a Workflow or Job for which you would like to surpress GhaUnityBuildReporter.
+Perhaps there is a Workflow or Job for which you would like to suppress GhaUnityBuildReporter.
 
 In such cases, setting the environment variable `GHA_UNITY_BUILD_REPORTER_OPTOUT` to `1` or `true` will suppress GhaUnityBuildReporter in the scope where that environment variable is valid.
+
+## Contribution
+
+Bugs and new feature suggestions are welcome in issues and Pull Requests.
 
 ## License
 
