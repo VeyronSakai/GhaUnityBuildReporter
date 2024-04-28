@@ -124,7 +124,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           clean: "${{ env.CLEAN }}"
-      - name: macOS Build
+      - name: WebGL Build
         env:
           UNITY_VERSION: ${{ needs.get-unity-version.outputs.unity-version }}
         run: |
