@@ -97,4 +97,4 @@ Bugs and new feature suggestions are welcome in issues and Pull Requests.
 
 ## License
 
-This software is released under the MIT License. Please see the LICENSE file for details.
+This software is released under the MIT License. Please see the [LICENSE](https://github.com/VeyronSakai/GhaUnityBuildReporter/blob/main/LICENSE) file for details.
