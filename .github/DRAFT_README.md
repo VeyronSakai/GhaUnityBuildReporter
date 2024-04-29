@@ -55,7 +55,7 @@ Each emoji corresponds to the following [LogType](https://docs.unity3d.com/Scrip
 
 ### Source Assets
 
-All asset names used in the build and their asset sizes.
+Information on all assets used in the build.
 
 <img width="650" alt="output-files" src="https://github.com/VeyronSakai/GhaUnityBuildReporter/assets/43900255/dd07dd3e-cbdd-46c4-831d-83465fe05e17">
 
