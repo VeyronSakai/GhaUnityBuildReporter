@@ -131,7 +131,7 @@ namespace GhaUnityBuildReporter.Editor
                     $"<details><summary>Details</summary>{Environment.NewLine}{Environment.NewLine}");
 
                 _jobSummaryRepository.AppendText(
-                    $"| Asset | Size |{Environment.NewLine}| --- | --- |{Environment.NewLine}");
+                    $"| File | Size |{Environment.NewLine}| --- | --- |{Environment.NewLine}");
 
                 foreach (var assetInfo in topAssets)
                 {
