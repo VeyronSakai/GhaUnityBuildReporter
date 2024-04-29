@@ -13,8 +13,8 @@ namespace GhaUnityBuildReporter.Editor.Domains
         IEnumerable<string> GetIncludedModuleNames();
         IEnumerable<string> GetReasonsForIncluding(string entity);
         BuildFile[] GetBuildFiles();
-        ulong GetPackedAssetSize(int packedAssetIndex);
         int GetPackedAssetsCount();
+        ulong GetPackedAssetSize(int packedAssetIndex);
         IEnumerable<PackedAssetInfo> GetPackedAssetContents(int packedAssetIndex);
         string GetPackAssetShortPath(int packedAssetIndex);
     }

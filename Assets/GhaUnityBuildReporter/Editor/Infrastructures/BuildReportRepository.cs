@@ -24,7 +24,7 @@ namespace GhaUnityBuildReporter.Editor.Infrastructures
         private const string LibraryDirectoryName = "Library";
         private const string LastBuildReportFileName = "LastBuild.buildreport";
         private readonly BuildReport _buildReport;
-        private readonly PackedAssets[] _packedAssets;
+        private readonly PackedAssets[] _packedAssetsArray;
 
         public BuildReportRepository()
         {
@@ -51,7 +51,7 @@ namespace GhaUnityBuildReporter.Editor.Infrastructures
 
             if (_buildReport != null)
             {
-                _packedAssets = _buildReport.packedAssets;
+                _packedAssetsArray = _buildReport.packedAssets;
             }
         }
 
@@ -103,17 +103,17 @@ namespace GhaUnityBuildReporter.Editor.Infrastructures
 
         public ulong GetPackedAssetSize(int packedAssetIndex)
         {
-            if (_packedAssets.Length == 0)
+            if (_packedAssetsArray.Length == 0)
             {
                 return 0;
             }
 
-            if (_packedAssets.Length <= packedAssetIndex)
+            if (_packedAssetsArray.Length <= packedAssetIndex)
             {
                 throw new IndexOutOfRangeException();
             }
 
-            var packedAsset = _packedAssets[packedAssetIndex];
+            var packedAsset = _packedAssetsArray[packedAssetIndex];
             var totalSize = packedAsset.contents.Aggregate<PackedAssetInfo, ulong>(0,
                 (current, packedAssetContent) => current + packedAssetContent.packedSize);
             return totalSize;
@@ -121,27 +121,17 @@ namespace GhaUnityBuildReporter.Editor.Infrastructures
 
         public string GetPackAssetShortPath(int packedAssetIndex)
         {
-            if (_packedAssets.Length <= packedAssetIndex)
-            {
-                throw new IndexOutOfRangeException();
-            }
-
-            return _packedAssets[packedAssetIndex].shortPath;
+            return _packedAssetsArray[packedAssetIndex].shortPath;
         }
 
         public int GetPackedAssetsCount()
         {
-            return _packedAssets.Length;
+            return _packedAssetsArray.Length;
         }
 
         public IEnumerable<PackedAssetInfo> GetPackedAssetContents(int packedAssetIndex)
         {
-            if (_packedAssets.Length <= packedAssetIndex)
-            {
-                throw new IndexOutOfRangeException();
-            }
-
-            return _packedAssets[packedAssetIndex].contents;
+            return _packedAssetsArray[packedAssetIndex].contents;
         }
 
         internal bool IsBuildReportAvailable()
