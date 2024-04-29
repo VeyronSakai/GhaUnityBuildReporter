@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using GhaUnityBuildReporter.Editor.Domains;
-using JetBrains.Annotations;
 using UnityEditor;
 using UnityEditor.Build.Reporting;
 using UnityEngine;
@@ -47,37 +46,6 @@ namespace GhaUnityBuildReporter.Editor.Infrastructures
             File.Copy(lastBuildReportPath, _lastBuildReportsAssetPath, true);
             AssetDatabase.ImportAsset(_lastBuildReportsAssetPath);
             _buildReport = AssetDatabase.LoadAssetAtPath<BuildReport>(_lastBuildReportsAssetPath);
-        }
-
-        public bool IsBuildReportActive()
-        {
-            return _buildReport != null;
-        }
-
-        [CanBeNull]
-        internal BuildReport GetBuildReport()
-        {
-            var projectRootPath = Directory.GetParent(Application.dataPath)?.FullName;
-            if (string.IsNullOrEmpty(projectRootPath))
-            {
-                return default;
-            }
-
-            var lastBuildReportPath = $"{Path.Combine(projectRootPath, LibraryDirectoryName, LastBuildReportFileName)}";
-            if (!File.Exists(lastBuildReportPath))
-            {
-                return default;
-            }
-
-            if (!Directory.Exists(_buildReportDir))
-            {
-                Directory.CreateDirectory(_buildReportDir);
-            }
-
-            File.Copy(lastBuildReportPath, _lastBuildReportsAssetPath, true);
-            AssetDatabase.ImportAsset(_lastBuildReportsAssetPath);
-            var report = AssetDatabase.LoadAssetAtPath<BuildReport>(_lastBuildReportsAssetPath);
-            return report;
         }
 
         public void Dispose()
@@ -129,6 +97,11 @@ namespace GhaUnityBuildReporter.Editor.Infrastructures
 #else
             return _buildReport.files;
 #endif
+        }
+
+        internal bool IsBuildReportActive()
+        {
+            return _buildReport != null;
         }
     }
 }
