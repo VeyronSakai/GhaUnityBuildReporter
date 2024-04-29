@@ -5,20 +5,22 @@ using System;
 using System.IO;
 using System.Linq;
 using GhaUnityBuildReporter.Editor.Domains;
-using UnityEditor.Build.Reporting;
 using UnityEngine;
 
 namespace GhaUnityBuildReporter.Editor.UseCases
 {
-    internal sealed class ReportUnityBuildUseCase
+    public sealed class ReportUnityBuildUseCase
     {
         private readonly IJobSummaryRepository _jobSummaryRepository;
-        private readonly BuildReport _buildReport;
+        private readonly IBuildReportRepository _buildReportRepository;
 
-        public ReportUnityBuildUseCase(IJobSummaryRepository jobSummaryRepository, BuildReport buildReport)
+        public ReportUnityBuildUseCase(
+            IJobSummaryRepository jobSummaryRepository,
+            IBuildReportRepository buildReportRepository
+        )
         {
             _jobSummaryRepository = jobSummaryRepository;
-            _buildReport = buildReport;
+            _buildReportRepository = buildReportRepository;
         }
 
         public void WriteAll()
@@ -40,7 +42,7 @@ namespace GhaUnityBuildReporter.Editor.UseCases
         {
             _jobSummaryRepository.AppendText($"## Basic Info{Environment.NewLine}");
 
-            var summary = _buildReport.summary;
+            var summary = _buildReportRepository.GetBuildSummary();
 
             var basicInfo =
                 $"| Key | Value |{Environment.NewLine}"
@@ -57,7 +59,8 @@ namespace GhaUnityBuildReporter.Editor.UseCases
 
         private void WriteBuildStepsInfo()
         {
-            if (_buildReport.steps.Length <= 0)
+            var steps = _buildReportRepository.GetBuildSteps();
+            if (steps.Length <= 0)
             {
                 return;
             }
@@ -67,7 +70,7 @@ namespace GhaUnityBuildReporter.Editor.UseCases
             _jobSummaryRepository.AppendText(
                 $"<details><summary>Details</summary>{Environment.NewLine}{Environment.NewLine}");
 
-            foreach (var step in _buildReport.steps)
+            foreach (var step in steps)
             {
                 switch (step.depth)
                 {
@@ -111,22 +114,23 @@ namespace GhaUnityBuildReporter.Editor.UseCases
 
         private void WriteSourceAssetsInfo()
         {
-            if (!_buildReport.packedAssets.Any())
+            var packedAssetsCount = _buildReportRepository.GetPackedAssetsCount();
+            if (packedAssetsCount == 0)
             {
                 return;
             }
 
             _jobSummaryRepository.AppendText($"## Source Assets{Environment.NewLine}");
 
-            foreach (var packedAsset in _buildReport.packedAssets)
+            for (var i = 0; i < packedAssetsCount; i++)
             {
-                var totalSize = packedAsset.contents.Aggregate<PackedAssetInfo, ulong>(0,
-                    (current, packedAssetContent) => current + packedAssetContent.packedSize);
+                var totalSize = _buildReportRepository.GetPackedAssetSize(i);
 
-                var topAssets = packedAsset.contents.OrderByDescending(x => x.packedSize);
+                var packedAssets = _buildReportRepository.GetPackedAssetContents(i)
+                    .OrderByDescending(x => x.packedSize);
 
                 _jobSummaryRepository.AppendText(
-                    $"### {packedAsset.shortPath} ({GetFormattedSize(totalSize)}){Environment.NewLine}");
+                    $"### {_buildReportRepository.GetPackAssetShortPath(i)} ({GetFormattedSize(totalSize)}){Environment.NewLine}");
 
                 _jobSummaryRepository.AppendText(
                     $"<details><summary>Details</summary>{Environment.NewLine}{Environment.NewLine}");
@@ -134,14 +138,14 @@ namespace GhaUnityBuildReporter.Editor.UseCases
                 _jobSummaryRepository.AppendText(
                     $"| File | Size |{Environment.NewLine}| --- | --- |{Environment.NewLine}");
 
-                foreach (var assetInfo in topAssets)
+                foreach (var packedAsset in packedAssets)
                 {
-                    var assetPath = string.IsNullOrEmpty(assetInfo.sourceAssetPath)
+                    var assetPath = string.IsNullOrEmpty(packedAsset.sourceAssetPath)
                         ? "Unknown"
-                        : assetInfo.sourceAssetPath;
+                        : packedAsset.sourceAssetPath;
 
                     var assetDetails =
-                        $"| {assetPath} | {GetFormattedSize(assetInfo.packedSize)} |{Environment.NewLine}";
+                        $"| {assetPath} | {GetFormattedSize(packedAsset.packedSize)} |{Environment.NewLine}";
 
                     _jobSummaryRepository.AppendText(assetDetails);
                 }
@@ -152,8 +156,8 @@ namespace GhaUnityBuildReporter.Editor.UseCases
 
         private void WriteOutputFilesInfo()
         {
-            var files = GetBuildFiles();
-            if (files.Length == 0)
+            var buildFiles = _buildReportRepository.GetBuildFiles();
+            if (!buildFiles.Any())
             {
                 return;
             }
@@ -168,7 +172,7 @@ namespace GhaUnityBuildReporter.Editor.UseCases
 
             var projectRootPath = Directory.GetParent(Application.dataPath)?.FullName;
 
-            foreach (var file in files)
+            foreach (var file in buildFiles)
             {
                 var relativePath = Path.GetRelativePath(projectRootPath, file.path);
                 _jobSummaryRepository.AppendText(
@@ -180,7 +184,8 @@ namespace GhaUnityBuildReporter.Editor.UseCases
 
         private void WriteIncludedModulesInfo()
         {
-            if (_buildReport.strippingInfo == null)
+            var includedModuleNames = _buildReportRepository.GetIncludedModuleNames().ToArray();
+            if (!includedModuleNames.Any())
             {
                 return;
             }
@@ -190,34 +195,26 @@ namespace GhaUnityBuildReporter.Editor.UseCases
             _jobSummaryRepository.AppendText(
                 $"<details><summary>Details</summary>{Environment.NewLine}{Environment.NewLine}");
 
-            foreach (var item in _buildReport.strippingInfo.includedModules)
+            foreach (var entity in includedModuleNames)
             {
-                WriteIncludedModuleInfoInternal(item, 0);
+                WriteIncludedModuleInfoInternal(entity, 0);
             }
 
             _jobSummaryRepository.AppendText($"</details>{Environment.NewLine}{Environment.NewLine}");
         }
 
-        private void WriteIncludedModuleInfoInternal(string item, uint depth)
+        private void WriteIncludedModuleInfoInternal(string entity, uint depth)
         {
             _jobSummaryRepository.AppendText(depth == 0
-                ? $@"- **{item}**{Environment.NewLine}"
-                : $@"{new string(' ', (int)(depth * 2))} - {item}{Environment.NewLine}");
+                ? $@"- **{entity}**{Environment.NewLine}"
+                : $@"{new string(' ', (int)(depth * 2))} - {entity}{Environment.NewLine}");
 
-            var reasons = _buildReport.strippingInfo.GetReasonsForIncluding(item);
+
+            var reasons = _buildReportRepository.GetReasonsForIncluding(entity);
             foreach (var reason in reasons)
             {
                 WriteIncludedModuleInfoInternal(reason, depth + 1);
             }
-        }
-
-        private BuildFile[] GetBuildFiles()
-        {
-#if UNITY_2022_1_OR_NEWER
-            return _buildReport.GetFiles();
-#else
-            return _buildReport.files;
-#endif
         }
 
         private static string GetFormattedSize(ulong size)
