@@ -3,7 +3,7 @@
 
 namespace GhaUnityBuildReporter.Editor.Domains
 {
-    public interface IJobSummaryRepository
+    internal interface IJobSummaryRepository
     {
         void AppendText(string text);
     }

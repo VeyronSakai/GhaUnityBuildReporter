@@ -2,17 +2,15 @@
 // This software is released under the MIT License.
 
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using GhaUnityBuildReporter.Editor.Domains;
+using JetBrains.Annotations;
 using UnityEditor;
 using UnityEditor.Build.Reporting;
 using UnityEngine;
 
 namespace GhaUnityBuildReporter.Editor.Infrastructures
 {
-    internal sealed class BuildReportRepository : IBuildReportRepository, IDisposable
+    internal sealed class BuildReportRepository : IDisposable
     {
         private readonly string _buildReportDir =
             $"{Path.Combine(Application.dataPath, LastBuildReportsDirectoryName)}";
@@ -23,21 +21,20 @@ namespace GhaUnityBuildReporter.Editor.Infrastructures
         private const string LastBuildReportsDirectoryName = "LastBuildReports";
         private const string LibraryDirectoryName = "Library";
         private const string LastBuildReportFileName = "LastBuild.buildreport";
-        private readonly BuildReport _buildReport;
-        private readonly PackedAssets[] _packedAssetsArray;
 
-        public BuildReportRepository()
+        [CanBeNull]
+        internal BuildReport GetBuildReport()
         {
             var projectRootPath = Directory.GetParent(Application.dataPath)?.FullName;
             if (string.IsNullOrEmpty(projectRootPath))
             {
-                return;
+                return default;
             }
 
             var lastBuildReportPath = $"{Path.Combine(projectRootPath, LibraryDirectoryName, LastBuildReportFileName)}";
             if (!File.Exists(lastBuildReportPath))
             {
-                return;
+                return default;
             }
 
             if (!Directory.Exists(_buildReportDir))
@@ -47,12 +44,8 @@ namespace GhaUnityBuildReporter.Editor.Infrastructures
 
             File.Copy(lastBuildReportPath, _lastBuildReportsAssetPath, true);
             AssetDatabase.ImportAsset(_lastBuildReportsAssetPath);
-            _buildReport = AssetDatabase.LoadAssetAtPath<BuildReport>(_lastBuildReportsAssetPath);
-
-            if (_buildReport != null)
-            {
-                _packedAssetsArray = _buildReport.packedAssets;
-            }
+            var report = AssetDatabase.LoadAssetAtPath<BuildReport>(_lastBuildReportsAssetPath);
+            return report;
         }
 
         public void Dispose()
@@ -66,77 +59,6 @@ namespace GhaUnityBuildReporter.Editor.Infrastructures
             {
                 File.Delete($"{_buildReportDir}.meta");
             }
-        }
-
-        public BuildSummary GetBuildSummary()
-        {
-            return _buildReport.summary;
-        }
-
-        public BuildStep[] GetBuildSteps()
-        {
-            return _buildReport.steps;
-        }
-
-        public IEnumerable<string> GetIncludedModuleNames()
-        {
-            return _buildReport.strippingInfo == null
-                ? Array.Empty<string>()
-                : _buildReport.strippingInfo.includedModules;
-        }
-
-        public IEnumerable<string> GetReasonsForIncluding(string entity)
-        {
-            return _buildReport.strippingInfo == null
-                ? Array.Empty<string>()
-                : _buildReport.strippingInfo.GetReasonsForIncluding(entity);
-        }
-
-        public BuildFile[] GetBuildFiles()
-        {
-#if UNITY_2022_1_OR_NEWER
-            return _buildReport.GetFiles();
-#else
-            return _buildReport.files;
-#endif
-        }
-
-        public ulong GetPackedAssetSize(int packedAssetIndex)
-        {
-            if (_packedAssetsArray.Length == 0)
-            {
-                return 0;
-            }
-
-            if (_packedAssetsArray.Length <= packedAssetIndex)
-            {
-                throw new IndexOutOfRangeException();
-            }
-
-            var packedAsset = _packedAssetsArray[packedAssetIndex];
-            var totalSize = packedAsset.contents.Aggregate<PackedAssetInfo, ulong>(0,
-                (current, packedAssetContent) => current + packedAssetContent.packedSize);
-            return totalSize;
-        }
-
-        public string GetPackAssetShortPath(int packedAssetIndex)
-        {
-            return _packedAssetsArray[packedAssetIndex].shortPath;
-        }
-
-        public int GetPackedAssetsCount()
-        {
-            return _packedAssetsArray.Length;
-        }
-
-        public IEnumerable<PackedAssetInfo> GetPackedAssetContents(int packedAssetIndex)
-        {
-            return _packedAssetsArray[packedAssetIndex].contents;
-        }
-
-        internal bool IsBuildReportAvailable()
-        {
-            return _buildReport != null;
         }
     }
 }
