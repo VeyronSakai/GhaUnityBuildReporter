@@ -36,7 +36,7 @@ namespace GhaUnityBuildReporter.Editor.Presentations
             }
 
             using var buildReportRepository = new BuildReportRepository();
-            if (!buildReportRepository.IsBuildReportActive())
+            if (!buildReportRepository.IsBuildReportAvailable())
             {
                 return;
             }

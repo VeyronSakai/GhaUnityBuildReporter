@@ -10,9 +10,12 @@ namespace GhaUnityBuildReporter.Editor.Domains
     {
         BuildSummary GetBuildSummary();
         BuildStep[] GetBuildSteps();
-        PackedAssets[] GetPackedAssets();
         IEnumerable<string> GetIncludedModuleNames();
         IEnumerable<string> GetReasonsForIncluding(string entity);
         BuildFile[] GetBuildFiles();
+        ulong GetPackedAssetSize(int packedAssetIndex);
+        int GetPackedAssetsCount();
+        IEnumerable<PackedAssetInfo> GetPackedAssetContents(int packedAssetIndex);
+        string GetPackAssetShortPath(int packedAssetIndex);
     }
 }

@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using GhaUnityBuildReporter.Editor.Domains;
 using UnityEditor;
 using UnityEditor.Build.Reporting;
@@ -23,6 +24,7 @@ namespace GhaUnityBuildReporter.Editor.Infrastructures
         private const string LibraryDirectoryName = "Library";
         private const string LastBuildReportFileName = "LastBuild.buildreport";
         private readonly BuildReport _buildReport;
+        private readonly PackedAssets[] _packedAssets;
 
         public BuildReportRepository()
         {
@@ -46,6 +48,11 @@ namespace GhaUnityBuildReporter.Editor.Infrastructures
             File.Copy(lastBuildReportPath, _lastBuildReportsAssetPath, true);
             AssetDatabase.ImportAsset(_lastBuildReportsAssetPath);
             _buildReport = AssetDatabase.LoadAssetAtPath<BuildReport>(_lastBuildReportsAssetPath);
+
+            if (_buildReport != null)
+            {
+                _packedAssets = _buildReport.packedAssets;
+            }
         }
 
         public void Dispose()
@@ -71,11 +78,6 @@ namespace GhaUnityBuildReporter.Editor.Infrastructures
             return _buildReport.steps;
         }
 
-        public PackedAssets[] GetPackedAssets()
-        {
-            return _buildReport.packedAssets;
-        }
-
         public IEnumerable<string> GetIncludedModuleNames()
         {
             return _buildReport.strippingInfo == null
@@ -99,7 +101,50 @@ namespace GhaUnityBuildReporter.Editor.Infrastructures
 #endif
         }
 
-        internal bool IsBuildReportActive()
+        public ulong GetPackedAssetSize(int packedAssetIndex)
+        {
+            if (_packedAssets.Length == 0)
+            {
+                return 0;
+            }
+
+            if (_packedAssets.Length <= packedAssetIndex)
+            {
+                throw new IndexOutOfRangeException();
+            }
+
+            var packedAsset = _packedAssets[packedAssetIndex];
+            var totalSize = packedAsset.contents.Aggregate<PackedAssetInfo, ulong>(0,
+                (current, packedAssetContent) => current + packedAssetContent.packedSize);
+            return totalSize;
+        }
+
+        public string GetPackAssetShortPath(int packedAssetIndex)
+        {
+            if (_packedAssets.Length <= packedAssetIndex)
+            {
+                throw new IndexOutOfRangeException();
+            }
+
+            return _packedAssets[packedAssetIndex].shortPath;
+        }
+
+        public int GetPackedAssetsCount()
+        {
+            return _packedAssets.Length;
+        }
+
+        public IEnumerable<PackedAssetInfo> GetPackedAssetContents(int packedAssetIndex)
+        {
+            if (_packedAssets.Length <= packedAssetIndex)
+            {
+                throw new IndexOutOfRangeException();
+            }
+
+            return _packedAssets[packedAssetIndex].contents;
+        }
+
+        internal bool IsBuildReportAvailable()
         {
             return _buildReport != null;
         }

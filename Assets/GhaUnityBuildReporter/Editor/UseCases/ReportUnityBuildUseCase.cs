@@ -5,7 +5,6 @@ using System;
 using System.IO;
 using System.Linq;
 using GhaUnityBuildReporter.Editor.Domains;
-using UnityEditor.Build.Reporting;
 using UnityEngine;
 
 namespace GhaUnityBuildReporter.Editor.UseCases
@@ -115,23 +114,34 @@ namespace GhaUnityBuildReporter.Editor.UseCases
 
         private void WriteSourceAssetsInfo()
         {
-            var packedAssets = _buildReportRepository.GetPackedAssets();
-            if (!packedAssets.Any())
+            // var packedAssets = _buildReportRepository.GetPackedAssets();
+            // if (!packedAssets.Any())
+            // {
+            //     return;
+            // }
+
+            var packedAssetsCount = _buildReportRepository.GetPackedAssetsCount();
+            if (packedAssetsCount == 0)
             {
                 return;
             }
 
             _jobSummaryRepository.AppendText($"## Source Assets{Environment.NewLine}");
 
-            foreach (var packedAsset in packedAssets)
+            for (var i = 0; i < packedAssetsCount; i++)
             {
-                var totalSize = packedAsset.contents.Aggregate<PackedAssetInfo, ulong>(0,
-                    (current, packedAssetContent) => current + packedAssetContent.packedSize);
+                // var totalSize = packedAsset.contents.Aggregate<PackedAssetInfo, ulong>(0,
+                //     (current, packedAssetContent) => current + packedAssetContent.packedSize);
 
-                var topAssets = packedAsset.contents.OrderByDescending(x => x.packedSize);
+                var totalSize = _buildReportRepository.GetPackedAssetSize(i);
+
+                // var topAssets = packedAsset.contents.OrderByDescending(x => x.packedSize);
+
+                var orderedContents = _buildReportRepository.GetPackedAssetContents(i)
+                    .OrderByDescending(x => x.packedSize);
 
                 _jobSummaryRepository.AppendText(
-                    $"### {packedAsset.shortPath} ({GetFormattedSize(totalSize)}){Environment.NewLine}");
+                    $"### {_buildReportRepository.GetPackAssetShortPath(i)} ({GetFormattedSize(totalSize)}){Environment.NewLine}");
 
                 _jobSummaryRepository.AppendText(
                     $"<details><summary>Details</summary>{Environment.NewLine}{Environment.NewLine}");
@@ -139,7 +149,7 @@ namespace GhaUnityBuildReporter.Editor.UseCases
                 _jobSummaryRepository.AppendText(
                     $"| File | Size |{Environment.NewLine}| --- | --- |{Environment.NewLine}");
 
-                foreach (var assetInfo in topAssets)
+                foreach (var assetInfo in orderedContents)
                 {
                     var assetPath = string.IsNullOrEmpty(assetInfo.sourceAssetPath)
                         ? "Unknown"
@@ -153,6 +163,37 @@ namespace GhaUnityBuildReporter.Editor.UseCases
 
                 _jobSummaryRepository.AppendText($"</details>{Environment.NewLine}{Environment.NewLine}");
             }
+
+            // foreach (var packedAsset in packedAssets)
+            // {
+            //     var totalSize = packedAsset.contents.Aggregate<PackedAssetInfo, ulong>(0,
+            //         (current, packedAssetContent) => current + packedAssetContent.packedSize);
+            //
+            //     var topAssets = packedAsset.contents.OrderByDescending(x => x.packedSize);
+            //
+            //     _jobSummaryRepository.AppendText(
+            //         $"### {packedAsset.shortPath} ({GetFormattedSize(totalSize)}){Environment.NewLine}");
+            //
+            //     _jobSummaryRepository.AppendText(
+            //         $"<details><summary>Details</summary>{Environment.NewLine}{Environment.NewLine}");
+            //
+            //     _jobSummaryRepository.AppendText(
+            //         $"| File | Size |{Environment.NewLine}| --- | --- |{Environment.NewLine}");
+            //
+            //     foreach (var assetInfo in topAssets)
+            //     {
+            //         var assetPath = string.IsNullOrEmpty(assetInfo.sourceAssetPath)
+            //             ? "Unknown"
+            //             : assetInfo.sourceAssetPath;
+            //
+            //         var assetDetails =
+            //             $"| {assetPath} | {GetFormattedSize(assetInfo.packedSize)} |{Environment.NewLine}";
+            //
+            //         _jobSummaryRepository.AppendText(assetDetails);
+            //     }
+            //
+            //     _jobSummaryRepository.AppendText($"</details>{Environment.NewLine}{Environment.NewLine}");
+            // }
         }
 
         private void WriteOutputFilesInfo()
