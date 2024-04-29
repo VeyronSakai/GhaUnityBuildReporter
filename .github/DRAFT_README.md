@@ -4,8 +4,6 @@ GhaUnityBuildReporter is a Unity package that automatically reflects [build repo
 
 <img width="400" alt="top" src="https://github.com/VeyronSakai/GhaUnityBuildReporter/assets/43900255/ce50ca9a-928d-458a-8350-ff0630bdea0a">
 
-[Here](https://github.com/VeyronSakai/GhaUnityBuildReporter/actions/runs/8864812982) is an example of a specific build report.
-
 This package is inspired by [Unity-Technologies/BuildReportInspector](https://github.com/Unity-Technologies/BuildReportInspector).
 
 ## Features
