@@ -4,10 +4,11 @@
 using System;
 using System.IO;
 using System.Linq;
+using GhaUnityBuildReporter.Editor.Domains;
 using UnityEditor.Build.Reporting;
 using UnityEngine;
 
-namespace GhaUnityBuildReporter.Editor
+namespace GhaUnityBuildReporter.Editor.UseCases
 {
     internal sealed class ReportUnityBuildUseCase
     {
