@@ -81,6 +81,7 @@ jobs:
           cp -f .github/DRAFT_README.md README.md
       - name: Commit README.md
         uses: EndBug/add-and-commit@v9
+        id: commit-readme
         with:
           author_name: ${{ env.GITHUB_BOT_NAME }}
           author_email: ${{ env.GITHUB_BOT_EMAIL }}
@@ -88,7 +89,7 @@ jobs:
           add: "README.md"
           new_branch: ${{ env.SOURCE_BRANCH }}
       - name: Create pull request and merge
-        if: ${{ steps.commit-package-json.outputs.committed == 'true' }}
+        if: ${{ steps.commit-package-json.outputs.committed == 'true' || steps.commit-readme.outputs.committed == 'true'}}
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
