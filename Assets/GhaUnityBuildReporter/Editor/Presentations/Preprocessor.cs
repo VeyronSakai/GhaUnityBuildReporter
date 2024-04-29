@@ -1,10 +1,11 @@
 // Copyright (c) 2024 VeyronSakai.
 // This software is released under the MIT License.
 
+using GhaUnityBuildReporter.Editor.Infrastructures;
 using UnityEditor.Build;
 using UnityEditor.Build.Reporting;
 
-namespace GhaUnityBuildReporter.Editor
+namespace GhaUnityBuildReporter.Editor.Presentations
 {
     internal sealed class Preprocessor : IPreprocessBuildWithReport
     {
