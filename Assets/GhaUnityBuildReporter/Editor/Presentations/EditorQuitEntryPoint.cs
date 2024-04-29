@@ -36,14 +36,13 @@ namespace GhaUnityBuildReporter.Editor.Presentations
             }
 
             using var buildReportRepository = new BuildReportRepository();
-            var buildReport = buildReportRepository.GetBuildReport();
-            if (buildReport == default)
+            if (!buildReportRepository.IsBuildReportActive())
             {
                 return;
             }
 
             var jobSummaryRepository = new GitHubJobSummaryRepository(s_gitHubStepSummaryPath);
-            var useCase = new ReportUnityBuildUseCase(jobSummaryRepository, buildReport);
+            var useCase = new ReportUnityBuildUseCase(jobSummaryRepository, buildReportRepository);
             useCase.WriteAll();
         }
     }
