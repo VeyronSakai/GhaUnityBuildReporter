@@ -62,11 +62,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Update package.json
-        shell: pwsh
         run: |
-          $jsonContent = Get-Content -Path $env:PACKAGE_JSON_PATH | ConvertFrom-Json
-          $jsonContent.version = $env:VERSION
-          $jsonContent | ConvertTo-Json | Set-Content -Path $env:PACKAGE_JSON_PATH
+          json_content=$(cat "${PACKAGE_JSON_PATH}")
+          updated_json=$(echo "${json_content}" | jq --arg version "${VERSION}" '.version = $version')
+          echo "${updated_json}" | jq '.' > "${PACKAGE_JSON_PATH}"
       - name: Commit package.json
         uses: EndBug/add-and-commit@v9
         id: commit-package-json
@@ -108,31 +107,41 @@ jobs:
     env:
       VERSION: ${{ needs.update-draft.outputs.tag_name }}
     steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Confirm version in package.json
+        run: |
+          package_version=$(jq -r '.version' "${PACKAGE_JSON_PATH}")
+          if [[ "${package_version}" != "${VERSION}" ]]; then
+            echo "::error::version in package.json (${package_version}) does not match the release draft tag (${VERSION})"
+            exit 1
+          fi
       - uses: release-drafter/release-drafter@v6
         id: release-drafter
         with:
           publish: true
           commitish: main
-      - name: Create semver outputs
-        uses: actions/github-script@v7
-        id: semver
-        with:
-          script: |
-            const matched = "${{ env.VERSION }}".match(/(((\d+)\.\d+).\d+)/)
-            core.setOutput('major', matched[3])
-            core.setOutput('minor', matched[2])
-            core.setOutput('patch', matched[1])
+      - name: Get semver
+        id: get-semver
+        run: |
+          read -r major minor patch <<< "$(echo "${VERSION}" | grep -oE '^([0-9]+)\.([0-9]+)\.([0-9]+)' | awk -F '.' '{print $1 " " $2 " " $3}')"
+          {
+            echo "major=${major}"
+            echo "minor=${major}.${minor}"
+            echo "patch=${major}.${minor}.${patch}"
+          } >> "${GITHUB_OUTPUT}"
       - uses: actions/checkout@v4
         with:
           ref: ${{ env.VERSION }}
       - name: Update major tag
-        if: ${{ steps.semver.outputs.major != '0' }}
+        if: steps.get-semver.outputs.major != '0'
         run: |
-          git push -f origin "refs/tags/${VERSION}:refs/tags/${{ steps.semver.outputs.major }}"
+          git push -f origin "refs/tags/${VERSION}:refs/tags/${{ steps.get-semver.outputs.major }}"
       - name: Update minor tag
-        if: ${{ steps.semver.outputs.minor != '0.0' }}
+        if: steps.get-semver.outputs.minor != '0.0'
         run: |
-          git push -f origin "refs/tags/${VERSION}:refs/tags/${{ steps.semver.outputs.minor }}"
+          git push -f origin "refs/tags/${VERSION}:refs/tags/${{ steps.get-semver.outputs.minor }}"
       - name: Export unitypackage
         uses: game-ci/unity-builder@v4
         env:
