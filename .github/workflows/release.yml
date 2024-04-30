@@ -110,7 +110,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: main
-      - name: Confirm version in package.json
+      - name: Validate version in package.json
         run: |
           package_version=$(jq -r '.version' "${PACKAGE_JSON_PATH}")
           if [[ "${package_version}" != "${VERSION}" ]]; then
