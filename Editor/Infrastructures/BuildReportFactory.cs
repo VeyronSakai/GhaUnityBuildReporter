@@ -2,14 +2,14 @@
 // This software is released under the MIT License.
 
 using System;
-using GhaUnityBuildReporter.Editor.Domains;
+using GhaUnityBuildReporter.Domains;
 using JetBrains.Annotations;
 using UnityEditor.Build.Reporting;
-using BuildReport = GhaUnityBuildReporter.Editor.Domains.BuildReport;
-using PackedAssets = GhaUnityBuildReporter.Editor.Domains.PackedAssets;
-using StrippingInfo = GhaUnityBuildReporter.Editor.Domains.StrippingInfo;
+using BuildReport = GhaUnityBuildReporter.Domains.BuildReport;
+using PackedAssets = GhaUnityBuildReporter.Domains.PackedAssets;
+using StrippingInfo = GhaUnityBuildReporter.Domains.StrippingInfo;
 
-namespace GhaUnityBuildReporter.Editor.Infrastructures
+namespace GhaUnityBuildReporter.Infrastructures
 {
     public sealed class BuildReportFactory : IBuildReportFactory
     {

@@ -3,7 +3,7 @@
 
 using System;
 
-namespace GhaUnityBuildReporter.Editor.Infrastructures
+namespace GhaUnityBuildReporter.Infrastructures
 {
     internal sealed class EnvironmentVariableRepository
     {

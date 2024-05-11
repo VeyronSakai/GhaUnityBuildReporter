@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
 
-namespace GhaUnityBuildReporter.Editor.Domains
+namespace GhaUnityBuildReporter.Domains
 {
     public interface ILastBuildReportRepository : IDisposable
     {

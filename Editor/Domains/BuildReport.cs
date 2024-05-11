@@ -3,16 +3,10 @@
 
 using UnityEditor.Build.Reporting;
 
-namespace GhaUnityBuildReporter.Editor.Domains
+namespace GhaUnityBuildReporter.Domains
 {
     public sealed class BuildReport
     {
-        public BuildSummary Summary { get; }
-        public BuildStep[] Steps { get; }
-        public PackedAssets[] PackedAssets { get; }
-        public StrippingInfo StrippingInfo { get; }
-        public BuildFile[] BuildFiles { get; }
-
         public BuildReport(BuildSummary summary, BuildStep[] steps, PackedAssets[] packedAssets,
             StrippingInfo strippingInfo, BuildFile[] buildFiles)
         {
@@ -22,5 +16,11 @@ namespace GhaUnityBuildReporter.Editor.Domains
             StrippingInfo = strippingInfo;
             BuildFiles = buildFiles;
         }
+
+        public BuildSummary Summary { get; }
+        public BuildStep[] Steps { get; }
+        public PackedAssets[] PackedAssets { get; }
+        public StrippingInfo StrippingInfo { get; }
+        public BuildFile[] BuildFiles { get; }
     }
 }

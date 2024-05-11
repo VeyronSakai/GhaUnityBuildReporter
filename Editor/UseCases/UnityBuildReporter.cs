@@ -4,19 +4,19 @@
 using System;
 using System.IO;
 using System.Linq;
-using GhaUnityBuildReporter.Editor.Domains;
+using GhaUnityBuildReporter.Domains;
 using JetBrains.Annotations;
 using UnityEditor.Build.Reporting;
 using UnityEngine;
-using BuildReport = GhaUnityBuildReporter.Editor.Domains.BuildReport;
+using BuildReport = GhaUnityBuildReporter.Domains.BuildReport;
 
-namespace GhaUnityBuildReporter.Editor.UseCases
+namespace GhaUnityBuildReporter.UseCases
 {
     internal sealed class UnityBuildReporter
     {
+        [CanBeNull] private readonly BuildReport _buildReport;
         private readonly IJobSummaryRepository _jobSummaryRepository;
         private readonly ILastBuildReportRepository _lastBuildReportRepository;
-        [CanBeNull] private readonly BuildReport _buildReport;
 
         public UnityBuildReporter(
             IJobSummaryRepository jobSummaryRepository,

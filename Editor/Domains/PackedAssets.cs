@@ -3,17 +3,17 @@
 
 using UnityEditor.Build.Reporting;
 
-namespace GhaUnityBuildReporter.Editor.Domains
+namespace GhaUnityBuildReporter.Domains
 {
     public sealed class PackedAssets
     {
-        public string ShortPath { get; }
-        public PackedAssetInfo[] Contents { get; }
-
         public PackedAssets(string shortPath, PackedAssetInfo[] contents)
         {
             ShortPath = shortPath;
             Contents = contents;
         }
+
+        public string ShortPath { get; }
+        public PackedAssetInfo[] Contents { get; }
     }
 }

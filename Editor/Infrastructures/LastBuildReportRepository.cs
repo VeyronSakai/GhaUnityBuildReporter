@@ -3,26 +3,26 @@
 
 using System.Collections.Generic;
 using System.IO;
-using GhaUnityBuildReporter.Editor.Domains;
+using GhaUnityBuildReporter.Domains;
 using UnityEditor;
 using UnityEngine;
 using BuildReport = UnityEditor.Build.Reporting.BuildReport;
 
-namespace GhaUnityBuildReporter.Editor.Infrastructures
+namespace GhaUnityBuildReporter.Infrastructures
 {
     internal sealed class LastBuildReportRepository : ILastBuildReportRepository
     {
-        private readonly string _buildReportDir =
-            $"{Path.Combine(Application.dataPath, LastBuildReportsDirectoryName)}";
-
-        private readonly string _lastBuildReportsAssetPath =
-            $"{Path.Combine("Assets", LastBuildReportsDirectoryName, LastBuildReportFileName)}";
-
         private const string LastBuildReportsDirectoryName = "LastBuildReports";
         private const string LibraryDirectoryName = "Library";
         private const string LastBuildReportFileName = "LastBuild.buildreport";
 
+        private readonly string _buildReportDir =
+            $"{Path.Combine(Application.dataPath, LastBuildReportsDirectoryName)}";
+
         private readonly BuildReport _lastBuildReport;
+
+        private readonly string _lastBuildReportsAssetPath =
+            $"{Path.Combine("Assets", LastBuildReportsDirectoryName, LastBuildReportFileName)}";
 
         public LastBuildReportRepository()
         {
