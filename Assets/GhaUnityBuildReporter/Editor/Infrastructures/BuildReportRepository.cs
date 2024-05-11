@@ -1,16 +1,15 @@
 // Copyright (c) 2024 VeyronSakai.
 // This software is released under the MIT License.
 
-using System;
 using System.IO;
-using JetBrains.Annotations;
+using GhaUnityBuildReporter.Editor.Domains;
 using UnityEditor;
 using UnityEditor.Build.Reporting;
 using UnityEngine;
 
 namespace GhaUnityBuildReporter.Editor.Infrastructures
 {
-    internal sealed class BuildReportRepository : IDisposable
+    internal sealed class BuildReportRepository : IBuildReportRepository
     {
         private readonly string _buildReportDir =
             $"{Path.Combine(Application.dataPath, LastBuildReportsDirectoryName)}";
@@ -22,8 +21,7 @@ namespace GhaUnityBuildReporter.Editor.Infrastructures
         private const string LibraryDirectoryName = "Library";
         private const string LastBuildReportFileName = "LastBuild.buildreport";
 
-        [CanBeNull]
-        internal BuildReport GetBuildReport()
+        public BuildReport GetBuildReport()
         {
             var projectRootPath = Directory.GetParent(Application.dataPath)?.FullName;
             if (string.IsNullOrEmpty(projectRootPath))
