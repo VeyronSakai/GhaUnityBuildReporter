@@ -14,7 +14,7 @@ permissions:
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  PACKAGE_JSON_PATH: Assets/GhaUnityBuildReporter/package.json
+  PACKAGE_JSON_PATH: package.json
   GITHUB_BOT_NAME: github-actions[bot]
   GITHUB_BOT_EMAIL: github-actions[bot]@users.noreply.github.com
 

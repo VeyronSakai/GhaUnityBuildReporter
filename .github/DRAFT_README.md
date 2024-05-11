@@ -6,6 +6,9 @@ GhaUnityBuildReporter is a Unity package that automatically reflects [build repo
 
 This package is inspired by [Unity-Technologies/BuildReportInspector](https://github.com/Unity-Technologies/BuildReportInspector).
 
+> [!WARNING]
+> This is in a very early stage of development. Please use with caution.
+
 ## Features
 
 GhaUnityBuildReporter specifically reflects the following information in the Job Summary.
@@ -76,7 +79,7 @@ Because all the processing is done in Unity post-processing, the setup is basica
 1. Open the Package Manager in the UnityEditor.
 2. Select the `+` button in the upper left corner.
 3. Select Add package from git URL.
-4. Enter https://github.com/VeyronSakai/GhaUnityBuildReporter.git?path=Assets/GhaUnityBuildReporter and Select Add button.
+4. Enter https://github.com/VeyronSakai/GhaUnityBuildReporter.git and Select Add button.
 
 It can also be installed by downloading .unitypackage from [Releases](https://github.com/VeyronSakai/GhaUnityBuildReporter/releases/latest).
 
@@ -85,9 +88,9 @@ It can also be installed by downloading .unitypackage from [Releases](https://gi
 
 ## How to suppress GhaUnityBuildReporter
 
-Perhaps there is a Workflow or Job for which you would like to suppress GhaUnityBuildReporter.
+Perhaps there is a Workflow or Job for which you would like to disable GhaUnityBuildReporter.
 
-In such cases, setting the environment variable `GHA_UNITY_BUILD_REPORTER_OPTOUT` to `1` or `true` will suppress GhaUnityBuildReporter in the scope where that environment variable is valid.
+In such cases, setting the environment variable `GHA_UNITY_BUILD_REPORTER_OPTOUT` to `1` or `true` will disable GhaUnityBuildReporter in the scope where that environment variable is valid.
 
 ## Contribution
 
