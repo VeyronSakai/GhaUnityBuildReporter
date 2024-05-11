@@ -153,4 +153,4 @@ jobs:
           buildMethod: Editor.PackageExporter.Export
       - name: Upload unitypackage
         run: |
-          gh release upload "${VERSION}" "GhaUnityBuildReporter.unitypackage"
+          gh release upload "${VERSION}" "Samples~/GhaUnityBuildReporter.unitypackage"

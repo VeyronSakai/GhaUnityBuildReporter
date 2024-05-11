@@ -8,7 +8,7 @@ namespace Editor
 {
     public class PackageExporter
     {
-        private const string PackagePath = "Assets/GhaUnityBuildReporter/";
+        private const string PackagePath = "Packages/com.veyron-sakai.gha-unity-build-reporter/";
         private const string ExportPath = "./GhaUnityBuildReporter.unitypackage";
 
         [MenuItem("Tools/ExportPackage")]
