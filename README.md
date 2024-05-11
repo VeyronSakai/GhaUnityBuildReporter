@@ -6,6 +6,9 @@ GhaUnityBuildReporter is a Unity package that automatically reflects [build repo
 
 This package is inspired by [Unity-Technologies/BuildReportInspector](https://github.com/Unity-Technologies/BuildReportInspector).
 
+> [!WARNING]
+> This is in a very early stage of development. Please use with caution.
+
 ## Features
 
 GhaUnityBuildReporter specifically reflects the following information in the Job Summary.
