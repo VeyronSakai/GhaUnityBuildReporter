@@ -82,8 +82,3 @@ crashlytics-build.properties
 **/.idea/**/contentModel.xml
 **/.idea/**/modules.xml
 /[Aa]ssets/[Pp]lugins/[Ee]ditor/[Jj]et[Bb]rains*
-
-LICENSE.meta
-README.md.meta
-**/*.sln
-**/*.sln.meta

@@ -28,9 +28,9 @@ jobs:
         with:
           filters: |
             should-build:
-              - Assets/**/*
-              - ProjectSettings/**/*
-              - Packages/**/*
+              - Editor/**/*
+              - Runtime/**/*
+              - Samples~/**/*
               - .github/workflows/build.yml
 
   get-unity-version:
@@ -38,17 +38,19 @@ jobs:
     needs: paths-filter
     if: ${{ (github.event_name == 'pull_request' && needs.paths-filter.outputs.should-build == 'true') || github.event_name == 'workflow_dispatch'}}
     runs-on: ubuntu-latest
+    env:
+      PROJECT_VERSION_PATH: Samples~/ProjectSettings/ProjectVersion.txt
     outputs:
       unity-version: ${{ steps.get-unity-version.outputs.unity-version }}
     steps:
       - uses: actions/checkout@v4
         with:
-          sparse-checkout: ProjectSettings/ProjectVersion.txt
+          sparse-checkout: ${{ env.PROJECT_VERSION_PATH }}
           clean: "${{ env.CLEAN }}"
       - name: Get Unity version
         id: get-unity-version
         run: |
-          echo "unity-version=$(grep "m_EditorVersion:" < ProjectSettings/ProjectVersion.txt | cut -d" " -f2)" >> "${GITHUB_OUTPUT}"
+          echo "unity-version=$(grep "m_EditorVersion:" < "${PROJECT_VERSION_PATH}" | cut -d" " -f2)" >> "${GITHUB_OUTPUT}"
 
   android:
     name: Android
@@ -69,7 +71,7 @@ jobs:
             -quit \
             -batchmode \
             -nographics \
-            -projectPath "$(pwd)" \
+            -projectPath ./Samples~ \
             -executeMethod Editor.BuildEntryPoint.BuildAndroid
 
   ios:
@@ -90,7 +92,7 @@ jobs:
             -quit \
             -batchmode \
             -nographics \
-            -projectPath "$(pwd)" \
+            -projectPath ./Samples~ \
             -executeMethod Editor.BuildEntryPoint.BuildIOS
 
   macos:
@@ -111,7 +113,7 @@ jobs:
             -quit \
             -batchmode \
             -nographics \
-            -projectPath "$(pwd)" \
+            -projectPath ./Samples~ \
             -executeMethod Editor.BuildEntryPoint.BuildMacOS
 
   webgl:
@@ -132,5 +134,5 @@ jobs:
             -quit \
             -batchmode \
             -nographics \
-            -projectPath "$(pwd)" \
+            -projectPath ./Samples~ \
             -executeMethod Editor.BuildEntryPoint.BuildWebGL
