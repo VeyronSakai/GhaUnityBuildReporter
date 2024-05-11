@@ -30,7 +30,12 @@ namespace GhaUnityBuildReporter.Editor.Infrastructures
             }
 
             var packedAssetsArray = GetPackedAssetsArray(originalBuildReport);
-            var strippingInfo = new StrippingInfo(originalBuildReport.strippingInfo.includedModules);
+
+            var includedModules = originalBuildReport.strippingInfo == null
+                ? Array.Empty<string>()
+                : originalBuildReport.strippingInfo.includedModules;
+
+            var strippingInfo = new StrippingInfo(includedModules);
             var buildFiles = GetBuildFiles(originalBuildReport);
             return new BuildReport(
                 originalBuildReport.summary,
