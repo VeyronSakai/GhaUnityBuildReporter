@@ -151,6 +151,7 @@ jobs:
         with:
           targetPlatform: StandaloneLinux64
           buildMethod: Editor.PackageExporter.Export
+          projectPath: Samples~
       - name: Upload unitypackage
         run: |
           gh release upload "${VERSION}" "Samples~/GhaUnityBuildReporter.unitypackage"
