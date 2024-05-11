@@ -1,15 +1,16 @@
 // Copyright (c) 2024 VeyronSakai.
 // This software is released under the MIT License.
 
+using System.Collections.Generic;
 using System.IO;
 using GhaUnityBuildReporter.Editor.Domains;
 using UnityEditor;
-using UnityEditor.Build.Reporting;
 using UnityEngine;
+using BuildReport = UnityEditor.Build.Reporting.BuildReport;
 
 namespace GhaUnityBuildReporter.Editor.Infrastructures
 {
-    internal sealed class BuildReportRepository : IBuildReportRepository
+    internal sealed class LastBuildReportRepository : ILastBuildReportRepository
     {
         private readonly string _buildReportDir =
             $"{Path.Combine(Application.dataPath, LastBuildReportsDirectoryName)}";
@@ -21,18 +22,20 @@ namespace GhaUnityBuildReporter.Editor.Infrastructures
         private const string LibraryDirectoryName = "Library";
         private const string LastBuildReportFileName = "LastBuild.buildreport";
 
-        public BuildReport GetBuildReport()
+        private readonly BuildReport _lastBuildReport;
+
+        public LastBuildReportRepository()
         {
             var projectRootPath = Directory.GetParent(Application.dataPath)?.FullName;
             if (string.IsNullOrEmpty(projectRootPath))
             {
-                return default;
+                return;
             }
 
             var lastBuildReportPath = $"{Path.Combine(projectRootPath, LibraryDirectoryName, LastBuildReportFileName)}";
             if (!File.Exists(lastBuildReportPath))
             {
-                return default;
+                return;
             }
 
             if (!Directory.Exists(_buildReportDir))
@@ -42,8 +45,17 @@ namespace GhaUnityBuildReporter.Editor.Infrastructures
 
             File.Copy(lastBuildReportPath, _lastBuildReportsAssetPath, true);
             AssetDatabase.ImportAsset(_lastBuildReportsAssetPath);
-            var report = AssetDatabase.LoadAssetAtPath<BuildReport>(_lastBuildReportsAssetPath);
-            return report;
+            _lastBuildReport = AssetDatabase.LoadAssetAtPath<BuildReport>(_lastBuildReportsAssetPath);
+        }
+
+        public BuildReport GetBuildReport()
+        {
+            return _lastBuildReport;
+        }
+
+        public IEnumerable<string> GetReasonsForIncluding(string entityName)
+        {
+            return _lastBuildReport.strippingInfo.GetReasonsForIncluding(entityName);
         }
 
         public void Dispose()
