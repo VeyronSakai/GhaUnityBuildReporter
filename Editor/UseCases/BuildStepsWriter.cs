@@ -19,7 +19,7 @@ namespace GhaUnityBuildReporter.Editor.UseCases
 
         internal void Write([NotNull] BuildReport buildReport)
         {
-            if (buildReport == null || buildReport.Steps.Length <= 0)
+            if (buildReport.Steps.Length <= 0)
             {
                 return;
             }

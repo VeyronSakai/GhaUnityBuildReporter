@@ -2,11 +2,9 @@
 // This software is released under the MIT License.
 
 using System;
-using System.IO;
 using System.Linq;
 using GhaUnityBuildReporter.Editor.Domains;
 using JetBrains.Annotations;
-using UnityEngine;
 using BuildReport = GhaUnityBuildReporter.Editor.Domains.BuildReport;
 
 namespace GhaUnityBuildReporter.Editor.UseCases
@@ -21,6 +19,7 @@ namespace GhaUnityBuildReporter.Editor.UseCases
         [NotNull] private readonly BasicInfoWriter _basicInfoWriter;
         [NotNull] private readonly BuildStepsWriter _buildStepsWriter;
         [NotNull] private readonly SourceAssetsWriter _sourceAssetsWriter;
+        [NotNull] private readonly OutputFilesWriter _outputFilesWriter;
 
         internal UnityBuildReporter(
             [NotNull] AbstractJobSummaryRepository jobSummaryRepository,
@@ -35,6 +34,7 @@ namespace GhaUnityBuildReporter.Editor.UseCases
             _basicInfoWriter = new BasicInfoWriter(_jobSummaryRepository);
             _buildStepsWriter = new BuildStepsWriter(_jobSummaryRepository);
             _sourceAssetsWriter = new SourceAssetsWriter(_jobSummaryRepository);
+            _outputFilesWriter = new OutputFilesWriter(_jobSummaryRepository);
         }
 
         internal void WriteAll()
@@ -52,33 +52,9 @@ namespace GhaUnityBuildReporter.Editor.UseCases
             _basicInfoWriter.Write(_buildReport);
             _buildStepsWriter.Write(_buildReport);
             _sourceAssetsWriter.Write(_buildReport);
+            _outputFilesWriter.Write(_buildReport);
 
-            WriteOutputFilesInfo();
             WriteIncludedModulesInfo();
-        }
-
-        private void WriteOutputFilesInfo()
-        {
-            if (_buildReport == null || _buildReport.BuildFiles.Length == 0)
-            {
-                return;
-            }
-
-            _jobSummaryRepository.AppendText($"## Output Files{Environment.NewLine}" +
-                                             $"<details><summary>Details</summary>{Environment.NewLine}{Environment.NewLine}" +
-                                             $"| File | Size |{Environment.NewLine}" +
-                                             $"| --- | --- |{Environment.NewLine}");
-
-            var projectRootPath = Directory.GetParent(Application.dataPath)?.FullName;
-
-            foreach (var file in _buildReport.BuildFiles)
-            {
-                var relativePath = Path.GetRelativePath(projectRootPath, file.path);
-                _jobSummaryRepository.AppendText(
-                    $"| {relativePath} | {GetFormattedSize(file.size)} |{Environment.NewLine}");
-            }
-
-            _jobSummaryRepository.AppendText($"</details>{Environment.NewLine}{Environment.NewLine}");
         }
 
         private void WriteIncludedModulesInfo()
