@@ -19,9 +19,9 @@ namespace GhaUnityBuildReporter.Editor.Domains
         }
 
         internal BuildSummary Summary { get; }
-        internal BuildStep[] Steps { get; }
-        internal PackedAssets[] PackedAssets { get; }
-        internal StrippingInfo StrippingInfo { get; }
-        internal BuildFile[] BuildFiles { get; }
+        [NotNull] internal BuildStep[] Steps { get; }
+        [NotNull] internal PackedAssets[] PackedAssets { get; }
+        [NotNull] internal StrippingInfo StrippingInfo { get; }
+        [NotNull] internal BuildFile[] BuildFiles { get; }
     }
 }

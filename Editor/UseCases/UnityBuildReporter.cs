@@ -6,7 +6,6 @@ using System.IO;
 using System.Linq;
 using GhaUnityBuildReporter.Editor.Domains;
 using JetBrains.Annotations;
-using UnityEditor.Build.Reporting;
 using UnityEngine;
 using BuildReport = GhaUnityBuildReporter.Editor.Domains.BuildReport;
 
@@ -20,7 +19,8 @@ namespace GhaUnityBuildReporter.Editor.UseCases
         private readonly AbstractBuildReportFactory _buildReportFactory;
         private readonly TitleWriter _titleWriter;
         private readonly BasicInfoWriter _basicInfoWriter;
-        private BuildStepsWriter _buildStepsWriter;
+        private readonly BuildStepsWriter _buildStepsWriter;
+        private readonly SourceAssetsWriter _sourceAssetsWriter;
 
         internal UnityBuildReporter(
             [NotNull] AbstractJobSummaryRepository jobSummaryRepository,
@@ -34,6 +34,7 @@ namespace GhaUnityBuildReporter.Editor.UseCases
             _titleWriter = new TitleWriter(_jobSummaryRepository);
             _basicInfoWriter = new BasicInfoWriter(_jobSummaryRepository);
             _buildStepsWriter = new BuildStepsWriter(_jobSummaryRepository);
+            _sourceAssetsWriter = new SourceAssetsWriter(_jobSummaryRepository);
         }
 
         internal void WriteAll()
@@ -50,48 +51,10 @@ namespace GhaUnityBuildReporter.Editor.UseCases
             _titleWriter.Write();
             _basicInfoWriter.Write(_buildReport);
             _buildStepsWriter.Write(_buildReport);
+            _sourceAssetsWriter.Write(_buildReport);
 
-            WriteSourceAssetsInfo();
             WriteOutputFilesInfo();
             WriteIncludedModulesInfo();
-        }
-
-        private void WriteSourceAssetsInfo()
-        {
-            if (_buildReport == null || !_buildReport.PackedAssets.Any())
-            {
-                return;
-            }
-
-            _jobSummaryRepository.AppendText($"## Source Assets{Environment.NewLine}");
-
-            foreach (var packedAsset in _buildReport.PackedAssets)
-            {
-                var totalSize = packedAsset.Contents.Aggregate<PackedAssetInfo, ulong>(0,
-                    (current, packedAssetContent) => current + packedAssetContent.packedSize);
-
-                var topAssets = packedAsset.Contents.OrderByDescending(x => x.packedSize);
-
-                _jobSummaryRepository.AppendText(
-                    $"### {packedAsset.ShortPath} ({GetFormattedSize(totalSize)}){Environment.NewLine}" +
-                    $"<details><summary>Details</summary>{Environment.NewLine}{Environment.NewLine}" +
-                    $"| File | Size |{Environment.NewLine}| --- | --- |{Environment.NewLine}"
-                );
-
-                foreach (var assetInfo in topAssets)
-                {
-                    var assetPath = string.IsNullOrEmpty(assetInfo.sourceAssetPath)
-                        ? "Unknown"
-                        : assetInfo.sourceAssetPath;
-
-                    var assetDetails =
-                        $"| {assetPath} | {GetFormattedSize(assetInfo.packedSize)} |{Environment.NewLine}";
-
-                    _jobSummaryRepository.AppendText(assetDetails);
-                }
-
-                _jobSummaryRepository.AppendText($"</details>{Environment.NewLine}{Environment.NewLine}");
-            }
         }
 
         private void WriteOutputFilesInfo()

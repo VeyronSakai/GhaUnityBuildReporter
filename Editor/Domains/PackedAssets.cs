@@ -14,7 +14,7 @@ namespace GhaUnityBuildReporter.Editor.Domains
             Contents = contents;
         }
 
-        internal string ShortPath { get; }
+        [NotNull] internal string ShortPath { get; }
         [NotNull] internal PackedAssetInfo[] Contents { get; }
     }
 }
