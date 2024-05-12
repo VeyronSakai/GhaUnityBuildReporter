@@ -10,7 +10,7 @@ using BuildReport = UnityEditor.Build.Reporting.BuildReport;
 
 namespace GhaUnityBuildReporter.Editor.Infrastructures
 {
-    internal sealed class LastBuildReportRepository : AbstractLastBuildReportRepository
+    internal sealed class OriginalBuildReportRepository : AbstractOriginalBuildReportRepository
     {
         private const string LastBuildReportsDirectoryName = "LastBuildReports";
         private const string LibraryDirectoryName = "Library";
@@ -24,7 +24,7 @@ namespace GhaUnityBuildReporter.Editor.Infrastructures
         private readonly string _lastBuildReportsAssetPath =
             $"{Path.Combine("Assets", LastBuildReportsDirectoryName, LastBuildReportFileName)}";
 
-        internal LastBuildReportRepository()
+        internal OriginalBuildReportRepository()
         {
             var projectRootPath = Directory.GetParent(Application.dataPath)?.FullName;
             if (string.IsNullOrEmpty(projectRootPath))

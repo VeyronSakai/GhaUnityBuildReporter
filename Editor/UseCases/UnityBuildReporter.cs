@@ -14,56 +14,44 @@ namespace GhaUnityBuildReporter.Editor.UseCases
 {
     internal sealed class UnityBuildReporter
     {
-        [CanBeNull] private readonly BuildReport _buildReport;
+        [CanBeNull] private BuildReport _buildReport;
         private readonly AbstractJobSummaryRepository _jobSummaryRepository;
-        private readonly AbstractLastBuildReportRepository _lastBuildReportRepository;
+        private readonly AbstractOriginalBuildReportRepository _originalBuildReportRepository;
+        private readonly AbstractBuildReportFactory _buildReportFactory;
         private readonly TitleWriter _titleWriter;
+        private readonly BasicInfoWriter _basicInfoWriter;
 
         internal UnityBuildReporter(
-            AbstractJobSummaryRepository jobSummaryRepository,
-            AbstractLastBuildReportRepository lastBuildReportRepository,
-            AbstractBuildReportFactory buildReportFactory
+            [NotNull] AbstractJobSummaryRepository jobSummaryRepository,
+            [NotNull] AbstractOriginalBuildReportRepository originalBuildReportRepository,
+            [NotNull] AbstractBuildReportFactory buildReportFactory
         )
         {
             _jobSummaryRepository = jobSummaryRepository;
-            _lastBuildReportRepository = lastBuildReportRepository;
-            _buildReport = buildReportFactory.CreateBuildReport();
+            _originalBuildReportRepository = originalBuildReportRepository;
+            _buildReportFactory = buildReportFactory;
             _titleWriter = new TitleWriter(_jobSummaryRepository);
+            _basicInfoWriter = new BasicInfoWriter(_jobSummaryRepository);
         }
 
         internal void WriteAll()
         {
-            _titleWriter.WriteTitle(_buildReport);
+            var originalBuildReport = _originalBuildReportRepository.GetBuildReport();
+            if (originalBuildReport == null)
+            {
+                _jobSummaryRepository.AppendText("Unity build report not found.");
+                return;
+            }
 
-            WriteSummary();
+            _buildReport = _buildReportFactory.CreateBuildReport(originalBuildReport);
+
+            _titleWriter.Write();
+            _basicInfoWriter.Write(_buildReport);
+
             WriteBuildStepsInfo();
             WriteSourceAssetsInfo();
             WriteOutputFilesInfo();
             WriteIncludedModulesInfo();
-        }
-
-        private void WriteSummary()
-        {
-            if (_buildReport == null)
-            {
-                return;
-            }
-
-            _jobSummaryRepository.AppendText($"## Basic Info{Environment.NewLine}");
-
-            var summary = _buildReport.Summary;
-
-            var basicInfo =
-                $"| Key | Value |{Environment.NewLine}"
-                + $"| --- | --- |{Environment.NewLine}"
-                + $"| Platform | {summary.platform} |{Environment.NewLine}"
-                + $@"| Total Time | {summary.totalTime:hh\:mm\:ss\.fff}|{Environment.NewLine}"
-                + $"| Total Size | {GetFormattedSize(summary.totalSize)} |{Environment.NewLine}"
-                + $"| Build Result | {summary.result} |{Environment.NewLine}"
-                + $"| Total Errors | {summary.totalErrors} |{Environment.NewLine}"
-                + $"| Total Warnings | {summary.totalWarnings} |{Environment.NewLine}";
-
-            _jobSummaryRepository.AppendText(basicInfo);
         }
 
         private void WriteBuildStepsInfo()
@@ -211,7 +199,7 @@ namespace GhaUnityBuildReporter.Editor.UseCases
                 return;
             }
 
-            var reasons = _lastBuildReportRepository.GetReasonsForIncluding(item);
+            var reasons = _originalBuildReportRepository.GetReasonsForIncluding(item);
             foreach (var reason in reasons)
             {
                 WriteIncludedModuleInfoInternal(reason, depth + 1);

@@ -3,6 +3,7 @@
 
 using System.IO;
 using GhaUnityBuildReporter.Editor.Domains;
+using JetBrains.Annotations;
 
 namespace GhaUnityBuildReporter.Editor.Infrastructures
 {
@@ -10,7 +11,7 @@ namespace GhaUnityBuildReporter.Editor.Infrastructures
     {
         private readonly string _gitHubStepSummaryPath;
 
-        internal GitHubJobSummaryRepository(string gitHubStepSummaryPath)
+        internal GitHubJobSummaryRepository([NotNull] string gitHubStepSummaryPath)
         {
             _gitHubStepSummaryPath = gitHubStepSummaryPath;
         }

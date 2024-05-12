@@ -2,6 +2,7 @@
 // This software is released under the MIT License.
 
 using System;
+using JetBrains.Annotations;
 
 namespace GhaUnityBuildReporter.Editor.Infrastructures
 {
@@ -12,6 +13,7 @@ namespace GhaUnityBuildReporter.Editor.Infrastructures
         private const string GhaUnityBuildReporterOptOut = "GHA_UNITY_BUILD_REPORTER_OPTOUT";
         private const string True = "true";
 
+        [CanBeNull]
         internal static string GetGitHubStepSummaryPath()
         {
             return Environment.GetEnvironmentVariable(GitHubStepSummary);

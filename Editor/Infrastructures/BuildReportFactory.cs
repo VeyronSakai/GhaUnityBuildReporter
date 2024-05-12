@@ -13,22 +13,8 @@ namespace GhaUnityBuildReporter.Editor.Infrastructures
 {
     internal sealed class BuildReportFactory : AbstractBuildReportFactory
     {
-        private readonly AbstractLastBuildReportRepository _lastBuildReportRepository;
-
-        internal BuildReportFactory(AbstractLastBuildReportRepository lastBuildReportRepository)
+        internal override BuildReport CreateBuildReport(UnityEditor.Build.Reporting.BuildReport originalBuildReport)
         {
-            _lastBuildReportRepository = lastBuildReportRepository;
-        }
-
-        [CanBeNull]
-        internal override BuildReport CreateBuildReport()
-        {
-            var originalBuildReport = _lastBuildReportRepository.GetBuildReport();
-            if (originalBuildReport == null)
-            {
-                return null;
-            }
-
             var packedAssetsArray = GetPackedAssetsArray(originalBuildReport);
 
             var includedModules = originalBuildReport.strippingInfo == null
@@ -46,7 +32,9 @@ namespace GhaUnityBuildReporter.Editor.Infrastructures
             );
         }
 
-        private static PackedAssets[] GetPackedAssetsArray(UnityEditor.Build.Reporting.BuildReport originalBuildReport)
+        [NotNull]
+        private static PackedAssets[] GetPackedAssetsArray(
+            [NotNull] UnityEditor.Build.Reporting.BuildReport originalBuildReport)
         {
             var packedAssets = new PackedAssets[originalBuildReport.packedAssets.Length];
             for (var i = 0; i < originalBuildReport.packedAssets.Length; i++)
@@ -65,7 +53,8 @@ namespace GhaUnityBuildReporter.Editor.Infrastructures
             return packedAssets;
         }
 
-        private static BuildFile[] GetBuildFiles(UnityEditor.Build.Reporting.BuildReport originalBuildReport)
+        [NotNull]
+        private static BuildFile[] GetBuildFiles([NotNull] UnityEditor.Build.Reporting.BuildReport originalBuildReport)
         {
             return originalBuildReport == null
                 ? Array.Empty<BuildFile>()

@@ -7,7 +7,7 @@ using JetBrains.Annotations;
 
 namespace GhaUnityBuildReporter.Editor.Domains
 {
-    internal abstract class AbstractLastBuildReportRepository : IDisposable
+    internal abstract class AbstractOriginalBuildReportRepository : IDisposable
     {
         [CanBeNull]
         internal abstract UnityEditor.Build.Reporting.BuildReport GetBuildReport();

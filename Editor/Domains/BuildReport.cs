@@ -1,14 +1,15 @@
 // Copyright (c) 2024 VeyronSakai.
 // This software is released under the MIT License.
 
+using JetBrains.Annotations;
 using UnityEditor.Build.Reporting;
 
 namespace GhaUnityBuildReporter.Editor.Domains
 {
     internal sealed class BuildReport
     {
-        public BuildReport(BuildSummary summary, BuildStep[] steps, PackedAssets[] packedAssets,
-            StrippingInfo strippingInfo, BuildFile[] buildFiles)
+        public BuildReport(BuildSummary summary, [NotNull] BuildStep[] steps, [NotNull] PackedAssets[] packedAssets,
+            [NotNull] StrippingInfo strippingInfo, [NotNull] BuildFile[] buildFiles)
         {
             Summary = summary;
             Steps = steps;

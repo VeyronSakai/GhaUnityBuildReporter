@@ -3,6 +3,7 @@
 
 using System;
 using GhaUnityBuildReporter.Editor.Domains;
+using JetBrains.Annotations;
 
 namespace GhaUnityBuildReporter.Editor.UseCases
 {
@@ -10,18 +11,14 @@ namespace GhaUnityBuildReporter.Editor.UseCases
     {
         private readonly AbstractJobSummaryRepository _jobSummaryRepository;
 
-        internal TitleWriter(AbstractJobSummaryRepository jobSummaryRepository)
+        internal TitleWriter([NotNull] AbstractJobSummaryRepository jobSummaryRepository)
         {
             _jobSummaryRepository = jobSummaryRepository;
         }
 
-        internal void WriteTitle(BuildReport buildReport)
+        internal void Write()
         {
             _jobSummaryRepository.AppendText($"# Unity Build Report{Environment.NewLine}");
-            if (buildReport == null)
-            {
-                _jobSummaryRepository.AppendText($"Build report not found {Environment.NewLine}");
-            }
         }
     }
 }
