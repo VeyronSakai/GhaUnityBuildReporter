@@ -15,13 +15,13 @@ namespace GhaUnityBuildReporter.Editor.UseCases
     internal sealed class UnityBuildReporter
     {
         [CanBeNull] private readonly BuildReport _buildReport;
-        private readonly IJobSummaryRepository _jobSummaryRepository;
-        private readonly ILastBuildReportRepository _lastBuildReportRepository;
+        private readonly AbstractJobSummaryRepository _jobSummaryRepository;
+        private readonly AbstractLastBuildReportRepository _lastBuildReportRepository;
 
-        public UnityBuildReporter(
-            IJobSummaryRepository jobSummaryRepository,
-            ILastBuildReportRepository lastBuildReportRepository,
-            IBuildReportFactory buildReportFactory
+        internal UnityBuildReporter(
+            AbstractJobSummaryRepository jobSummaryRepository,
+            AbstractLastBuildReportRepository lastBuildReportRepository,
+            AbstractBuildReportFactory buildReportFactory
         )
         {
             _jobSummaryRepository = jobSummaryRepository;
@@ -29,7 +29,7 @@ namespace GhaUnityBuildReporter.Editor.UseCases
             _buildReport = buildReportFactory.CreateBuildReport();
         }
 
-        public void WriteAll()
+        internal void WriteAll()
         {
             WriteTitle();
             WriteSummary();

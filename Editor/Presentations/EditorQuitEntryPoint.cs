@@ -13,7 +13,8 @@ namespace GhaUnityBuildReporter.Editor.Presentations
         internal static bool ExecutesUnityBuild;
         private static readonly string s_gitHubStepSummaryPath;
 
-        // The 'report' argument passed to IPolsstprocessBuildWithReport.OnPostprocessBuild() contains incorrect information, so read Library/LastBuild.buildreport instead.
+        // ReSharper disable once CommentTypo
+        // The 'report' argument passed to IPostprocessBuildWithReport.OnPostprocessBuild() contains incorrect information, so read Library/LastBuild.buildreport instead.
         // see: https://issuetracker.unity3d.com/issues/buildreport-report-in-ipostprocessbuildwithreport-provides-incorrect-information
         static EditorQuitEntryPoint()
         {

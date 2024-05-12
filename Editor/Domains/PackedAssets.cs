@@ -5,15 +5,15 @@ using UnityEditor.Build.Reporting;
 
 namespace GhaUnityBuildReporter.Editor.Domains
 {
-    public sealed class PackedAssets
+    internal sealed class PackedAssets
     {
-        public PackedAssets(string shortPath, PackedAssetInfo[] contents)
+        internal PackedAssets(string shortPath, PackedAssetInfo[] contents)
         {
             ShortPath = shortPath;
             Contents = contents;
         }
 
-        public string ShortPath { get; }
-        public PackedAssetInfo[] Contents { get; }
+        internal string ShortPath { get; }
+        internal PackedAssetInfo[] Contents { get; }
     }
 }

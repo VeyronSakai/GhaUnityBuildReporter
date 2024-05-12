@@ -10,7 +10,7 @@ using BuildReport = UnityEditor.Build.Reporting.BuildReport;
 
 namespace GhaUnityBuildReporter.Editor.Infrastructures
 {
-    internal sealed class LastBuildReportRepository : ILastBuildReportRepository
+    internal sealed class LastBuildReportRepository : AbstractLastBuildReportRepository
     {
         private const string LastBuildReportsDirectoryName = "LastBuildReports";
         private const string LibraryDirectoryName = "Library";
@@ -24,7 +24,7 @@ namespace GhaUnityBuildReporter.Editor.Infrastructures
         private readonly string _lastBuildReportsAssetPath =
             $"{Path.Combine("Assets", LastBuildReportsDirectoryName, LastBuildReportFileName)}";
 
-        public LastBuildReportRepository()
+        internal LastBuildReportRepository()
         {
             var projectRootPath = Directory.GetParent(Application.dataPath)?.FullName;
             if (string.IsNullOrEmpty(projectRootPath))
@@ -48,17 +48,17 @@ namespace GhaUnityBuildReporter.Editor.Infrastructures
             _lastBuildReport = AssetDatabase.LoadAssetAtPath<BuildReport>(_lastBuildReportsAssetPath);
         }
 
-        public BuildReport GetBuildReport()
+        internal override BuildReport GetBuildReport()
         {
             return _lastBuildReport;
         }
 
-        public IEnumerable<string> GetReasonsForIncluding(string entityName)
+        internal override IEnumerable<string> GetReasonsForIncluding(string entityName)
         {
             return _lastBuildReport.strippingInfo.GetReasonsForIncluding(entityName);
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
             if (Directory.Exists(_buildReportDir))
             {

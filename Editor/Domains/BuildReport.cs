@@ -5,7 +5,7 @@ using UnityEditor.Build.Reporting;
 
 namespace GhaUnityBuildReporter.Editor.Domains
 {
-    public sealed class BuildReport
+    internal sealed class BuildReport
     {
         public BuildReport(BuildSummary summary, BuildStep[] steps, PackedAssets[] packedAssets,
             StrippingInfo strippingInfo, BuildFile[] buildFiles)
@@ -17,10 +17,10 @@ namespace GhaUnityBuildReporter.Editor.Domains
             BuildFiles = buildFiles;
         }
 
-        public BuildSummary Summary { get; }
-        public BuildStep[] Steps { get; }
-        public PackedAssets[] PackedAssets { get; }
-        public StrippingInfo StrippingInfo { get; }
-        public BuildFile[] BuildFiles { get; }
+        internal BuildSummary Summary { get; }
+        internal BuildStep[] Steps { get; }
+        internal PackedAssets[] PackedAssets { get; }
+        internal StrippingInfo StrippingInfo { get; }
+        internal BuildFile[] BuildFiles { get; }
     }
 }

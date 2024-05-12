@@ -11,17 +11,17 @@ using StrippingInfo = GhaUnityBuildReporter.Editor.Domains.StrippingInfo;
 
 namespace GhaUnityBuildReporter.Editor.Infrastructures
 {
-    public sealed class BuildReportFactory : IBuildReportFactory
+    internal sealed class BuildReportFactory : AbstractBuildReportFactory
     {
-        private readonly ILastBuildReportRepository _lastBuildReportRepository;
+        private readonly AbstractLastBuildReportRepository _lastBuildReportRepository;
 
-        public BuildReportFactory(ILastBuildReportRepository lastBuildReportRepository)
+        internal BuildReportFactory(AbstractLastBuildReportRepository lastBuildReportRepository)
         {
             _lastBuildReportRepository = lastBuildReportRepository;
         }
 
         [CanBeNull]
-        public BuildReport CreateBuildReport()
+        internal override BuildReport CreateBuildReport()
         {
             var originalBuildReport = _lastBuildReportRepository.GetBuildReport();
             if (originalBuildReport == null)
@@ -64,7 +64,6 @@ namespace GhaUnityBuildReporter.Editor.Infrastructures
 
             return packedAssets;
         }
-
 
         private static BuildFile[] GetBuildFiles(UnityEditor.Build.Reporting.BuildReport originalBuildReport)
         {
