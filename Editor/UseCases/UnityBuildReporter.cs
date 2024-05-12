@@ -18,7 +18,7 @@ namespace GhaUnityBuildReporter.Editor.UseCases
         private readonly AbstractJobSummaryRepository _jobSummaryRepository;
         private readonly AbstractLastBuildReportRepository _lastBuildReportRepository;
 
-        public UnityBuildReporter(
+        internal UnityBuildReporter(
             AbstractJobSummaryRepository jobSummaryRepository,
             AbstractLastBuildReportRepository lastBuildReportRepository,
             AbstractBuildReportFactory buildReportFactory
@@ -29,7 +29,7 @@ namespace GhaUnityBuildReporter.Editor.UseCases
             _buildReport = buildReportFactory.CreateBuildReport();
         }
 
-        public void WriteAll()
+        internal void WriteAll()
         {
             WriteTitle();
             WriteSummary();

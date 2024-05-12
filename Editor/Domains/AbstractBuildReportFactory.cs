@@ -3,8 +3,8 @@
 
 namespace GhaUnityBuildReporter.Editor.Domains
 {
-    public abstract class AbstractBuildReportFactory
+    internal abstract class AbstractBuildReportFactory
     {
-        public abstract BuildReport CreateBuildReport();
+        internal abstract BuildReport CreateBuildReport();
     }
 }

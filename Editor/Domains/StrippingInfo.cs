@@ -5,13 +5,13 @@ using System.Collections.Generic;
 
 namespace GhaUnityBuildReporter.Editor.Domains
 {
-    public sealed class StrippingInfo
+    internal sealed class StrippingInfo
     {
-        public StrippingInfo(IEnumerable<string> includedModules)
+        internal StrippingInfo(IEnumerable<string> includedModules)
         {
             IncludedModules = includedModules;
         }
 
-        public IEnumerable<string> IncludedModules { get; }
+        internal IEnumerable<string> IncludedModules { get; }
     }
 }

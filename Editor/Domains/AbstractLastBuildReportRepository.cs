@@ -7,12 +7,12 @@ using JetBrains.Annotations;
 
 namespace GhaUnityBuildReporter.Editor.Domains
 {
-    public abstract class AbstractLastBuildReportRepository : IDisposable
+    internal abstract class AbstractLastBuildReportRepository : IDisposable
     {
         [CanBeNull]
-        public abstract UnityEditor.Build.Reporting.BuildReport GetBuildReport();
+        internal abstract UnityEditor.Build.Reporting.BuildReport GetBuildReport();
 
-        public abstract IEnumerable<string> GetReasonsForIncluding(string entityName);
+        internal abstract IEnumerable<string> GetReasonsForIncluding(string entityName);
 
         public abstract void Dispose();
     }

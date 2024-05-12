@@ -15,7 +15,7 @@ namespace GhaUnityBuildReporter.Editor.Infrastructures
             _gitHubStepSummaryPath = gitHubStepSummaryPath;
         }
 
-        public override void AppendText(string text)
+        internal override void AppendText(string text)
         {
             var dir = Path.GetDirectoryName(_gitHubStepSummaryPath);
             if (string.IsNullOrEmpty(dir))

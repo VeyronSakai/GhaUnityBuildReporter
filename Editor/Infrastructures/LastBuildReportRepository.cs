@@ -24,7 +24,7 @@ namespace GhaUnityBuildReporter.Editor.Infrastructures
         private readonly string _lastBuildReportsAssetPath =
             $"{Path.Combine("Assets", LastBuildReportsDirectoryName, LastBuildReportFileName)}";
 
-        public LastBuildReportRepository()
+        internal LastBuildReportRepository()
         {
             var projectRootPath = Directory.GetParent(Application.dataPath)?.FullName;
             if (string.IsNullOrEmpty(projectRootPath))
@@ -48,12 +48,12 @@ namespace GhaUnityBuildReporter.Editor.Infrastructures
             _lastBuildReport = AssetDatabase.LoadAssetAtPath<BuildReport>(_lastBuildReportsAssetPath);
         }
 
-        public override BuildReport GetBuildReport()
+        internal override BuildReport GetBuildReport()
         {
             return _lastBuildReport;
         }
 
-        public override IEnumerable<string> GetReasonsForIncluding(string entityName)
+        internal override IEnumerable<string> GetReasonsForIncluding(string entityName)
         {
             return _lastBuildReport.strippingInfo.GetReasonsForIncluding(entityName);
         }

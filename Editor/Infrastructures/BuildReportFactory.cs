@@ -15,13 +15,13 @@ namespace GhaUnityBuildReporter.Editor.Infrastructures
     {
         private readonly AbstractLastBuildReportRepository _lastBuildReportRepository;
 
-        public BuildReportFactory(AbstractLastBuildReportRepository lastBuildReportRepository)
+        internal BuildReportFactory(AbstractLastBuildReportRepository lastBuildReportRepository)
         {
             _lastBuildReportRepository = lastBuildReportRepository;
         }
 
         [CanBeNull]
-        public override BuildReport CreateBuildReport()
+        internal override BuildReport CreateBuildReport()
         {
             var originalBuildReport = _lastBuildReportRepository.GetBuildReport();
             if (originalBuildReport == null)
