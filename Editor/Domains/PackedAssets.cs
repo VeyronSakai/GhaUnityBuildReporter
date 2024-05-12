@@ -3,7 +3,7 @@
 
 using UnityEditor.Build.Reporting;
 
-namespace GhaUnityBuildReporter.Domains
+namespace GhaUnityBuildReporter.Editor.Domains
 {
     public sealed class PackedAssets
     {

@@ -2,9 +2,9 @@
 // This software is released under the MIT License.
 
 using System.IO;
-using GhaUnityBuildReporter.Domains;
+using GhaUnityBuildReporter.Editor.Domains;
 
-namespace GhaUnityBuildReporter.Infrastructures
+namespace GhaUnityBuildReporter.Editor.Infrastructures
 {
     internal sealed class GitHubJobSummaryRepository : IJobSummaryRepository
     {

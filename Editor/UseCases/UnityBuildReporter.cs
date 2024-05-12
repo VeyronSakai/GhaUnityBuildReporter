@@ -4,13 +4,13 @@
 using System;
 using System.IO;
 using System.Linq;
-using GhaUnityBuildReporter.Domains;
+using GhaUnityBuildReporter.Editor.Domains;
 using JetBrains.Annotations;
 using UnityEditor.Build.Reporting;
 using UnityEngine;
-using BuildReport = GhaUnityBuildReporter.Domains.BuildReport;
+using BuildReport = GhaUnityBuildReporter.Editor.Domains.BuildReport;
 
-namespace GhaUnityBuildReporter.UseCases
+namespace GhaUnityBuildReporter.Editor.UseCases
 {
     internal sealed class UnityBuildReporter
     {

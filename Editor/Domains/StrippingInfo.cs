@@ -3,7 +3,7 @@
 
 using System.Collections.Generic;
 
-namespace GhaUnityBuildReporter.Domains
+namespace GhaUnityBuildReporter.Editor.Domains
 {
     public sealed class StrippingInfo
     {

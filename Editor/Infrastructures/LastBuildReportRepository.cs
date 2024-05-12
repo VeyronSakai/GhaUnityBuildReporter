@@ -3,12 +3,12 @@
 
 using System.Collections.Generic;
 using System.IO;
-using GhaUnityBuildReporter.Domains;
+using GhaUnityBuildReporter.Editor.Domains;
 using UnityEditor;
 using UnityEngine;
 using BuildReport = UnityEditor.Build.Reporting.BuildReport;
 
-namespace GhaUnityBuildReporter.Infrastructures
+namespace GhaUnityBuildReporter.Editor.Infrastructures
 {
     internal sealed class LastBuildReportRepository : ILastBuildReportRepository
     {
