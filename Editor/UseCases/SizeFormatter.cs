@@ -3,9 +3,9 @@
 
 namespace GhaUnityBuildReporter.Editor.UseCases
 {
-    internal static class FormattedSizeGetter
+    internal static class SizeFormatter
     {
-        internal static string Get(ulong size)
+        internal static string GetFormattedSize(ulong size)
         {
             return size switch
             {

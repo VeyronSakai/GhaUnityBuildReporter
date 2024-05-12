@@ -27,7 +27,7 @@ namespace GhaUnityBuildReporter.Editor.UseCases
                 + $"| --- | --- |{Environment.NewLine}"
                 + $"| Platform | {summary.platform} |{Environment.NewLine}"
                 + $@"| Total Time | {summary.totalTime:hh\:mm\:ss\.fff}|{Environment.NewLine}"
-                + $"| Total Size | {FormattedSizeGetter.Get(summary.totalSize)} |{Environment.NewLine}"
+                + $"| Total Size | {SizeFormatter.GetFormattedSize(summary.totalSize)} |{Environment.NewLine}"
                 + $"| Build Result | {summary.result} |{Environment.NewLine}"
                 + $"| Total Errors | {summary.totalErrors} |{Environment.NewLine}"
                 + $"| Total Warnings | {summary.totalWarnings} |{Environment.NewLine}";

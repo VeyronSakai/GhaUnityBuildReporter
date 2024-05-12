@@ -20,6 +20,7 @@ namespace GhaUnityBuildReporter.Editor.UseCases
         private readonly AbstractBuildReportFactory _buildReportFactory;
         private readonly TitleWriter _titleWriter;
         private readonly BasicInfoWriter _basicInfoWriter;
+        private BuildStepsWriter _buildStepsWriter;
 
         internal UnityBuildReporter(
             [NotNull] AbstractJobSummaryRepository jobSummaryRepository,
@@ -32,6 +33,7 @@ namespace GhaUnityBuildReporter.Editor.UseCases
             _buildReportFactory = buildReportFactory;
             _titleWriter = new TitleWriter(_jobSummaryRepository);
             _basicInfoWriter = new BasicInfoWriter(_jobSummaryRepository);
+            _buildStepsWriter = new BuildStepsWriter(_jobSummaryRepository);
         }
 
         internal void WriteAll()
@@ -47,63 +49,11 @@ namespace GhaUnityBuildReporter.Editor.UseCases
 
             _titleWriter.Write();
             _basicInfoWriter.Write(_buildReport);
+            _buildStepsWriter.Write(_buildReport);
 
-            WriteBuildStepsInfo();
             WriteSourceAssetsInfo();
             WriteOutputFilesInfo();
             WriteIncludedModulesInfo();
-        }
-
-        private void WriteBuildStepsInfo()
-        {
-            if (_buildReport == null || _buildReport.Steps.Length <= 0)
-            {
-                return;
-            }
-
-            _jobSummaryRepository.AppendText($"## Build Steps{Environment.NewLine}" +
-                                             $"<details><summary>Details</summary>{Environment.NewLine}{Environment.NewLine}");
-
-            foreach (var step in _buildReport.Steps)
-            {
-                switch (step.depth)
-                {
-                    case 0:
-                        _jobSummaryRepository.AppendText(
-                            $@"### {step.name} ({step.duration:hh\:mm\:ss\.fff}){Environment.NewLine}");
-                        break;
-                    case >= 1:
-                        {
-                            _jobSummaryRepository.AppendText(
-                                $@"{new string(' ', (step.depth - 1) * 2)}- **{step.name}** ({step.duration:hh\:mm\:ss\.fff}){Environment.NewLine}");
-
-                            if (step.messages.Length <= 0)
-                            {
-                                continue;
-                            }
-
-                            foreach (var message in step.messages)
-                            {
-                                var emoji = message.type switch
-                                {
-                                    LogType.Error => ":x:",
-                                    LogType.Assert => ":no_entry_sign:",
-                                    LogType.Warning => ":warning:",
-                                    LogType.Log => ":information_source:",
-                                    LogType.Exception => ":boom:",
-                                    _ => ":question:"
-                                };
-
-                                _jobSummaryRepository.AppendText(
-                                    $@"{new string(' ', step.depth * 2)}- {emoji} {message.content}{Environment.NewLine}");
-                            }
-
-                            break;
-                        }
-                }
-            }
-
-            _jobSummaryRepository.AppendText($"</details>{Environment.NewLine}{Environment.NewLine}");
         }
 
         private void WriteSourceAssetsInfo()
