@@ -188,7 +188,7 @@ namespace GhaUnityBuildReporter.Editor.UseCases
 
         private void WriteIncludedModulesInfo()
         {
-            if (_buildReport?.StrippingInfo == null)
+            if (_buildReport?.StrippingInfo == null || !_buildReport.StrippingInfo.IncludedModules.Any())
             {
                 return;
             }
