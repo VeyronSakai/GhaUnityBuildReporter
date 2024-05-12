@@ -6,7 +6,7 @@ using GhaUnityBuildReporter.Editor.Domains;
 
 namespace GhaUnityBuildReporter.Editor.Infrastructures
 {
-    internal sealed class GitHubJobSummaryRepository : IJobSummaryRepository
+    internal sealed class GitHubJobSummaryRepository : AbstractJobSummaryRepository
     {
         private readonly string _gitHubStepSummaryPath;
 
@@ -15,7 +15,7 @@ namespace GhaUnityBuildReporter.Editor.Infrastructures
             _gitHubStepSummaryPath = gitHubStepSummaryPath;
         }
 
-        public void AppendText(string text)
+        public override void AppendText(string text)
         {
             var dir = Path.GetDirectoryName(_gitHubStepSummaryPath);
             if (string.IsNullOrEmpty(dir))
