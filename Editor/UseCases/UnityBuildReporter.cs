@@ -3,13 +3,11 @@
 
 using GhaUnityBuildReporter.Editor.Domains;
 using JetBrains.Annotations;
-using BuildReport = GhaUnityBuildReporter.Editor.Domains.BuildReport;
 
 namespace GhaUnityBuildReporter.Editor.UseCases
 {
     internal sealed class UnityBuildReporter
     {
-        [CanBeNull] private BuildReport _buildReport;
         [NotNull] private readonly AbstractJobSummaryRepository _jobSummaryRepository;
         [NotNull] private readonly AbstractOriginalBuildReportRepository _originalBuildReportRepository;
         [NotNull] private readonly AbstractBuildReportFactory _buildReportFactory;
@@ -46,14 +44,14 @@ namespace GhaUnityBuildReporter.Editor.UseCases
                 return;
             }
 
-            _buildReport = _buildReportFactory.CreateBuildReport(originalBuildReport);
+            var buildReport = _buildReportFactory.CreateBuildReport(originalBuildReport);
 
             _titleWriter.Write();
-            _basicInfoWriter.Write(_buildReport);
-            _buildStepsWriter.Write(_buildReport);
-            _sourceAssetsWriter.Write(_buildReport);
-            _outputFilesWriter.Write(_buildReport);
-            _includedModulesWriter.Write(_buildReport);
+            _basicInfoWriter.Write(buildReport);
+            _buildStepsWriter.Write(buildReport);
+            _sourceAssetsWriter.Write(buildReport);
+            _outputFilesWriter.Write(buildReport);
+            _includedModulesWriter.Write(buildReport);
         }
     }
 }
