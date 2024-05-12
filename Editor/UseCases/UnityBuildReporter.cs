@@ -14,13 +14,13 @@ namespace GhaUnityBuildReporter.Editor.UseCases
     internal sealed class UnityBuildReporter
     {
         [CanBeNull] private BuildReport _buildReport;
-        private readonly AbstractJobSummaryRepository _jobSummaryRepository;
-        private readonly AbstractOriginalBuildReportRepository _originalBuildReportRepository;
-        private readonly AbstractBuildReportFactory _buildReportFactory;
-        private readonly TitleWriter _titleWriter;
-        private readonly BasicInfoWriter _basicInfoWriter;
-        private readonly BuildStepsWriter _buildStepsWriter;
-        private readonly SourceAssetsWriter _sourceAssetsWriter;
+        [NotNull] private readonly AbstractJobSummaryRepository _jobSummaryRepository;
+        [NotNull] private readonly AbstractOriginalBuildReportRepository _originalBuildReportRepository;
+        [NotNull] private readonly AbstractBuildReportFactory _buildReportFactory;
+        [NotNull] private readonly TitleWriter _titleWriter;
+        [NotNull] private readonly BasicInfoWriter _basicInfoWriter;
+        [NotNull] private readonly BuildStepsWriter _buildStepsWriter;
+        [NotNull] private readonly SourceAssetsWriter _sourceAssetsWriter;
 
         internal UnityBuildReporter(
             [NotNull] AbstractJobSummaryRepository jobSummaryRepository,

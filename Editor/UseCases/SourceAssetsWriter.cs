@@ -12,7 +12,7 @@ namespace GhaUnityBuildReporter.Editor.UseCases
 {
     internal sealed class SourceAssetsWriter
     {
-        private readonly AbstractJobSummaryRepository _jobSummaryRepository;
+        [NotNull] private readonly AbstractJobSummaryRepository _jobSummaryRepository;
 
         internal SourceAssetsWriter([NotNull] AbstractJobSummaryRepository jobSummaryRepository)
         {

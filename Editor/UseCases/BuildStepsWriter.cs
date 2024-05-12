@@ -2,15 +2,15 @@
 // This software is released under the MIT License.
 
 using System;
-using System.Diagnostics.CodeAnalysis;
 using GhaUnityBuildReporter.Editor.Domains;
+using JetBrains.Annotations;
 using UnityEngine;
 
 namespace GhaUnityBuildReporter.Editor.UseCases
 {
     internal sealed class BuildStepsWriter
     {
-        private readonly AbstractJobSummaryRepository _jobSummaryRepository;
+        [NotNull] private readonly AbstractJobSummaryRepository _jobSummaryRepository;
 
         internal BuildStepsWriter([NotNull] AbstractJobSummaryRepository jobSummaryRepository)
         {

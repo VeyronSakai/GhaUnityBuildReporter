@@ -9,7 +9,7 @@ namespace GhaUnityBuildReporter.Editor.UseCases
 {
     internal sealed class TitleWriter
     {
-        private readonly AbstractJobSummaryRepository _jobSummaryRepository;
+        [NotNull] private readonly AbstractJobSummaryRepository _jobSummaryRepository;
 
         internal TitleWriter([NotNull] AbstractJobSummaryRepository jobSummaryRepository)
         {

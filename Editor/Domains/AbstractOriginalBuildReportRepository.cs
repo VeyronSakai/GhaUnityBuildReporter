@@ -12,6 +12,7 @@ namespace GhaUnityBuildReporter.Editor.Domains
         [CanBeNull]
         internal abstract UnityEditor.Build.Reporting.BuildReport GetBuildReport();
 
+        [NotNull]
         internal abstract IEnumerable<string> GetReasonsForIncluding(string entityName);
 
         public abstract void Dispose();
