@@ -17,6 +17,7 @@ namespace GhaUnityBuildReporter.Editor.UseCases
         [CanBeNull] private readonly BuildReport _buildReport;
         private readonly AbstractJobSummaryRepository _jobSummaryRepository;
         private readonly AbstractLastBuildReportRepository _lastBuildReportRepository;
+        private readonly TitleWriter _titleWriter;
 
         internal UnityBuildReporter(
             AbstractJobSummaryRepository jobSummaryRepository,
@@ -27,25 +28,18 @@ namespace GhaUnityBuildReporter.Editor.UseCases
             _jobSummaryRepository = jobSummaryRepository;
             _lastBuildReportRepository = lastBuildReportRepository;
             _buildReport = buildReportFactory.CreateBuildReport();
+            _titleWriter = new TitleWriter(_jobSummaryRepository);
         }
 
         internal void WriteAll()
         {
-            WriteTitle();
+            _titleWriter.WriteTitle(_buildReport);
+
             WriteSummary();
             WriteBuildStepsInfo();
             WriteSourceAssetsInfo();
             WriteOutputFilesInfo();
             WriteIncludedModulesInfo();
-        }
-
-        private void WriteTitle()
-        {
-            _jobSummaryRepository.AppendText($"# Unity Build Report{Environment.NewLine}");
-            if (_buildReport == null)
-            {
-                _jobSummaryRepository.AppendText($"Build report not found {Environment.NewLine}");
-            }
         }
 
         private void WriteSummary()
