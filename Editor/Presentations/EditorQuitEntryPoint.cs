@@ -1,11 +1,11 @@
 // Copyright (c) 2024 VeyronSakai.
 // This software is released under the MIT License.
 
-using GhaUnityBuildReporter.Infrastructures;
-using GhaUnityBuildReporter.UseCases;
+using GhaUnityBuildReporter.Editor.Infrastructures;
+using GhaUnityBuildReporter.Editor.UseCases;
 using UnityEditor;
 
-namespace GhaUnityBuildReporter.Presentations
+namespace GhaUnityBuildReporter.Editor.Presentations
 {
     [InitializeOnLoad]
     internal sealed class EditorQuitEntryPoint
