@@ -42,7 +42,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/cache@v4
         with:
-          path: Library
+          path: Samples~/Library
           key: ${{ runner.os }}-Library
       - name: Run EditMode and PlayMode Test
         id: test
