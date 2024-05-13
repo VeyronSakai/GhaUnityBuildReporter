@@ -2,6 +2,7 @@
 // This software is released under the MIT License.
 
 using System;
+using System.Linq;
 using GhaUnityBuildReporter.Editor.Domains;
 using JetBrains.Annotations;
 using UnityEngine;
@@ -29,25 +30,25 @@ namespace GhaUnityBuildReporter.Editor.UseCases
 
             foreach (var step in buildReport.Steps)
             {
-                switch (step.depth)
+                switch (step.Depth)
                 {
                     case 0:
                         _jobSummaryRepository.AppendText(
-                            $@"### {step.name} ({step.duration:hh\:mm\:ss\.fff}){Environment.NewLine}");
+                            $@"### {step.Name} ({step.Duration:hh\:mm\:ss\.fff}){Environment.NewLine}");
                         break;
                     case >= 1:
                         {
                             _jobSummaryRepository.AppendText(
-                                $@"{new string(' ', (step.depth - 1) * 2)}- **{step.name}** ({step.duration:hh\:mm\:ss\.fff}){Environment.NewLine}");
+                                $@"{new string(' ', (step.Depth - 1) * 2)}- **{step.Name}** ({step.Duration:hh\:mm\:ss\.fff}){Environment.NewLine}");
 
-                            if (step.messages.Length <= 0)
+                            if (!step.Messages.Any())
                             {
                                 continue;
                             }
 
-                            foreach (var message in step.messages)
+                            foreach (var message in step.Messages)
                             {
-                                var emoji = message.type switch
+                                var emoji = message.Type switch
                                 {
                                     LogType.Error => ":x:",
                                     LogType.Assert => ":no_entry_sign:",
@@ -58,7 +59,7 @@ namespace GhaUnityBuildReporter.Editor.UseCases
                                 };
 
                                 _jobSummaryRepository.AppendText(
-                                    $@"{new string(' ', step.depth * 2)}- {emoji} {message.content}{Environment.NewLine}");
+                                    $@"{new string(' ', step.Depth * 2)}- {emoji} {message.Content}{Environment.NewLine}");
                             }
 
                             break;
