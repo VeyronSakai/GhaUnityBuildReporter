@@ -60,20 +60,12 @@ namespace GhaUnityBuildReporter.Editor.Infrastructures
         private static PackedAssets[] GetPackedAssetsArray(
             [NotNull] UnityEditor.Build.Reporting.BuildReport originalBuildReport)
         {
-            var packedAssets = new PackedAssets[originalBuildReport.packedAssets.Length];
-            for (var i = 0; i < originalBuildReport.packedAssets.Length; i++)
+            var packedAssets = originalBuildReport.packedAssets.Select(originalPackedAssets =>
             {
-                var originalPackedAssets = originalBuildReport.packedAssets[i];
-                var packedAssetInfos = new PackedAssetInfo[originalPackedAssets.contents.Length];
-                for (var j = 0; j < originalPackedAssets.contents.Length; j++)
-                {
-                    packedAssetInfos[j] = new PackedAssetInfo(originalPackedAssets.contents[j].packedSize,
-                        originalPackedAssets.contents[j].sourceAssetPath);
-                }
-
-                var packedAsset = new PackedAssets(originalPackedAssets.shortPath, packedAssetInfos);
-                packedAssets[i] = packedAsset;
-            }
+                var packedAssetInfos = originalPackedAssets.contents.Select(content =>
+                    new PackedAssetInfo(content.packedSize, content.sourceAssetPath));
+                return new PackedAssets(originalPackedAssets.shortPath, packedAssetInfos);
+            }).ToArray();
 
             return packedAssets;
         }

@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 
 namespace GhaUnityBuildReporter.Editor.Domains
 {
@@ -10,10 +11,10 @@ namespace GhaUnityBuildReporter.Editor.Domains
     {
         internal string Name { get; }
         internal TimeSpan Duration { get; }
-        internal IEnumerable<BuildStepMessage> Messages { get; }
+        [NotNull] internal IEnumerable<BuildStepMessage> Messages { get; }
         internal int Depth { get; }
 
-        internal BuildStep(string name, TimeSpan duration, IEnumerable<BuildStepMessage> messages, int depth)
+        internal BuildStep(string name, TimeSpan duration, [NotNull] IEnumerable<BuildStepMessage> messages, int depth)
         {
             this.Name = name;
             Duration = duration;

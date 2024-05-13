@@ -8,11 +8,11 @@ namespace GhaUnityBuildReporter.Editor.Domains
 {
     internal sealed class StrippingInfo
     {
+        [NotNull] internal IEnumerable<string> IncludedModules { get; }
+
         internal StrippingInfo([NotNull] IEnumerable<string> includedModules)
         {
             IncludedModules = includedModules;
         }
-
-        [NotNull] internal IEnumerable<string> IncludedModules { get; }
     }
 }
