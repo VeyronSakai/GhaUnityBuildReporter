@@ -25,12 +25,12 @@ namespace GhaUnityBuildReporter.Editor.UseCases
             var basicInfo =
                 $"| Key | Value |{Environment.NewLine}"
                 + $"| --- | --- |{Environment.NewLine}"
-                + $"| Platform | {summary.platform} |{Environment.NewLine}"
-                + $@"| Total Time | {summary.totalTime:hh\:mm\:ss\.fff}|{Environment.NewLine}"
-                + $"| Total Size | {SizeFormatter.GetFormattedSize(summary.totalSize)} |{Environment.NewLine}"
-                + $"| Build Result | {summary.result} |{Environment.NewLine}"
-                + $"| Total Errors | {summary.totalErrors} |{Environment.NewLine}"
-                + $"| Total Warnings | {summary.totalWarnings} |{Environment.NewLine}";
+                + $"| Platform | {summary.Platform} |{Environment.NewLine}"
+                + $@"| Total Time | {summary.TotalTime:hh\:mm\:ss\.fff}|{Environment.NewLine}"
+                + $"| Total Size | {SizeFormatter.GetFormattedSize(summary.TotalSize)} |{Environment.NewLine}"
+                + $"| Build Result | {summary.Result} |{Environment.NewLine}"
+                + $"| Total Errors | {summary.TotalErrors} |{Environment.NewLine}"
+                + $"| Total Warnings | {summary.TotalWarnings} |{Environment.NewLine}";
 
             _jobSummaryRepository.AppendText(basicInfo);
         }

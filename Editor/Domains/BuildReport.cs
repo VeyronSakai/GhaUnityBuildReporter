@@ -8,8 +8,19 @@ namespace GhaUnityBuildReporter.Editor.Domains
 {
     internal sealed class BuildReport
     {
-        public BuildReport(BuildSummary summary, [NotNull] BuildStep[] steps, [NotNull] PackedAssets[] packedAssets,
-            [NotNull] StrippingInfo strippingInfo, [NotNull] BuildFile[] buildFiles)
+        [NotNull] internal BuildSummary Summary { get; }
+        [NotNull] internal BuildStep[] Steps { get; }
+        [NotNull] internal PackedAssets[] PackedAssets { get; }
+        [NotNull] internal StrippingInfo StrippingInfo { get; }
+        [NotNull] internal BuildFile[] BuildFiles { get; }
+
+        internal BuildReport(
+            [NotNull] BuildSummary summary,
+            [NotNull] BuildStep[] steps,
+            [NotNull] PackedAssets[] packedAssets,
+            [NotNull] StrippingInfo strippingInfo,
+            [NotNull] BuildFile[] buildFiles
+        )
         {
             Summary = summary;
             Steps = steps;
@@ -17,11 +28,5 @@ namespace GhaUnityBuildReporter.Editor.Domains
             StrippingInfo = strippingInfo;
             BuildFiles = buildFiles;
         }
-
-        internal BuildSummary Summary { get; }
-        [NotNull] internal BuildStep[] Steps { get; }
-        [NotNull] internal PackedAssets[] PackedAssets { get; }
-        [NotNull] internal StrippingInfo StrippingInfo { get; }
-        [NotNull] internal BuildFile[] BuildFiles { get; }
     }
 }

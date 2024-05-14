@@ -5,8 +5,8 @@ using System;
 using System.Linq;
 using GhaUnityBuildReporter.Editor.Domains;
 using JetBrains.Annotations;
-using UnityEditor.Build.Reporting;
 using BuildReport = GhaUnityBuildReporter.Editor.Domains.BuildReport;
+using PackedAssetInfo = GhaUnityBuildReporter.Editor.Domains.PackedAssetInfo;
 
 namespace GhaUnityBuildReporter.Editor.UseCases
 {
@@ -31,9 +31,9 @@ namespace GhaUnityBuildReporter.Editor.UseCases
             foreach (var packedAsset in buildReport.PackedAssets)
             {
                 var totalSize = packedAsset.Contents.Aggregate<PackedAssetInfo, ulong>(0,
-                    (current, packedAssetContent) => current + packedAssetContent.packedSize);
+                    (current, packedAssetContent) => current + packedAssetContent.PackedSize);
 
-                var topAssets = packedAsset.Contents.OrderByDescending(x => x.packedSize);
+                var topAssets = packedAsset.Contents.OrderByDescending(x => x.PackedSize);
 
                 _jobSummaryRepository.AppendText(
                     $"### {packedAsset.ShortPath} ({SizeFormatter.GetFormattedSize(totalSize)}){Environment.NewLine}" +
@@ -43,12 +43,12 @@ namespace GhaUnityBuildReporter.Editor.UseCases
 
                 foreach (var assetInfo in topAssets)
                 {
-                    var assetPath = string.IsNullOrEmpty(assetInfo.sourceAssetPath)
+                    var assetPath = string.IsNullOrEmpty(assetInfo.SourceAssetPath)
                         ? "Unknown"
-                        : assetInfo.sourceAssetPath;
+                        : assetInfo.SourceAssetPath;
 
                     var assetDetails =
-                        $"| {assetPath} | {SizeFormatter.GetFormattedSize(assetInfo.packedSize)} |{Environment.NewLine}";
+                        $"| {assetPath} | {SizeFormatter.GetFormattedSize(assetInfo.PackedSize)} |{Environment.NewLine}";
 
                     _jobSummaryRepository.AppendText(assetDetails);
                 }
