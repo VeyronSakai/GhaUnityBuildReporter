@@ -6,7 +6,7 @@ using JetBrains.Annotations;
 
 namespace GhaUnityBuildReporter.Editor.UseCases
 {
-    internal sealed class UnityBuildReporter
+    internal sealed class UnityBuildReportWriter
     {
         [NotNull] private readonly AbstractJobSummaryRepository _jobSummaryRepository;
         [NotNull] private readonly AbstractOriginalBuildReportRepository _originalBuildReportRepository;
@@ -18,7 +18,7 @@ namespace GhaUnityBuildReporter.Editor.UseCases
         [NotNull] private readonly OutputFilesWriter _outputFilesWriter;
         [NotNull] private readonly IncludedModulesWriter _includedModulesWriter;
 
-        internal UnityBuildReporter(
+        internal UnityBuildReportWriter(
             [NotNull] AbstractJobSummaryRepository jobSummaryRepository,
             [NotNull] AbstractOriginalBuildReportRepository originalBuildReportRepository,
             [NotNull] AbstractBuildReportFactory buildReportFactory

@@ -34,9 +34,9 @@ namespace GhaUnityBuildReporter.Editor.UseCases
 
             foreach (var file in buildReport.BuildFiles)
             {
-                var relativePath = Path.GetRelativePath(projectRootPath, file.path);
+                var relativePath = Path.GetRelativePath(projectRootPath, file.Path);
                 _jobSummaryRepository.AppendText(
-                    $"| {relativePath} | {SizeFormatter.GetFormattedSize(file.size)} |{Environment.NewLine}");
+                    $"| {relativePath} | {SizeFormatter.GetFormattedSize(file.Size)} |{Environment.NewLine}");
             }
 
             _jobSummaryRepository.AppendText($"</details>{Environment.NewLine}{Environment.NewLine}");

@@ -151,7 +151,7 @@ file_header_template = Copyright (c) ${CurrentDate.Year} VeyronSakai.\nThis soft
 dotnet_public_api_analyzer.require_api_files = true
 
 # CSharp code style settings:
-[*.cs]
+[**/*.cs]
 # Newline settings
 csharp_new_line_before_open_brace = all
 csharp_new_line_before_else = true
@@ -231,7 +231,8 @@ csharp_preserve_single_line_statements = true
 # IDE0060: Remove unused parameter
 dotnet_diagnostic.IDE0060.severity = warning
 
-resharper_foreach_can_be_converted_to_query_using_another_get_enumerator_highlighting = none
+# 'null' assignments to non-nullable entity are not allowed
+# resharper_assign_null_to_not_null_attribute_highlighting = error
 
 [src/{Compilers,ExpressionEvaluator,Scripting}/**Test**/*.{cs,vb}]
 
@@ -280,7 +281,6 @@ dotnet_diagnostic.IDE2005.severity = warning
 
 # csharp_style_allow_blank_line_after_token_in_arrow_expression_clause_experimental
 dotnet_diagnostic.IDE2006.severity = warning
-
 
 [src/{VisualStudio}/**/*.{cs,vb}]
 # CA1822: Make member static
