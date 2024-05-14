@@ -151,7 +151,7 @@ file_header_template = Copyright (c) ${CurrentDate.Year} VeyronSakai.\nThis soft
 dotnet_public_api_analyzer.require_api_files = true
 
 # CSharp code style settings:
-[**/*.cs]
+[*.cs]
 # Newline settings
 csharp_new_line_before_open_brace = all
 csharp_new_line_before_else = true

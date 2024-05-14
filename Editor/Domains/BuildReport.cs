@@ -2,7 +2,6 @@
 // This software is released under the MIT License.
 
 using JetBrains.Annotations;
-using UnityEditor.Build.Reporting;
 
 namespace GhaUnityBuildReporter.Editor.Domains
 {
