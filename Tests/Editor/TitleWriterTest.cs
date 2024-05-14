@@ -8,10 +8,10 @@ using NUnit.Framework;
 
 namespace GhaUnityBuildReporter.Editor.Tests
 {
-    public class TitleWriterTest
+    public sealed class TitleWriterTest
     {
         private readonly string _outputPath =
-            Path.Combine(Directory.GetCurrentDirectory(), "ActualTitleWriterTestResult.md");
+            Path.Combine(Directory.GetCurrentDirectory(), "ActualTitle.md");
 
         [Test]
         public void WriteTest()
@@ -29,7 +29,7 @@ namespace GhaUnityBuildReporter.Editor.Tests
                 "Tests",
                 "Editor",
                 "TestData",
-                "ExpectedTitleWriterTestResult.md"
+                "ExpectedTitle.md"
             );
             var expected = File.ReadAllText(expectedResultPath);
             Assert.AreEqual(expected, actual);
@@ -38,7 +38,10 @@ namespace GhaUnityBuildReporter.Editor.Tests
         [TearDown]
         public void TearDown()
         {
-            File.Delete(_outputPath);
+            if (File.Exists(_outputPath))
+            {
+                File.Delete(_outputPath);
+            }
         }
     }
 }
