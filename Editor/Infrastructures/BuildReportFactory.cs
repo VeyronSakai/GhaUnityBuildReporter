@@ -5,7 +5,7 @@ using System;
 using System.Linq;
 using GhaUnityBuildReporter.Editor.Domains;
 using JetBrains.Annotations;
-using UnityEditor.Build.Reporting;
+using BuildFile = GhaUnityBuildReporter.Editor.Domains.BuildFile;
 using BuildReport = GhaUnityBuildReporter.Editor.Domains.BuildReport;
 using BuildStep = GhaUnityBuildReporter.Editor.Domains.BuildStep;
 using BuildStepMessage = GhaUnityBuildReporter.Editor.Domains.BuildStepMessage;
@@ -73,13 +73,16 @@ namespace GhaUnityBuildReporter.Editor.Infrastructures
         [NotNull]
         private static BuildFile[] GetBuildFiles([NotNull] UnityEditor.Build.Reporting.BuildReport originalBuildReport)
         {
-            return originalBuildReport == null
-                ? Array.Empty<BuildFile>()
+            var originalBuildFiles =
 #if UNITY_2022_1_OR_NEWER
-                : originalBuildReport.GetFiles();
+                originalBuildReport.GetFiles();
 #else
-                : originalBuildReport.files;
+                originalBuildReport.files;
 #endif
+
+            return originalBuildFiles.Select(originalBuildFile =>
+                new BuildFile(originalBuildFile.id, originalBuildFile.path, originalBuildFile.role,
+                    originalBuildFile.size)).ToArray();
         }
     }
 }
