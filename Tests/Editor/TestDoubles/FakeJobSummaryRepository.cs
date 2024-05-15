@@ -7,11 +7,11 @@ using GhaUnityBuildReporter.Editor.Domains;
 
 namespace GhaUnityBuildReporter.Editor.Tests.TestDoubles
 {
-    internal sealed class SpyJobSummaryRepository : AbstractJobSummaryRepository
+    internal sealed class FakeJobSummaryRepository : AbstractJobSummaryRepository
     {
         private readonly string _outputPath;
 
-        internal SpyJobSummaryRepository([NotNull] string outputPath)
+        internal FakeJobSummaryRepository([NotNull] string outputPath)
         {
             _outputPath = outputPath;
         }
