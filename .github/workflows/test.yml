@@ -26,6 +26,7 @@ jobs:
               - Editor/**/*
               - Runtime/**/*
               - Samples~/**/*
+              - Tests/**/*
               - .github/workflows/test.yml
 
   test:
