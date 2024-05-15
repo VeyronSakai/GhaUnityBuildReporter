@@ -17,7 +17,7 @@ namespace GhaUnityBuildReporter.Editor.Tests
         public void WriteTest()
         {
             // Arrange
-            var jobSummaryRepository = new SpyJobSummaryRepository(_outputPath);
+            var jobSummaryRepository = new FakeJobSummaryRepository(_outputPath);
             var titleWriter = new TitleWriter(jobSummaryRepository);
 
             // Act
