@@ -129,6 +129,11 @@ namespace GhaUnityBuildReporter.Editor.Infrastructures
         [NotNull]
         private BuildFile[] GetBuildFiles()
         {
+            if (!_lastBuildReport)
+            {
+                return Array.Empty<BuildFile>();
+            }
+
             var buildFiles =
 #if UNITY_2022_1_OR_NEWER
                 _lastBuildReport.GetFiles();
