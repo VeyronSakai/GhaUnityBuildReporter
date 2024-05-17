@@ -16,7 +16,7 @@ namespace GhaUnityBuildReporter.Editor.Domains
 
         internal BuildStep(string name, TimeSpan duration, [NotNull] IEnumerable<BuildStepMessage> messages, int depth)
         {
-            this.Name = name;
+            Name = name;
             Duration = duration;
             Messages = messages;
             Depth = depth;

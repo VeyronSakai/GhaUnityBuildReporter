@@ -11,13 +11,13 @@ namespace GhaUnityBuildReporter.Editor.UseCases
     internal sealed class IncludedModulesWriter
     {
         [NotNull] private readonly AbstractJobSummaryRepository _jobSummaryRepository;
-        [NotNull] private readonly AbstractOriginalBuildReportRepository _originalBuildReportRepository;
+        [NotNull] private readonly AbstractBuildReportRepository _buildReportRepository;
 
         internal IncludedModulesWriter([NotNull] AbstractJobSummaryRepository jobSummaryRepository,
-            [NotNull] AbstractOriginalBuildReportRepository originalBuildReportRepository)
+            [NotNull] AbstractBuildReportRepository buildReportRepository)
         {
             _jobSummaryRepository = jobSummaryRepository;
-            _originalBuildReportRepository = originalBuildReportRepository;
+            _buildReportRepository = buildReportRepository;
         }
 
         internal void Write([NotNull] BuildReport buildReport)
@@ -46,7 +46,7 @@ namespace GhaUnityBuildReporter.Editor.UseCases
                 ? $@"- **{item}**{Environment.NewLine}"
                 : $@"{new string(' ', (int)(depth * 2))} - {item}{Environment.NewLine}");
 
-            var reasons = _originalBuildReportRepository.GetReasonsForIncluding(item);
+            var reasons = _buildReportRepository.GetReasonsForIncluding(item);
             foreach (var reason in reasons)
             {
                 WriteIncludedModuleInfoInternal(reason, depth + 1);

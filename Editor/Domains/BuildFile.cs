@@ -12,10 +12,10 @@ namespace GhaUnityBuildReporter.Editor.Domains
 
         internal BuildFile(uint id, string path, string role, ulong size)
         {
-            this.ID = id;
-            this.Path = path;
-            this.Role = role;
-            this.Size = size;
+            ID = id;
+            Path = path;
+            Role = role;
+            Size = size;
         }
     }
 }

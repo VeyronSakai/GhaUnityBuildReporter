@@ -10,8 +10,8 @@ namespace GhaUnityBuildReporter.Editor.Domains
 
         internal PackedAssetInfo(ulong packedSize, string sourceAssetPath)
         {
-            this.PackedSize = packedSize;
-            this.SourceAssetPath = sourceAssetPath;
+            PackedSize = packedSize;
+            SourceAssetPath = sourceAssetPath;
         }
     }
 }
