@@ -43,7 +43,7 @@ namespace GhaUnityBuildReporter.Editor.Tests
                 Enumerable.Empty<BuildStepMessage>(), 1);
             var packedAssetInfo = new PackedAssetInfo(15, "Unknown");
             var packedAsset = new PackedAssets("Test Packed Asset", new[] { packedAssetInfo });
-            var strippingInfo = new StrippingInfo(new[] { "Test Included Module" });
+            var strippingInfo = new StrippingInfo(new[] { "AndroidJNI Module", "Animation Module", "Audio Module" });
             var buildFile = new BuildFile(0, "TestBuildFile", "TestRole", 100);
 
             return new BuildReport(summary, new[] { buildStep1, buildStep2, buildStep3, buildStep4 },
