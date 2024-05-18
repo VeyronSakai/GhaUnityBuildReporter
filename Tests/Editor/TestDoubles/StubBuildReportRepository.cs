@@ -7,7 +7,7 @@ using GhaUnityBuildReporter.Editor.Domains;
 
 namespace GhaUnityBuildReporter.Editor.Tests.TestDoubles
 {
-    public class FakeBuildReportRepository : AbstractBuildReportRepository
+    internal class StubBuildReportRepository : AbstractBuildReportRepository
     {
         internal override BuildReport GetBuildReport()
         {

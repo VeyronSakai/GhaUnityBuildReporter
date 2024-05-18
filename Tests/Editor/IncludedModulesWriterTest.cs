@@ -17,13 +17,13 @@ namespace GhaUnityBuildReporter.Editor.Tests
         {
             // Arrange
             var jobSummaryRepository = new FakeJobSummaryRepository(_outputPath);
-            var buildReportRepository = new FakeBuildReportRepository();
+            var buildReportRepository = new StubBuildReportRepository();
             var buildReport = buildReportRepository.GetBuildReport();
             var titleWriter = new IncludedModulesWriter(jobSummaryRepository, buildReportRepository);
 
             // Act
             titleWriter.Write(buildReport);
-            
+
             // Assert
             var actual = File.ReadAllText(_outputPath);
             var expectedResultPath = Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory())?.FullName,
