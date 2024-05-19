@@ -34,5 +34,14 @@ namespace GhaUnityBuildReporter.Editor.Tests
             var expected = File.ReadAllText(expectedResultPath);
             Assert.AreEqual(expected, actual);
         }
+
+        [SetUp, TearDown]
+        public void Clean()
+        {
+            if (File.Exists(_outputPath))
+            {
+                File.Delete(_outputPath);
+            }
+        }
     }
 }
