@@ -46,7 +46,10 @@ namespace GhaUnityBuildReporter.Editor.Presentations
                 return;
             }
 
-            var reporter = new UnityBuildReportWriter(jobSummaryRepository, buildReportRepository);
+            var reportConfigRepository = new ReportConfigRepository();
+
+            var reporter =
+                new UnityBuildReportWriter(jobSummaryRepository, buildReportRepository, reportConfigRepository);
             reporter.Write();
         }
     }
