@@ -32,7 +32,7 @@ namespace GhaUnityBuildReporter.Editor.UseCases
             _includedModulesWriter = new IncludedModulesWriter(_jobSummaryRepository, _buildReportRepository);
         }
 
-        internal void WriteAll()
+        internal void Write()
         {
             var buildReport = _buildReportRepository.GetBuildReport();
             if (buildReport == null)

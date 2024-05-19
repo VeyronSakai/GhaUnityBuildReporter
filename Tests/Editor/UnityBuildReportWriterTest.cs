@@ -8,24 +8,25 @@ using NUnit.Framework;
 
 namespace GhaUnityBuildReporter.Editor.Tests
 {
-    public sealed class SourceAssetsWriterTest
+    public sealed class UnityBuildReportWriterTest
     {
-        private readonly string _outputPath = Path.Combine(Directory.GetCurrentDirectory(), "ActualSourceAssets.md");
+        private readonly string _outputPath =
+            Path.Combine(Directory.GetCurrentDirectory(), "ActualUnityBuildReport.md");
 
         [Test]
         public void WriteTest()
         {
             // Arrange
             var jobSummaryRepository = new FakeJobSummaryRepository(_outputPath);
-            var buildReport = Helper.GenerateStubBuildReport();
-            var writer = new SourceAssetsWriter(jobSummaryRepository);
+            var buildReportRepository = new StubBuildReportRepository();
+            var writer = new UnityBuildReportWriter(jobSummaryRepository, buildReportRepository);
 
             // Act
-            writer.Write(buildReport);
+            writer.Write();
 
             // Assert
             var actual = File.ReadAllText(_outputPath);
-            var expected = Helper.GetExpectedResult("ExpectedSourceAssets.md");
+            var expected = Helper.GetExpectedResult("ExpectedUnityBuildReport.md");
             Assert.AreEqual(expected, actual);
         }
 
