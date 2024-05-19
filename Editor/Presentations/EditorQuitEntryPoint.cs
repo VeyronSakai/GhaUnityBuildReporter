@@ -36,9 +36,17 @@ namespace GhaUnityBuildReporter.Editor.Presentations
                 return;
             }
 
-            using var lastBuildReportRepository = new BuildReportRepository();
+            using var buildReportRepository = new BuildReportRepository();
             var jobSummaryRepository = new GitHubJobSummaryRepository(s_gitHubStepSummaryPath);
-            var reporter = new UnityBuildReportWriter(jobSummaryRepository, lastBuildReportRepository);
+
+            var buildReport = buildReportRepository.GetBuildReport();
+            if (buildReport == null)
+            {
+                jobSummaryRepository.AppendText("Unity build report not found.");
+                return;
+            }
+
+            var reporter = new UnityBuildReportWriter(jobSummaryRepository, buildReportRepository);
             reporter.Write();
         }
     }

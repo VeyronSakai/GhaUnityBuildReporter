@@ -26,6 +26,7 @@ namespace GhaUnityBuildReporter.Editor.Infrastructures
             $"{Path.Combine("Assets", LastBuildReportsDirectoryName, LastBuildReportFileName)}";
 
         [CanBeNull] private readonly UnityEditor.Build.Reporting.BuildReport _lastBuildReport;
+        [CanBeNull] private BuildReport _cachedBuildReport;
 
         internal BuildReportRepository()
         {
@@ -54,6 +55,11 @@ namespace GhaUnityBuildReporter.Editor.Infrastructures
 
         internal override BuildReport GetBuildReport()
         {
+            if (_cachedBuildReport != null)
+            {
+                return _cachedBuildReport;
+            }
+
             if (!_lastBuildReport)
             {
                 return null;
@@ -83,13 +89,15 @@ namespace GhaUnityBuildReporter.Editor.Infrastructures
                     originalBuildStep.depth);
             }).ToArray();
 
-            return new BuildReport(
+            _cachedBuildReport = new BuildReport(
                 summary,
                 buildSteps,
                 packedAssetsArray,
                 strippingInfo,
                 buildFiles
             );
+
+            return _cachedBuildReport;
         }
 
         internal override IEnumerable<string> GetReasonsForIncluding(string entityName)
