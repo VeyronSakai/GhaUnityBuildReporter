@@ -39,7 +39,7 @@ namespace GhaUnityBuildReporter.Editor.Presentations
             using var lastBuildReportRepository = new BuildReportRepository();
             var jobSummaryRepository = new GitHubJobSummaryRepository(s_gitHubStepSummaryPath);
             var reporter = new UnityBuildReportWriter(jobSummaryRepository, lastBuildReportRepository);
-            reporter.WriteAll();
+            reporter.Write();
         }
     }
 }
