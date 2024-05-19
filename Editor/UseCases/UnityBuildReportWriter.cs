@@ -37,18 +37,37 @@ namespace GhaUnityBuildReporter.Editor.UseCases
 
         internal void Write()
         {
-            _titleWriter.Write();
-
             var reportConfig = _reportConfigRepository.GetReporterConfig();
+
+            if (reportConfig == null || reportConfig.WritesTitle)
+            {
+                _titleWriter.Write();
+            }
+
             if (reportConfig == null || reportConfig.WritesBasicInfo)
             {
                 _basicInfoWriter.Write(_buildReport);
             }
 
-            _buildStepsWriter.Write(_buildReport);
-            _sourceAssetsWriter.Write(_buildReport);
-            _outputFilesWriter.Write(_buildReport);
-            _includedModulesWriter.Write(_buildReport);
+            if (reportConfig == null || reportConfig.WritesBuildSteps)
+            {
+                _buildStepsWriter.Write(_buildReport);
+            }
+
+            if (reportConfig == null || reportConfig.WritesSourceAssets)
+            {
+                _sourceAssetsWriter.Write(_buildReport);
+            }
+
+            if (reportConfig == null || reportConfig.WritesOutputFiles)
+            {
+                _outputFilesWriter.Write(_buildReport);
+            }
+
+            if (reportConfig == null || reportConfig.WritesIncludedModules)
+            {
+                _includedModulesWriter.Write(_buildReport);
+            }
         }
     }
 }

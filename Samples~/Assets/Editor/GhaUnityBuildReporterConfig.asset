@@ -12,4 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 670b240bae904410a7befb6bcc10871e, type: 3}
   m_Name: GhaUnityBuildReporterConfig
   m_EditorClassIdentifier: 
+  title: 0
   basicInfo: 0
+  buildSteps: 0
+  sourceAssets: 0
+  outputFiles: 0
+  includedModules: 1

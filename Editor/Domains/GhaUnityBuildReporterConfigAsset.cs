@@ -8,6 +8,11 @@ namespace GhaUnityBuildReporter.Editor.Domains
     [CreateAssetMenu(fileName = "GhaUnityBuildReporterConfig", menuName = "GhaUnityBuildReporterConfig")]
     public class GhaUnityBuildReporterConfigAsset : ScriptableObject
     {
-        public bool　basicInfo = true;
+        public bool title = true;
+        public bool basicInfo = true;
+        public bool buildSteps = true;
+        public bool sourceAssets = true;
+        public bool outputFiles = true;
+        public bool includedModules = true;
     }
 }
