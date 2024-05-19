@@ -46,8 +46,9 @@ namespace GhaUnityBuildReporter.Editor.Presentations
                 return;
             }
 
-            var reportConfigRepository = new ReportConfigRepository("Assets/Editor/GhaUnityBuildReporterConfig.asset");
-
+            var commandLineArgsRepository = new CommandLineArgsRepository();
+            var configPath = commandLineArgsRepository.GetValue("buildReporterConfig");
+            var reportConfigRepository = new ReportConfigRepository(configPath);
             var reporter =
                 new UnityBuildReportWriter(jobSummaryRepository, buildReportRepository, reportConfigRepository);
             reporter.Write();

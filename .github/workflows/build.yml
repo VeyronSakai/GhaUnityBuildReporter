@@ -72,6 +72,7 @@ jobs:
             -batchmode \
             -nographics \
             -projectPath ./Samples~ \
+            -buildReporterConfig "Assets/Editor/GhaUnityBuildReporterConfig.asset" \
             -executeMethod Editor.BuildEntryPoint.BuildAndroid
 
   ios:
@@ -93,6 +94,7 @@ jobs:
             -batchmode \
             -nographics \
             -projectPath ./Samples~ \
+            -buildReporterConfig "Assets/Editor/GhaUnityBuildReporterConfig.asset" \
             -executeMethod Editor.BuildEntryPoint.BuildIOS
 
   macos:
@@ -114,6 +116,7 @@ jobs:
             -batchmode \
             -nographics \
             -projectPath ./Samples~ \
+            -buildReporterConfig "Assets/Editor/GhaUnityBuildReporterConfig.asset" \
             -executeMethod Editor.BuildEntryPoint.BuildMacOS
 
   webgl:
@@ -135,4 +138,5 @@ jobs:
             -batchmode \
             -nographics \
             -projectPath ./Samples~ \
+            -buildReporterConfig "Assets/Editor/GhaUnityBuildReporterConfig.asset" \
             -executeMethod Editor.BuildEntryPoint.BuildWebGL

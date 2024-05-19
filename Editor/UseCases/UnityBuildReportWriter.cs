@@ -39,8 +39,7 @@ namespace GhaUnityBuildReporter.Editor.UseCases
         {
             _titleWriter.Write();
 
-            var reportConfig =
-                _reportConfigRepository.GetReporterConfig();
+            var reportConfig = _reportConfigRepository.GetReporterConfig();
             if (reportConfig == null || reportConfig.WritesBasicInfo)
             {
                 _basicInfoWriter.Write(_buildReport);
