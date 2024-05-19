@@ -9,6 +9,7 @@ namespace GhaUnityBuildReporter.Editor.UseCases
 {
     internal sealed class UnityBuildReportWriter
     {
+        [NotNull] private readonly AbstractReportConfigRepository _reportConfigRepository;
         [NotNull] private readonly BuildReport _buildReport;
         [NotNull] private readonly TitleWriter _titleWriter;
         [NotNull] private readonly BasicInfoWriter _basicInfoWriter;
@@ -19,9 +20,11 @@ namespace GhaUnityBuildReporter.Editor.UseCases
 
         internal UnityBuildReportWriter(
             [NotNull] AbstractJobSummaryRepository jobSummaryRepository,
-            [NotNull] AbstractBuildReportRepository buildReportRepository
+            [NotNull] AbstractBuildReportRepository buildReportRepository,
+            [NotNull] AbstractReportConfigRepository reportConfigRepository
         )
         {
+            _reportConfigRepository = reportConfigRepository;
             _buildReport = buildReportRepository.GetBuildReport() ??
                            throw new InvalidOperationException("Build report is not available.");
             _titleWriter = new TitleWriter(jobSummaryRepository);
@@ -34,12 +37,37 @@ namespace GhaUnityBuildReporter.Editor.UseCases
 
         internal void Write()
         {
-            _titleWriter.Write();
-            _basicInfoWriter.Write(_buildReport);
-            _buildStepsWriter.Write(_buildReport);
-            _sourceAssetsWriter.Write(_buildReport);
-            _outputFilesWriter.Write(_buildReport);
-            _includedModulesWriter.Write(_buildReport);
+            var reportConfig = _reportConfigRepository.GetReporterConfig();
+
+            if (reportConfig == null || reportConfig.WritesTitle)
+            {
+                _titleWriter.Write();
+            }
+
+            if (reportConfig == null || reportConfig.WritesBasicInfo)
+            {
+                _basicInfoWriter.Write(_buildReport);
+            }
+
+            if (reportConfig == null || reportConfig.WritesBuildSteps)
+            {
+                _buildStepsWriter.Write(_buildReport);
+            }
+
+            if (reportConfig == null || reportConfig.WritesSourceAssets)
+            {
+                _sourceAssetsWriter.Write(_buildReport);
+            }
+
+            if (reportConfig == null || reportConfig.WritesOutputFiles)
+            {
+                _outputFilesWriter.Write(_buildReport);
+            }
+
+            if (reportConfig == null || reportConfig.WritesIncludedModules)
+            {
+                _includedModulesWriter.Write(_buildReport);
+            }
         }
     }
 }

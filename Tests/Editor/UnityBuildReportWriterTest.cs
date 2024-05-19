@@ -19,7 +19,9 @@ namespace GhaUnityBuildReporter.Editor.Tests
             // Arrange
             var jobSummaryRepository = new FakeJobSummaryRepository(_outputPath);
             var buildReportRepository = new StubBuildReportRepository();
-            var writer = new UnityBuildReportWriter(jobSummaryRepository, buildReportRepository);
+            var reportConfigRepository = new StubReportConfigRepository();
+            var writer =
+                new UnityBuildReportWriter(jobSummaryRepository, buildReportRepository, reportConfigRepository);
 
             // Act
             writer.Write();

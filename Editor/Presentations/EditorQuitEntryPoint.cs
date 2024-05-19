@@ -38,7 +38,6 @@ namespace GhaUnityBuildReporter.Editor.Presentations
 
             using var buildReportRepository = new BuildReportRepository();
             var jobSummaryRepository = new GitHubJobSummaryRepository(s_gitHubStepSummaryPath);
-
             var buildReport = buildReportRepository.GetBuildReport();
             if (buildReport == null)
             {
@@ -46,7 +45,11 @@ namespace GhaUnityBuildReporter.Editor.Presentations
                 return;
             }
 
-            var reporter = new UnityBuildReportWriter(jobSummaryRepository, buildReportRepository);
+            var commandLineArgsRepository = new CommandLineArgsRepository();
+            var configPath = commandLineArgsRepository.GetValue("-buildReporterConfig");
+            var reportConfigRepository = new ReportConfigRepository(configPath);
+            var reporter =
+                new UnityBuildReportWriter(jobSummaryRepository, buildReportRepository, reportConfigRepository);
             reporter.Write();
         }
     }
