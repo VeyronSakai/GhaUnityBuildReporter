@@ -46,8 +46,24 @@ namespace GhaUnityBuildReporter.Editor.Tests
                     Enumerable.Empty<BuildStepMessage>(), 1)
             };
 
-            var packedAssetInfo = new PackedAssetInfo(15, "Unknown");
-            var packedAssets = new[] { new PackedAssets("Test Packed Asset", new[] { packedAssetInfo }) };
+            var packedAssets = new[]
+            {
+                new PackedAssets("Test Packed Assets A",
+                    new[]
+                    {
+                        new PackedAssetInfo(150000, "Packed Asset A-1"),
+                        new PackedAssetInfo(10000, "Packed Asset A-2"),
+                    }),
+                new PackedAssets("Test Packed Assets B",
+                    new[]
+                    {
+                        new PackedAssetInfo(20000, "Packed Asset B-1"),
+                        new PackedAssetInfo(300000000, "Packed Asset B-2"),
+                        new PackedAssetInfo(250, "Packed Asset B-3"),
+                    })
+            };
+
+
             var strippingInfo = new StrippingInfo(new[] { "AndroidJNI Module", "Animation Module", "Audio Module" });
             var buildFiles = new[]
             {
