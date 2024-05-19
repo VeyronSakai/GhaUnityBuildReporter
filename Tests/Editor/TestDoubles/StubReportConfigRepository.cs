@@ -16,7 +16,7 @@ namespace GhaUnityBuildReporter.Editor.Tests.TestDoubles
             _writesBasicInfo = writesBasicInfo;
         }
 
-        internal override ReportConfig GetReporterConfig(string configPath)
+        internal override ReportConfig GetReporterConfig()
         {
             return _existsConfig ? new ReportConfig(_writesBasicInfo) : null;
         }

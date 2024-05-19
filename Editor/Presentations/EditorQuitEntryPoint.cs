@@ -46,7 +46,7 @@ namespace GhaUnityBuildReporter.Editor.Presentations
                 return;
             }
 
-            var reportConfigRepository = new ReportConfigRepository();
+            var reportConfigRepository = new ReportConfigRepository("Assets/Editor/GhaUnityBuildReporterConfig.asset");
 
             var reporter =
                 new UnityBuildReportWriter(jobSummaryRepository, buildReportRepository, reportConfigRepository);

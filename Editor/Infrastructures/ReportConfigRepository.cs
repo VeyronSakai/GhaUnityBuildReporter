@@ -8,9 +8,16 @@ namespace GhaUnityBuildReporter.Editor.Infrastructures
 {
     internal class ReportConfigRepository : AbstractReportConfigRepository
     {
-        internal override ReportConfig GetReporterConfig(string configPath)
+        private readonly string _configPath;
+
+        internal ReportConfigRepository(string configPath)
         {
-            var configAsset = AssetDatabase.LoadAssetAtPath<GhaUnityBuildReporterConfigAsset>(configPath);
+            _configPath = configPath;
+        }
+
+        internal override ReportConfig GetReporterConfig()
+        {
+            var configAsset = AssetDatabase.LoadAssetAtPath<GhaUnityBuildReporterConfigAsset>(_configPath);
             return new ReportConfig(configAsset.basicInfo);
         }
     }
