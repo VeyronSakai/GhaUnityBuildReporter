@@ -29,27 +29,38 @@ namespace GhaUnityBuildReporter.Editor.Tests
                 2
             );
 
-            var buildStep1 = new BuildStep("Test Build Step1", new System.TimeSpan(0, 1, 20, 3, 444),
-                Enumerable.Empty<BuildStepMessage>(), 0);
-            var buildStep2 = new BuildStep("Test Build Step2", new System.TimeSpan(0, 0, 1, 2, 3),
-                new[] { new BuildStepMessage(LogType.Log, "This is Test Step2 Log") }, 1);
-            var buildStep3 = new BuildStep("Test Build Step3", new System.TimeSpan(0, 0, 2, 3, 123),
-                new[]
-                {
-                    new BuildStepMessage(LogType.Warning, "This is Test Step3 Warning 1"),
-                    new BuildStepMessage(LogType.Warning, "This is Test Step3 Warning 2")
-                }, 1);
-            var buildStep4 = new BuildStep("Test Build Step4", new System.TimeSpan(0, 0, 30, 10, 111),
-                Enumerable.Empty<BuildStepMessage>(), 1);
-            var packedAssetInfo = new PackedAssetInfo(15, "Unknown");
-            var packedAsset = new PackedAssets("Test Packed Asset", new[] { packedAssetInfo });
-            var strippingInfo = new StrippingInfo(new[] { "AndroidJNI Module", "Animation Module", "Audio Module" });
-            var buildFile = new BuildFile(0, "TestBuildFile", "TestRole", 100);
+            var buildSteps = new[]
+            {
+                new BuildStep("Test Build Step1", new System.TimeSpan(0, 1, 20, 3, 444),
+                    Enumerable.Empty<BuildStepMessage>(), 0),
+                new BuildStep("Test Build Step2", new System.TimeSpan(0, 0, 1, 2, 3),
+                    new[] { new BuildStepMessage(LogType.Log, "This is Test Step2 Log") }, 1),
+                new BuildStep("Test Build Step3", new System.TimeSpan(0, 0, 2, 3, 123),
+                    new[]
+                    {
+                        new BuildStepMessage(LogType.Warning, "This is Test Step3 Warning 1"),
+                        new BuildStepMessage(LogType.Warning, "This is Test Step3 Warning 2")
+                    }, 1),
+                new BuildStep("Test Build Step4", new System.TimeSpan(0, 0, 30, 10, 111),
+                    Enumerable.Empty<BuildStepMessage>(), 1)
+            };
 
-            return new BuildReport(summary, new[] { buildStep1, buildStep2, buildStep3, buildStep4 },
-                new[] { packedAsset },
+            var packedAssetInfo = new PackedAssetInfo(15, "Unknown");
+            var packedAssets = new[] { new PackedAssets("Test Packed Asset", new[] { packedAssetInfo }) };
+            var strippingInfo = new StrippingInfo(new[] { "AndroidJNI Module", "Animation Module", "Audio Module" });
+            var buildFiles = new[]
+            {
+                new BuildFile(0, "TestBuildFile1", "Test Role A", 100),
+                new BuildFile(1, "TestBuildFile2", "Test Role B", 2000),
+                new BuildFile(2, "TestBuildFile3", "Test Role C", 30000)
+            };
+
+            return new BuildReport(
+                summary,
+                buildSteps,
+                packedAssets,
                 strippingInfo,
-                new[] { buildFile });
+                buildFiles);
         }
     }
 }

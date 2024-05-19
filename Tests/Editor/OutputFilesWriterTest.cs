@@ -8,21 +8,20 @@ using NUnit.Framework;
 
 namespace GhaUnityBuildReporter.Editor.Tests
 {
-    public sealed class IncludedModulesWriterTest
+    public sealed class OutputFilesWriterTest
     {
-        private readonly string _outputPath = Path.Combine(Directory.GetCurrentDirectory(), "ActualIncludedModules.md");
+        private readonly string _outputPath = Path.Combine(Directory.GetCurrentDirectory(), "ActualOutputFiles.md");
 
         [Test]
         public void WriteTest()
         {
             // Arrange
             var jobSummaryRepository = new FakeJobSummaryRepository(_outputPath);
-            var buildReportRepository = new StubBuildReportRepository();
-            var buildReport = buildReportRepository.GetBuildReport();
-            var titleWriter = new IncludedModulesWriter(jobSummaryRepository, buildReportRepository);
+            var writer = new OutputFilesWriter(jobSummaryRepository);
+            var buildReport = Helper.GenerateStubBuildReport();
 
             // Act
-            titleWriter.Write(buildReport);
+            writer.Write(buildReport);
 
             // Assert
             var actual = File.ReadAllText(_outputPath);
@@ -30,7 +29,7 @@ namespace GhaUnityBuildReporter.Editor.Tests
                 "Tests",
                 "Editor",
                 "TestData",
-                "ExpectedIncludedModules.md"
+                "ExpectedOutputFiles.md"
             );
             var expected = File.ReadAllText(expectedResultPath);
             Assert.AreEqual(expected, actual);

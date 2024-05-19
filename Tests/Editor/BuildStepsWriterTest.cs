@@ -36,8 +36,8 @@ namespace GhaUnityBuildReporter.Editor.Tests
             Assert.AreEqual(expected, actual);
         }
 
-        [TearDown]
-        public void TearDown()
+        [SetUp, TearDown]
+        public void Clean()
         {
             if (File.Exists(_outputPath))
             {
