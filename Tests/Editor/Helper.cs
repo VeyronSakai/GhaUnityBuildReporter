@@ -1,6 +1,7 @@
 // Copyright (c) 2024 VeyronSakai.
 // This software is released under the MIT License.
 
+using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEditor.Build.Reporting;
@@ -61,6 +62,17 @@ namespace GhaUnityBuildReporter.Editor.Tests
                 packedAssets,
                 strippingInfo,
                 buildFiles);
+        }
+
+        internal static string GetExpectedResult(string expectedResultFileName)
+        {
+            var expectedResultPath = Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory())?.FullName,
+                "Tests",
+                "Editor",
+                "TestData",
+                expectedResultFileName
+            );
+            return File.ReadAllText(expectedResultPath);
         }
     }
 }

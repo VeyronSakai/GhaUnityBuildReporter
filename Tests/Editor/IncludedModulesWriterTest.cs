@@ -26,13 +26,7 @@ namespace GhaUnityBuildReporter.Editor.Tests
 
             // Assert
             var actual = File.ReadAllText(_outputPath);
-            var expectedResultPath = Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory())?.FullName,
-                "Tests",
-                "Editor",
-                "TestData",
-                "ExpectedIncludedModules.md"
-            );
-            var expected = File.ReadAllText(expectedResultPath);
+            var expected = Helper.GetExpectedResult("ExpectedIncludedModules.md");
             Assert.AreEqual(expected, actual);
         }
 
