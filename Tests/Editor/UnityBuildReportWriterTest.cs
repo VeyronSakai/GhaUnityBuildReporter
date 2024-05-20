@@ -58,6 +58,30 @@ namespace GhaUnityBuildReporter.Editor.Tests
             Assert.AreEqual(expected, actual);
         }
 
+        [Test]
+        public void Write_AllConfigAreDisabled_NothingIsWritten()
+        {
+            // Arrange
+            var jobSummaryRepository = new FakeJobSummaryRepository(_outputPath);
+            var buildReportRepository = new StubBuildReportRepository();
+            var reportConfigRepository = new StubReportConfigRepository(
+                writesTitle: false,
+                writesBasicInfo: false,
+                writesBuildSteps: false,
+                writesSourceAssets: false,
+                writesOutputFiles: false,
+                writesIncludedModules: false
+            );
+            var writer =
+                new UnityBuildReportWriter(jobSummaryRepository, buildReportRepository, reportConfigRepository);
+
+            // Act
+            writer.Write();
+
+            // Assert
+            Assert.IsFalse(File.Exists(_outputPath));
+        }
+
         [SetUp, TearDown]
         public void Clean()
         {
