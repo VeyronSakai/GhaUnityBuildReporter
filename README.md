@@ -79,7 +79,7 @@ Because all the processing is done in Unity post-processing, the setup is basica
 1. Open the Package Manager in the UnityEditor.
 2. Select the `+` button in the upper left corner.
 3. Select Add package from git URL.
-4. Enter https://github.com/VeyronSakai/GhaUnityBuildReporter.git#0.3.0 and Select Add button.
+4. Enter https://github.com/VeyronSakai/GhaUnityBuildReporter.git#0.3 and Select Add button.
 
 It can also be installed by downloading .unitypackage from [Releases](https://github.com/VeyronSakai/GhaUnityBuildReporter/releases/latest).
 
@@ -94,7 +94,7 @@ In such cases, setting the environment variable `GHA_UNITY_BUILD_REPORTER_OPTOUT
 
 ## Hide specific items
 
-You can select items for output using a dedicated .asset file.
+You can hide specific items using a dedicated .asset file.
 
 First, create an .asset file from `Create` > `GhaUnityBuildReporterConfig` in the Project window.
 
