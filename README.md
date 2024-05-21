@@ -79,18 +79,42 @@ Because all the processing is done in Unity post-processing, the setup is basica
 1. Open the Package Manager in the UnityEditor.
 2. Select the `+` button in the upper left corner.
 3. Select Add package from git URL.
-4. Enter https://github.com/VeyronSakai/GhaUnityBuildReporter.git#0.2 and Select Add button.
+4. Enter https://github.com/VeyronSakai/GhaUnityBuildReporter.git#0.3 and Select Add button.
 
 It can also be installed by downloading .unitypackage from [Releases](https://github.com/VeyronSakai/GhaUnityBuildReporter/releases/latest).
 
 > [!WARNING]
 > The Workflow file of GitHub Actions basically does not need to be changed, but if you use Docker to build Unity, you must copy the files at `$GITHUB_STEP_SUMMARY` in the Docker container to the path at `$GITHUB_STEP_SUMMARY` on the host machine after building with Unity.
 
-## How to suppress GhaUnityBuildReporter
+## Disable GhaUnityBuildReporter using environment variables
 
 Perhaps there is a Workflow or Job for which you would like to disable GhaUnityBuildReporter.
 
 In such cases, setting the environment variable `GHA_UNITY_BUILD_REPORTER_OPTOUT` to `1` or `true` will disable GhaUnityBuildReporter in the scope where that environment variable is valid.
+
+## Hide specific items
+
+You can hide specific items using a dedicated .asset file.
+
+First, create an .asset file from `Create` > `GhaUnityBuildReporterConfig` in the Project window.
+
+Then, select the .asset file you created and turn off the items you do not want to show in the Job Summary in Inspector. (By default, all items are set to On.)
+
+<img width="584" alt="ghaunitybuildreporterconfig" src="https://github.com/VeyronSakai/GhaUnityBuildReporter/assets/43900255/147ecedf-dc63-49d5-befd-a6fa20664341">
+
+Finally, when running the Unity build, specify the path to the .asset file you created with `-buildReporterConfig` as follows
+
+```yml
+- name: iOS Build
+  run: |
+    /Applications/Unity/Hub/Editor/2022.3.26f1/Unity.app/Contents/MacOS/Unity \
+      -quit \
+      -batchmode \
+      -nographics \
+      -projectPath ./Samples~ \
+      -buildReporterConfig Assets/Editor/GhaUnityBuildReporterConfig.asset \
+      -executeMethod Editor.BuildEntryPoint.BuildIOS
+```
 
 ## Contribution
 
