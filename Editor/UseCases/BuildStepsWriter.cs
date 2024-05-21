@@ -58,8 +58,13 @@ namespace GhaUnityBuildReporter.Editor.UseCases
                                     _ => ":question:"
                                 };
 
-                                _jobSummaryRepository.AppendText(
-                                    $@"{new string(' ', step.Depth * 2)}- {emoji} {message.Content}{Environment.NewLine}");
+                                var splitMessages = message.Content.Split(Environment.NewLine);
+                                foreach (var msg in splitMessages)
+                                {
+                                    _jobSummaryRepository.AppendText(
+                                        $@"{new string(' ', step.Depth * 2)}- {emoji} {msg}{Environment.NewLine}"
+                                    );
+                                }
                             }
 
                             break;

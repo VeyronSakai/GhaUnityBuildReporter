@@ -40,7 +40,9 @@ namespace GhaUnityBuildReporter.Editor.Tests
                     new[]
                     {
                         new BuildStepMessage(LogType.Warning, "This is Test Step3 Warning 1"),
-                        new BuildStepMessage(LogType.Warning, "This is Test Step3 Warning 2")
+                        new BuildStepMessage(LogType.Warning, "This is Test Step3 Warning 2"),
+                        new BuildStepMessage(LogType.Warning,
+                            "This is Test Step3 Warning 3\nNew-line message.")
                     }, 1),
                 new BuildStep("Test Build Step4", new System.TimeSpan(0, 0, 30, 10, 111),
                     Enumerable.Empty<BuildStepMessage>(), 1)
