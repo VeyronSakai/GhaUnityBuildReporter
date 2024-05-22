@@ -19,6 +19,8 @@
   - :warning: This is Test Step3 Warning 2
   - :warning: This is Test Step3 Warning 3
   - :warning: New-line message.
+  - :x: This is Test Step3 Error
+  - :x: New-line message.
 - **Test Build Step4** (00:30:10.111)
 </details>
 
