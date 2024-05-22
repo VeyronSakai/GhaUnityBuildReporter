@@ -3,6 +3,7 @@
 
 using System;
 using System.Linq;
+using System.Text.RegularExpressions;
 using GhaUnityBuildReporter.Editor.Domains;
 using JetBrains.Annotations;
 using UnityEngine;
@@ -58,11 +59,14 @@ namespace GhaUnityBuildReporter.Editor.UseCases
                                     _ => ":question:"
                                 };
 
-                                var splitMessages = message.Content.Split(Environment.NewLine);
-                                foreach (var msg in splitMessages)
+                                // If there are multiple consecutive line breaks, combine them into one line break
+                                var normalizedMessage = Regex.Replace(message.Content, @"(\r\n|\r|\n)+",
+                                    Environment.NewLine);
+                                var contents = normalizedMessage.Split(Environment.NewLine);
+                                foreach (var content in contents)
                                 {
                                     _jobSummaryRepository.AppendText(
-                                        $@"{new string(' ', step.Depth * 2)}- {emoji} {msg}{Environment.NewLine}"
+                                        $@"{new string(' ', step.Depth * 2)}- {emoji} {content}{Environment.NewLine}"
                                     );
                                 }
                             }
