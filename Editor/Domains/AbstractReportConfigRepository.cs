@@ -7,7 +7,7 @@ namespace GhaUnityBuildReporter.Editor.Domains
 {
     internal abstract class AbstractReportConfigRepository
     {
-        [CanBeNull]
+        [NotNull]
         internal abstract ReportConfig GetReporterConfig();
     }
 }
