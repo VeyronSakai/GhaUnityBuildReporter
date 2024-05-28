@@ -39,32 +39,32 @@ namespace GhaUnityBuildReporter.Editor.UseCases
         {
             var reportConfig = _reportConfigRepository.GetReporterConfig();
 
-            if (reportConfig == null || reportConfig.WritesTitle)
+            if (reportConfig.WritesTitle)
             {
                 _titleWriter.Write();
             }
 
-            if (reportConfig == null || reportConfig.WritesBasicInfo)
+            if (reportConfig.WritesBasicInfo)
             {
                 _basicInfoWriter.Write(_buildReport);
             }
 
-            if (reportConfig == null || reportConfig.WritesBuildSteps)
+            if (reportConfig.WritesBuildSteps)
             {
                 _buildStepsWriter.Write(_buildReport);
             }
 
-            if (reportConfig == null || reportConfig.WritesSourceAssets)
+            if (reportConfig.WritesSourceAssets)
             {
                 _sourceAssetsWriter.Write(_buildReport);
             }
 
-            if (reportConfig == null || reportConfig.WritesOutputFiles)
+            if (reportConfig.WritesOutputFiles)
             {
                 _outputFilesWriter.Write(_buildReport);
             }
 
-            if (reportConfig == null || reportConfig.WritesIncludedModules)
+            if (reportConfig.WritesIncludedModules)
             {
                 _includedModulesWriter.Write(_buildReport);
             }

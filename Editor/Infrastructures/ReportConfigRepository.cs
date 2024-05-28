@@ -18,10 +18,20 @@ namespace GhaUnityBuildReporter.Editor.Infrastructures
         internal override ReportConfig GetReporterConfig()
         {
             var configAsset = AssetDatabase.LoadAssetAtPath<GhaUnityBuildReporterConfigAsset>(_configPath);
-            return !configAsset
-                ? null
-                : new ReportConfig(configAsset.title, configAsset.basicInfo, configAsset.buildSteps,
+            if (configAsset)
+            {
+                return new ReportConfig(configAsset.title, configAsset.basicInfo, configAsset.buildSteps,
                     configAsset.sourceAssets, configAsset.outputFiles, configAsset.includedModules);
+            }
+
+            return new ReportConfig(
+                ProjectSettingSingleton.instance.title,
+                ProjectSettingSingleton.instance.basicInfo,
+                ProjectSettingSingleton.instance.buildSteps,
+                ProjectSettingSingleton.instance.sourceAssets,
+                ProjectSettingSingleton.instance.outputFiles,
+                ProjectSettingSingleton.instance.includedModules
+            );
         }
     }
 }

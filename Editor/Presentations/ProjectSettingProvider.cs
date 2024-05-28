@@ -2,6 +2,8 @@
 // This software is released under the MIT License.
 
 using System.Collections.Generic;
+using GhaUnityBuildReporter.Editor.Domains;
+using GhaUnityBuildReporter.Editor.Infrastructures;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -22,7 +24,7 @@ namespace GhaUnityBuildReporter.Editor.Presentations
         {
             base.OnActivate(searchContext, rootElement);
 
-            var projectSetting = ProjectSetting.instance;
+            var projectSetting = ProjectSettingSingleton.instance;
             projectSetting.hideFlags = HideFlags.HideAndDontSave & ~HideFlags.NotEditable;
             UnityEditor.Editor.CreateCachedEditor(projectSetting, null, ref _editor);
         }
@@ -42,7 +44,7 @@ namespace GhaUnityBuildReporter.Editor.Presentations
 
             if (EditorGUI.EndChangeCheck())
             {
-                ProjectSetting.instance.Save();
+                ProjectSettingSingleton.instance.Save();
             }
         }
     }

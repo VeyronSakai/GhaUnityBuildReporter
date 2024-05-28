@@ -1,20 +1,20 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &11400000
+--- !u!114 &1
 MonoBehaviour:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 53
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 670b240bae904410a7befb6bcc10871e, type: 3}
-  m_Name: GhaUnityBuildReporterConfig
+  m_Script: {fileID: 11500000, guid: 6fb454959d8b4c09bf8335fccf0b7680, type: 3}
+  m_Name: 
   m_EditorClassIdentifier: 
   title: 1
-  basicInfo: 0
-  buildSteps: 0
-  sourceAssets: 1
-  outputFiles: 1
+  basicInfo: 1
+  buildSteps: 1
+  sourceAssets: 0
+  outputFiles: 0
   includedModules: 1
