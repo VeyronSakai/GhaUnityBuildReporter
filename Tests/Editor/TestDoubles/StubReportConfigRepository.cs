@@ -2,6 +2,7 @@
 // This software is released under the MIT License.
 
 using GhaUnityBuildReporter.Editor.Domains;
+using GhaUnityBuildReporter.Editor.Infrastructures;
 
 namespace GhaUnityBuildReporter.Editor.Tests.TestDoubles
 {
@@ -36,10 +37,20 @@ namespace GhaUnityBuildReporter.Editor.Tests.TestDoubles
 
         internal override ReportConfig GetReporterConfig()
         {
-            return _existsConfig
-                ? new ReportConfig(_writesTitle, _writesBasicInfo, _writesBuildSteps, _writesSourceAssets,
-                    _writesOutputFiles, _writesIncludedModules)
-                : null;
+            if (_existsConfig)
+            {
+                return new ReportConfig(_writesTitle, _writesBasicInfo, _writesBuildSteps, _writesSourceAssets,
+                    _writesOutputFiles, _writesIncludedModules);
+            }
+
+            return new ReportConfig(
+                true,
+                true,
+                true,
+                false,
+                false,
+                true
+            );
         }
     }
 }
