@@ -15,9 +15,13 @@ GhaUnityBuildReporter specifically reflects the following information in the Job
 
 - Basic Info
 - Build Steps
-- Source Assets
-- Output Files
+- Source Assets (Hidden by default)
+- Output Files (Hidden by default)
 - Included Modules
+
+Source Assets and Output Files are hidden by default.
+
+The display settings for each item can be configured in ProjectSettings.
 
 > [!NOTE]
 > Items with no information to display are hidden. For example, if the Scripting Backend is Mono instead of IL2CPP, Included Modules will be hidden.
@@ -92,9 +96,13 @@ Perhaps there is a Workflow or Job for which you would like to disable GhaUnityB
 
 In such cases, setting the environment variable `GHA_UNITY_BUILD_REPORTER_OPTOUT` to `1` or `true` will disable GhaUnityBuildReporter in the scope where that environment variable is valid.
 
-## Hide specific items
+## Override display settings
 
-You can hide specific items using a dedicated .asset file.
+Each item can be displayed or not from ProjectSettings.
+
+However, there may be times when you want to override this setting for a particular build.
+
+In that case, the following procedure can be used to override the setting.
 
 First, create an .asset file from `Create` > `GhaUnityBuildReporterConfig` in the Project window.
 
