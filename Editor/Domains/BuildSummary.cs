@@ -4,27 +4,39 @@
 using System;
 using UnityEditor;
 using UnityEditor.Build.Reporting;
+using UnityEngine;
 
 namespace GhaUnityBuildReporter.Editor.Domains
 {
-    internal sealed class BuildSummary
+    [Serializable]
+    internal class BuildSummary
     {
-        internal BuildTarget Platform { get; }
-        internal TimeSpan TotalTime { get; }
-        internal ulong TotalSize { get; }
-        internal BuildResult Result { get; }
-        internal int TotalErrors { get; }
-        internal int TotalWarnings { get; }
+        [SerializeField] private BuildTarget platform;
+
+        // ReSharper disable once InconsistentNaming
+        private TimeSpan totalTime;
+
+        [SerializeField] private ulong totalSize;
+        [SerializeField] private BuildResult result;
+        [SerializeField] private int totalErrors;
+        [SerializeField] private int totalWarnings;
+
+        internal BuildTarget Platform => platform;
+        internal TimeSpan TotalTime => totalTime;
+        internal ulong TotalSize => totalSize;
+        internal BuildResult Result => result;
+        internal int TotalErrors => totalErrors;
+        internal int TotalWarnings => totalWarnings;
 
         internal BuildSummary(BuildTarget platform, TimeSpan totalTime, ulong totalSize, BuildResult result,
             int totalErrors, int totalWarnings)
         {
-            Platform = platform;
-            TotalTime = totalTime;
-            TotalSize = totalSize;
-            Result = result;
-            TotalErrors = totalErrors;
-            TotalWarnings = totalWarnings;
+            this.platform = platform;
+            this.totalTime = totalTime;
+            this.totalSize = totalSize;
+            this.result = result;
+            this.totalErrors = totalErrors;
+            this.totalWarnings = totalWarnings;
         }
     }
 }

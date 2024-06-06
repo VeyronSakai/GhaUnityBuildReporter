@@ -127,7 +127,7 @@ namespace GhaUnityBuildReporter.Editor.Infrastructures
             var packedAssets = originalBuildReport.packedAssets.Select(originalPackedAssets =>
             {
                 var packedAssetInfos = originalPackedAssets.contents.Select(content =>
-                    new PackedAssetInfo(content.packedSize, content.sourceAssetPath));
+                    new PackedAssetInfo(content.packedSize, content.sourceAssetPath)).ToArray();
                 return new PackedAssets(originalPackedAssets.shortPath, packedAssetInfos);
             }).ToArray();
 

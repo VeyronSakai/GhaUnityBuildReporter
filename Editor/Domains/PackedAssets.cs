@@ -1,20 +1,26 @@
 // Copyright (c) 2024 VeyronSakai.
 // This software is released under the MIT License.
 
+using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
+using UnityEngine;
 
 namespace GhaUnityBuildReporter.Editor.Domains
 {
-    internal sealed class PackedAssets
+    [Serializable]
+    internal class PackedAssets
     {
-        [NotNull] internal string ShortPath { get; }
-        [NotNull] internal IEnumerable<PackedAssetInfo> Contents { get; }
+        [SerializeField] private string shortPath;
+        [SerializeField] private PackedAssetInfo[] contents;
 
-        internal PackedAssets([NotNull] string shortPath, [NotNull] IEnumerable<PackedAssetInfo> contents)
+        [NotNull] internal string ShortPath => shortPath;
+        [NotNull] internal IEnumerable<PackedAssetInfo> Contents => contents;
+
+        internal PackedAssets([NotNull] string shortPath, [NotNull] PackedAssetInfo[] contents)
         {
-            ShortPath = shortPath;
-            Contents = contents;
+            this.shortPath = shortPath;
+            this.contents = contents;
         }
     }
 }

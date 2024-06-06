@@ -1,16 +1,27 @@
 // Copyright (c) 2024 VeyronSakai.
 // This software is released under the MIT License.
 
+using System;
+using UnityEngine;
+
 namespace GhaUnityBuildReporter.Editor.Domains
 {
-    internal sealed class ReportConfig
+    [Serializable]
+    internal class ReportConfig
     {
-        internal bool WritesTitle { get; }
-        internal bool WritesBasicInfo { get; }
-        internal bool WritesBuildSteps { get; }
-        internal bool WritesSourceAssets { get; }
-        internal bool WritesOutputFiles { get; }
-        internal bool WritesIncludedModules { get; }
+        [SerializeField] private bool writesTitle;
+        [SerializeField] private bool writesBasicInfo;
+        [SerializeField] private bool writesBuildSteps;
+        [SerializeField] private bool writesSourceAssets;
+        [SerializeField] private bool writesOutputFiles;
+        [SerializeField] private bool writesIncludedModules;
+
+        internal bool WritesTitle => writesTitle;
+        internal bool WritesBasicInfo => writesBasicInfo;
+        internal bool WritesBuildSteps => writesBuildSteps;
+        internal bool WritesSourceAssets => writesSourceAssets;
+        internal bool WritesOutputFiles => writesOutputFiles;
+        internal bool WritesIncludedModules => writesIncludedModules;
 
         internal ReportConfig(
             bool writesTitle,
@@ -21,12 +32,12 @@ namespace GhaUnityBuildReporter.Editor.Domains
             bool writesIncludedModules
         )
         {
-            WritesTitle = writesTitle;
-            WritesBasicInfo = writesBasicInfo;
-            WritesBuildSteps = writesBuildSteps;
-            WritesSourceAssets = writesSourceAssets;
-            WritesOutputFiles = writesOutputFiles;
-            WritesIncludedModules = writesIncludedModules;
+            this.writesTitle = writesTitle;
+            this.writesBasicInfo = writesBasicInfo;
+            this.writesBuildSteps = writesBuildSteps;
+            this.writesSourceAssets = writesSourceAssets;
+            this.writesOutputFiles = writesOutputFiles;
+            this.writesIncludedModules = writesIncludedModules;
         }
     }
 }

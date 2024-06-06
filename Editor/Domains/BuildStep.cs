@@ -4,20 +4,27 @@
 using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
+using UnityEngine;
 
 namespace GhaUnityBuildReporter.Editor.Domains
 {
-    internal sealed class BuildStep
+    [Serializable]
+    internal class BuildStep
     {
-        internal string Name { get; }
-        internal TimeSpan Duration { get; }
+        [SerializeField] private string name;
+
+        // ReSharper disable once InconsistentNaming
+        private TimeSpan duration;
+
+        internal string Name => name;
+        internal TimeSpan Duration => duration;
         [NotNull] internal IEnumerable<BuildStepMessage> Messages { get; }
         internal int Depth { get; }
 
         internal BuildStep(string name, TimeSpan duration, [NotNull] IEnumerable<BuildStepMessage> messages, int depth)
         {
-            Name = name;
-            Duration = duration;
+            this.name = name;
+            this.duration = duration;
             Messages = messages;
             Depth = depth;
         }
