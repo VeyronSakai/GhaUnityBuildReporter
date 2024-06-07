@@ -10,7 +10,7 @@ namespace Editor
     {
         private const string Scenes = "Assets/Scenes/SampleScene.unity";
 
-        // ReSharper disable once UnusedMember.Global
+        [MenuItem("Tools/Build/Android")]
         public static void BuildAndroid()
         {
             var buildPlayerOptions = new BuildPlayerOptions
@@ -24,7 +24,7 @@ namespace Editor
             BuildPipeline.BuildPlayer(buildPlayerOptions);
         }
 
-        // ReSharper disable once UnusedMember.Global
+        [MenuItem("Tools/Build/iOS")]
         public static void BuildIOS()
         {
             var buildPlayerOptions = new BuildPlayerOptions
@@ -38,7 +38,7 @@ namespace Editor
             BuildPipeline.BuildPlayer(buildPlayerOptions);
         }
 
-        // ReSharper disable once UnusedMember.Global
+        [MenuItem("Tools/Build/macOS")]
         public static void BuildMacOS()
         {
             var buildPlayerOptions = new BuildPlayerOptions
@@ -52,7 +52,7 @@ namespace Editor
             BuildPipeline.BuildPlayer(buildPlayerOptions);
         }
 
-        // ReSharper disable once UnusedMember.Global
+        [MenuItem("Tools/Build/WebGL")]
         public static void BuildWebGL()
         {
             var buildPlayerOptions = new BuildPlayerOptions

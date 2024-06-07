@@ -15,6 +15,8 @@ namespace GhaUnityBuildReporter.Editor.Domains
         [NotNull]
         internal abstract IEnumerable<string> GetReasonsForIncluding(string entityName);
 
+        internal abstract void WriteJson();
+
         public abstract void Dispose();
     }
 }

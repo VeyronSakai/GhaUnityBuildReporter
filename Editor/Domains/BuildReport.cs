@@ -1,17 +1,26 @@
 // Copyright (c) 2024 VeyronSakai.
 // This software is released under the MIT License.
 
+using System;
 using JetBrains.Annotations;
+using UnityEngine;
 
 namespace GhaUnityBuildReporter.Editor.Domains
 {
-    internal sealed class BuildReport
+    [Serializable]
+    internal class BuildReport
     {
-        [NotNull] internal BuildSummary Summary { get; }
-        [NotNull] internal BuildStep[] Steps { get; }
-        [NotNull] internal PackedAssets[] PackedAssets { get; }
-        [NotNull] internal StrippingInfo StrippingInfo { get; }
-        [NotNull] internal BuildFile[] BuildFiles { get; }
+        [SerializeField] private BuildSummary summary;
+        [SerializeField] private BuildStep[] steps;
+        [SerializeField] private PackedAssets[] packedAssets;
+        [SerializeField] private StrippingInfo strippingInfo;
+        [SerializeField] private BuildFile[] buildFiles;
+
+        [NotNull] internal BuildSummary Summary => summary;
+        [NotNull] internal BuildStep[] Steps => steps;
+        [NotNull] internal PackedAssets[] PackedAssets => packedAssets;
+        [NotNull] internal StrippingInfo StrippingInfo => strippingInfo;
+        [NotNull] internal BuildFile[] BuildFiles => buildFiles;
 
         internal BuildReport(
             [NotNull] BuildSummary summary,
@@ -21,11 +30,11 @@ namespace GhaUnityBuildReporter.Editor.Domains
             [NotNull] BuildFile[] buildFiles
         )
         {
-            Summary = summary;
-            Steps = steps;
-            PackedAssets = packedAssets;
-            StrippingInfo = strippingInfo;
-            BuildFiles = buildFiles;
+            this.summary = summary;
+            this.steps = steps;
+            this.packedAssets = packedAssets;
+            this.strippingInfo = strippingInfo;
+            this.buildFiles = buildFiles;
         }
     }
 }

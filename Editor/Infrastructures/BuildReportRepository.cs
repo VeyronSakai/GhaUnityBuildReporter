@@ -107,6 +107,13 @@ namespace GhaUnityBuildReporter.Editor.Infrastructures
                 : _lastBuildReport.strippingInfo.GetReasonsForIncluding(entityName);
         }
 
+        internal override void WriteJson()
+        {
+            var jsonString = JsonUtility.ToJson(_cachedBuildReport);
+            var buildReportJsonPath = Path.Combine("Logs", "BuildReport.json");
+            File.WriteAllText(buildReportJsonPath, jsonString);
+        }
+
         public override void Dispose()
         {
             if (Directory.Exists(_buildReportDir))
@@ -127,7 +134,7 @@ namespace GhaUnityBuildReporter.Editor.Infrastructures
             var packedAssets = originalBuildReport.packedAssets.Select(originalPackedAssets =>
             {
                 var packedAssetInfos = originalPackedAssets.contents.Select(content =>
-                    new PackedAssetInfo(content.packedSize, content.sourceAssetPath));
+                    new PackedAssetInfo(content.packedSize, content.sourceAssetPath)).ToArray();
                 return new PackedAssets(originalPackedAssets.shortPath, packedAssetInfos);
             }).ToArray();
 

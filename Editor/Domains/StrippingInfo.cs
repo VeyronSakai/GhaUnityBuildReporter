@@ -1,18 +1,24 @@
 // Copyright (c) 2024 VeyronSakai.
 // This software is released under the MIT License.
 
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using JetBrains.Annotations;
+using UnityEngine;
 
 namespace GhaUnityBuildReporter.Editor.Domains
 {
-    internal sealed class StrippingInfo
+    [Serializable]
+    internal class StrippingInfo
     {
-        [NotNull] internal IEnumerable<string> IncludedModules { get; }
+        [SerializeField] private string[] includedModules;
+
+        [NotNull] internal string[] IncludedModules => includedModules;
 
         internal StrippingInfo([NotNull] IEnumerable<string> includedModules)
         {
-            IncludedModules = includedModules;
+            this.includedModules = includedModules.ToArray();
         }
     }
 }

@@ -2,13 +2,16 @@
 // This software is released under the MIT License.
 
 using System;
+using System.IO;
 using GhaUnityBuildReporter.Editor.Domains;
 using JetBrains.Annotations;
+using UnityEngine;
 
 namespace GhaUnityBuildReporter.Editor.UseCases
 {
     internal sealed class UnityBuildReportWriter
     {
+        [NotNull] private readonly AbstractBuildReportRepository _buildReportRepository;
         [NotNull] private readonly AbstractReportConfigRepository _reportConfigRepository;
         [NotNull] private readonly BuildReport _buildReport;
         [NotNull] private readonly TitleWriter _titleWriter;
@@ -24,6 +27,7 @@ namespace GhaUnityBuildReporter.Editor.UseCases
             [NotNull] AbstractReportConfigRepository reportConfigRepository
         )
         {
+            _buildReportRepository = buildReportRepository;
             _reportConfigRepository = reportConfigRepository;
             _buildReport = buildReportRepository.GetBuildReport() ??
                            throw new InvalidOperationException("Build report is not available.");
@@ -36,6 +40,12 @@ namespace GhaUnityBuildReporter.Editor.UseCases
         }
 
         internal void Write()
+        {
+            WriteJobSummary();
+            _buildReportRepository.WriteJson();
+        }
+
+        private void WriteJobSummary()
         {
             var reportConfig = _reportConfigRepository.GetReporterConfig();
 
