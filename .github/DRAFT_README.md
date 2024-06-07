@@ -26,6 +26,8 @@ The display settings for each item can be configured in ProjectSettings.
 > [!NOTE]
 > Items with no information to display are hidden. For example, if the Scripting Backend is Mono instead of IL2CPP, Included Modules will be hidden.
 
+The entire build report is also output to `Logs/BuildReport.json`.
+
 ### Basic Info
 
 The basic information about the build.
