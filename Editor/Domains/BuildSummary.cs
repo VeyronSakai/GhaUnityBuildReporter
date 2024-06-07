@@ -12,17 +12,14 @@ namespace GhaUnityBuildReporter.Editor.Domains
     internal class BuildSummary
     {
         [SerializeField] private BuildTarget platform;
-
-        // ReSharper disable once InconsistentNaming
-        private TimeSpan totalTime;
-
+        [SerializeField] private string totalTime;
         [SerializeField] private ulong totalSize;
         [SerializeField] private BuildResult result;
         [SerializeField] private int totalErrors;
         [SerializeField] private int totalWarnings;
 
         internal BuildTarget Platform => platform;
-        internal TimeSpan TotalTime => totalTime;
+        internal TimeSpan TotalTime { get; }
         internal ulong TotalSize => totalSize;
         internal BuildResult Result => result;
         internal int TotalErrors => totalErrors;
@@ -32,7 +29,8 @@ namespace GhaUnityBuildReporter.Editor.Domains
             int totalErrors, int totalWarnings)
         {
             this.platform = platform;
-            this.totalTime = totalTime;
+            TotalTime = totalTime;
+            this.totalTime = totalTime.ToString();
             this.totalSize = totalSize;
             this.result = result;
             this.totalErrors = totalErrors;

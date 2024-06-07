@@ -2,7 +2,6 @@
 // This software is released under the MIT License.
 
 using System.Collections.Generic;
-using GhaUnityBuildReporter.Editor.Domains;
 using GhaUnityBuildReporter.Editor.Infrastructures;
 using UnityEditor;
 using UnityEngine;

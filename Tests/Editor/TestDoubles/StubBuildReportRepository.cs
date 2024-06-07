@@ -4,6 +4,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using GhaUnityBuildReporter.Editor.Domains;
+using UnityEngine;
 
 namespace GhaUnityBuildReporter.Editor.Tests.TestDoubles
 {
@@ -24,6 +25,12 @@ namespace GhaUnityBuildReporter.Editor.Tests.TestDoubles
                 "AudioListener" => new[] { "Assets/Scenes/SampleScene.unity" },
                 _ => Enumerable.Empty<string>()
             };
+        }
+
+        internal override void WriteJson()
+        {
+            var jsonString = JsonUtility.ToJson(GetBuildReport());
+            Debug.Log(jsonString);
         }
 
         public override void Dispose()

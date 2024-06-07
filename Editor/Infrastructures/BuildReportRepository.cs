@@ -107,6 +107,13 @@ namespace GhaUnityBuildReporter.Editor.Infrastructures
                 : _lastBuildReport.strippingInfo.GetReasonsForIncluding(entityName);
         }
 
+        internal override void WriteJson()
+        {
+            var jsonString = JsonUtility.ToJson(_cachedBuildReport);
+            var buildReportJsonPath = Path.Combine("Logs", "BuildReport.json");
+            File.WriteAllText(buildReportJsonPath, jsonString);
+        }
+
         public override void Dispose()
         {
             if (Directory.Exists(_buildReportDir))
