@@ -80,7 +80,9 @@ jobs:
             -projectPath ./Samples~ \
             -buildReporterConfig "Assets/Editor/GhaUnityBuildReporterConfig.asset" \
             -executeMethod Editor.BuildEntryPoint.BuildAndroid
-
+      - name: Dump BuildReport
+        run: |
+          cat ./Samples~/Logs/BuildReport.json
   ios:
     name: iOS
     needs: get-unity-version
@@ -102,6 +104,9 @@ jobs:
             -projectPath ./Samples~ \
             -buildReporterConfig "Assets/Editor/GhaUnityBuildReporterConfig.asset" \
             -executeMethod Editor.BuildEntryPoint.BuildIOS
+      - name: Dump BuildReport
+        run: |
+          cat ./Samples~/Logs/BuildReport.json
 
   macos:
     name: macOS
@@ -123,6 +128,9 @@ jobs:
             -nographics \
             -projectPath ./Samples~ \
             -executeMethod Editor.BuildEntryPoint.BuildMacOS
+      - name: Dump BuildReport
+        run: |
+          cat ./Samples~/Logs/BuildReport.json
 
   webgl:
     name: WebGL
@@ -144,3 +152,6 @@ jobs:
             -nographics \
             -projectPath ./Samples~ \
             -executeMethod Editor.BuildEntryPoint.BuildWebGL
+      - name: Dump BuildReport
+        run: |
+          cat ./Samples~/Logs/BuildReport.json
