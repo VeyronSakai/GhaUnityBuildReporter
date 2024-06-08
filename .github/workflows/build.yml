@@ -19,10 +19,15 @@ permissions:
   contents: read
   pull-requests: read
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   paths-filter:
     name: Paths Filter
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     outputs:
       should-build: ${{ steps.filter.outputs.should-build }}
     steps:
@@ -44,6 +49,7 @@ jobs:
     needs: paths-filter
     if: ${{ (github.event_name == 'pull_request' && needs.paths-filter.outputs.should-build == 'true') || github.event_name == 'workflow_dispatch'}}
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     env:
       PROJECT_VERSION_PATH: Samples~/ProjectSettings/ProjectVersion.txt
     outputs:
@@ -62,6 +68,7 @@ jobs:
     name: Android
     needs: get-unity-version
     runs-on: [self-hosted, macOS]
+    timeout-minutes: 30
     steps:
       - name: Switch workspace
         uses: DeNA/setup-job-workspace-action@fea4ef4d011492fe235833241acbb4fced82da27
@@ -74,19 +81,21 @@ jobs:
           ANDROID_NDK_ROOT: "/Applications/Unity/Hub/Editor/${UNITY_VERSION}/PlaybackEngines/AndroidPlayer/NDK"
         run: |
           /Applications/Unity/Hub/Editor/"${UNITY_VERSION}"/Unity.app/Contents/MacOS/Unity \
+            -silent-crashes \
             -quit \
             -batchmode \
-            -nographics \
             -projectPath ./Samples~ \
             -buildReporterConfig "Assets/Editor/GhaUnityBuildReporterConfig.asset" \
             -executeMethod Editor.BuildEntryPoint.BuildAndroid
       - name: Dump BuildReport
         run: |
           cat ./Samples~/Logs/BuildReport.json
+
   ios:
     name: iOS
     needs: get-unity-version
     runs-on: [self-hosted, macOS]
+    timeout-minutes: 30
     steps:
       - name: Switch workspace
         uses: DeNA/setup-job-workspace-action@fea4ef4d011492fe235833241acbb4fced82da27
@@ -98,9 +107,9 @@ jobs:
           UNITY_VERSION: ${{ needs.get-unity-version.outputs.unity-version }}
         run: |
           /Applications/Unity/Hub/Editor/"${UNITY_VERSION}"/Unity.app/Contents/MacOS/Unity \
+            -silent-crashes \
             -quit \
             -batchmode \
-            -nographics \
             -projectPath ./Samples~ \
             -buildReporterConfig "Assets/Editor/GhaUnityBuildReporterConfig.asset" \
             -executeMethod Editor.BuildEntryPoint.BuildIOS
@@ -112,6 +121,7 @@ jobs:
     name: macOS
     needs: get-unity-version
     runs-on: [self-hosted, macOS]
+    timeout-minutes: 30
     steps:
       - name: Switch workspace
         uses: DeNA/setup-job-workspace-action@fea4ef4d011492fe235833241acbb4fced82da27
@@ -123,11 +133,36 @@ jobs:
           UNITY_VERSION: ${{ needs.get-unity-version.outputs.unity-version }}
         run: |
           /Applications/Unity/Hub/Editor/"${UNITY_VERSION}"/Unity.app/Contents/MacOS/Unity \
+            -silent-crashes \
             -quit \
             -batchmode \
-            -nographics \
             -projectPath ./Samples~ \
             -executeMethod Editor.BuildEntryPoint.BuildMacOS
+      - name: Dump BuildReport
+        run: |
+          cat ./Samples~/Logs/BuildReport.json
+
+  Windows:
+    name: Windows
+    needs: get-unity-version
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 30
+    steps:
+      - name: Switch workspace
+        uses: DeNA/setup-job-workspace-action@fea4ef4d011492fe235833241acbb4fced82da27
+      - uses: actions/checkout@v4
+        with:
+          clean: "${{ env.CLEAN }}"
+      - name: Windows Build
+        env:
+          UNITY_VERSION: ${{ needs.get-unity-version.outputs.unity-version }}
+        run: |
+          "/c/Program Files/Unity/Hub/Editor/${UNITY_VERSION}/Editor/Unity.exe" \
+            -silent-crashes \
+            -quit \
+            -batchmode \
+            -projectPath ./Samples~ \
+            -executeMethod Editor.BuildEntryPoint.BuildWindows
       - name: Dump BuildReport
         run: |
           cat ./Samples~/Logs/BuildReport.json
@@ -136,6 +171,7 @@ jobs:
     name: WebGL
     needs: get-unity-version
     runs-on: [self-hosted, macOS]
+    timeout-minutes: 30
     steps:
       - name: Switch workspace
         uses: DeNA/setup-job-workspace-action@fea4ef4d011492fe235833241acbb4fced82da27
@@ -147,9 +183,9 @@ jobs:
           UNITY_VERSION: ${{ needs.get-unity-version.outputs.unity-version }}
         run: |
           /Applications/Unity/Hub/Editor/"${UNITY_VERSION}"/Unity.app/Contents/MacOS/Unity \
+            -silent-crashes \
             -quit \
             -batchmode \
-            -nographics \
             -projectPath ./Samples~ \
             -executeMethod Editor.BuildEntryPoint.BuildWebGL
       - name: Dump BuildReport

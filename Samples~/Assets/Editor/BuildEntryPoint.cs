@@ -52,6 +52,21 @@ namespace Editor
             BuildPipeline.BuildPlayer(buildPlayerOptions);
         }
 
+
+        [MenuItem("Tools/Build/Windows")]
+        public static void BuildWindows()
+        {
+            var buildPlayerOptions = new BuildPlayerOptions
+            {
+                scenes = new[] { Scenes },
+                locationPathName = "Outputs/Windows.exe",
+                target = BuildTarget.StandaloneWindows64,
+                options = BuildOptions.Development,
+            };
+
+            BuildPipeline.BuildPlayer(buildPlayerOptions);
+        }
+
         [MenuItem("Tools/Build/WebGL")]
         public static void BuildWebGL()
         {
