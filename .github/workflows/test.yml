@@ -68,6 +68,8 @@ jobs:
       UNITY_VERSION: ${{ needs.get-unity-version.outputs.unity-version }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          clean: false
       - name: Run EditMode tests
         working-directory: Samples~
         run: |
