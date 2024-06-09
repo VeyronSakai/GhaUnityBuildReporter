@@ -156,16 +156,18 @@ jobs:
       - name: Windows Build
         env:
           UNITY_VERSION: ${{ needs.get-unity-version.outputs.unity-version }}
+        shell: pwsh
         run: |
-          "/c/Program Files/Unity/Hub/Editor/${UNITY_VERSION}/Editor/Unity.exe" \
-            -silent-crashes \
-            -quit \
-            -batchmode \
-            -projectPath ./Samples~ \
-            -executeMethod Editor.BuildEntryPoint.BuildWindows
+          $unityPath = "C:\Program Files\Unity\Hub\Editor\$env:UNITY_VERSION\Editor\Unity.exe"
+          $projectPath = ".\Samples~"
+          $executeMethod = "Editor.BuildEntryPoint.BuildWindows"
+          $arguments = "-silent-crashes", "-quit", "-batchmode", "-projectPath", $projectPath, "-executeMethod", $executeMethod
+
+          Start-Process -FilePath $unityPath -ArgumentList $arguments -NoNewWindow -Wait
       - name: Dump BuildReport
+        shell: pwsh
         run: |
-          cat ./Samples~/Logs/BuildReport.json
+          Get-Content -Path .\Samples~\Logs\BuildReport.json -Raw
 
   webgl:
     name: WebGL
