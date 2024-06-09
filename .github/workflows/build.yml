@@ -164,9 +164,9 @@ jobs:
           $unityPath = "C:\Program Files\Unity\Hub\Editor\$env:UNITY_VERSION\Editor\Unity.exe"
           $projectPath = ".\Samples~"
           $executeMethod = "Editor.BuildEntryPoint.BuildWindows"
-          $arguments = "-silent-crashes", "-quit", "-batchmode", "-projectPath", $projectPath, "-executeMethod", $executeMethod
+          $arguments = "-silent-crashes", "-quit", "-batchmode", "-projectPath", $projectPath, "-executeMethod", $executeMethod, "-logFile", "-"
 
-          Start-Process -FilePath $unityPath -ArgumentList $arguments -NoNewWindow -Wait
+          Start-Process -FilePath $unityPath -ArgumentList $arguments -NoNewWindow -Wait -RedirectStandardOutput ".\Samples~\Logs\Build.log"
       - name: Dump BuildReport
         shell: pwsh
         run: |
