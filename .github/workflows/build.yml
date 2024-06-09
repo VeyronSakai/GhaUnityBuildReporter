@@ -166,7 +166,7 @@ jobs:
           $executeMethod = "Editor.BuildEntryPoint.BuildWindows"
           $arguments = "-silent-crashes", "-quit", "-batchmode", "-projectPath", $projectPath, "-executeMethod", $executeMethod, "-logFile", "-"
 
-          Start-Process -FilePath $unityPath -ArgumentList $arguments -NoNewWindow -Wait -RedirectStandardOutput ".\Samples~\Logs\Build.log"
+          Start-Process -FilePath $unityPath -ArgumentList $arguments -NoNewWindow -Wait | Tee-Object -FilePath ".\Samples~\Logs\Build.log"
       - name: Dump BuildReport
         shell: pwsh
         run: |
