@@ -80,6 +80,8 @@ jobs:
           UNITY_VERSION: ${{ needs.get-unity-version.outputs.unity-version }}
           ANDROID_NDK_ROOT: "/Applications/Unity/Hub/Editor/${UNITY_VERSION}/PlaybackEngines/AndroidPlayer/NDK"
         run: |
+          mkdir -p ./Samples~/Logs/ 
+
           /Applications/Unity/Hub/Editor/"${UNITY_VERSION}"/Unity.app/Contents/MacOS/Unity \
             -silent-crashes \
             -quit \
@@ -107,6 +109,8 @@ jobs:
         env:
           UNITY_VERSION: ${{ needs.get-unity-version.outputs.unity-version }}
         run: |
+          mkdir -p ./Samples~/Logs/ 
+
           /Applications/Unity/Hub/Editor/"${UNITY_VERSION}"/Unity.app/Contents/MacOS/Unity \
             -silent-crashes \
             -quit \
@@ -134,6 +138,8 @@ jobs:
         env:
           UNITY_VERSION: ${{ needs.get-unity-version.outputs.unity-version }}
         run: |
+          mkdir -p ./Samples~/Logs/ 
+
           /Applications/Unity/Hub/Editor/"${UNITY_VERSION}"/Unity.app/Contents/MacOS/Unity \
             -silent-crashes \
             -quit \
@@ -165,6 +171,7 @@ jobs:
           $projectPath = ".\Samples~"
           $executeMethod = "Editor.BuildEntryPoint.BuildWindows"
           $arguments = "-silent-crashes", "-quit", "-batchmode", "-projectPath", $projectPath, "-executeMethod", $executeMethod, "-logFile", "-"
+          New-Item -Path ".\Samples~\Logs\" -ItemType Directory -Force
 
           Start-Process -FilePath $unityPath -ArgumentList $arguments -NoNewWindow -Wait | Tee-Object -FilePath ".\Samples~\Logs\Build.log"
       - name: Dump BuildReport
@@ -187,6 +194,8 @@ jobs:
         env:
           UNITY_VERSION: ${{ needs.get-unity-version.outputs.unity-version }}
         run: |
+          mkdir -p ./Samples~/Logs/ 
+
           /Applications/Unity/Hub/Editor/"${UNITY_VERSION}"/Unity.app/Contents/MacOS/Unity \
             -silent-crashes \
             -quit \
