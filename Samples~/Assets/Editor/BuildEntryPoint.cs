@@ -5,8 +5,7 @@ using UnityEditor;
 
 namespace Editor
 {
-    // ReSharper disable once UnusedType.Global
-    public sealed class BuildEntryPoint
+    public static class BuildEntryPoint
     {
         private const string Scenes = "Assets/Scenes/SampleScene.unity";
 

@@ -80,13 +80,16 @@ jobs:
           UNITY_VERSION: ${{ needs.get-unity-version.outputs.unity-version }}
           ANDROID_NDK_ROOT: "/Applications/Unity/Hub/Editor/${UNITY_VERSION}/PlaybackEngines/AndroidPlayer/NDK"
         run: |
+          mkdir -p ./Samples~/Logs/ 
+
           /Applications/Unity/Hub/Editor/"${UNITY_VERSION}"/Unity.app/Contents/MacOS/Unity \
             -silent-crashes \
             -quit \
             -batchmode \
             -projectPath ./Samples~ \
+            -logFile - \
             -buildReporterConfig "Assets/Editor/GhaUnityBuildReporterConfig.asset" \
-            -executeMethod Editor.BuildEntryPoint.BuildAndroid
+            -executeMethod Editor.BuildEntryPoint.BuildAndroid | tee ./Samples~/Logs/Build.log
       - name: Dump BuildReport
         run: |
           cat ./Samples~/Logs/BuildReport.json
@@ -106,13 +109,16 @@ jobs:
         env:
           UNITY_VERSION: ${{ needs.get-unity-version.outputs.unity-version }}
         run: |
+          mkdir -p ./Samples~/Logs/ 
+
           /Applications/Unity/Hub/Editor/"${UNITY_VERSION}"/Unity.app/Contents/MacOS/Unity \
             -silent-crashes \
             -quit \
             -batchmode \
+            -logFile - \
             -projectPath ./Samples~ \
             -buildReporterConfig "Assets/Editor/GhaUnityBuildReporterConfig.asset" \
-            -executeMethod Editor.BuildEntryPoint.BuildIOS
+            -executeMethod Editor.BuildEntryPoint.BuildIOS | tee ./Samples~/Logs/Build.log
       - name: Dump BuildReport
         run: |
           cat ./Samples~/Logs/BuildReport.json
@@ -132,12 +138,15 @@ jobs:
         env:
           UNITY_VERSION: ${{ needs.get-unity-version.outputs.unity-version }}
         run: |
+          mkdir -p ./Samples~/Logs/ 
+
           /Applications/Unity/Hub/Editor/"${UNITY_VERSION}"/Unity.app/Contents/MacOS/Unity \
             -silent-crashes \
             -quit \
             -batchmode \
+            -logFile - \
             -projectPath ./Samples~ \
-            -executeMethod Editor.BuildEntryPoint.BuildMacOS
+            -executeMethod Editor.BuildEntryPoint.BuildMacOS | tee ./Samples~/Logs/Build.log
       - name: Dump BuildReport
         run: |
           cat ./Samples~/Logs/BuildReport.json
@@ -156,16 +165,19 @@ jobs:
       - name: Windows Build
         env:
           UNITY_VERSION: ${{ needs.get-unity-version.outputs.unity-version }}
+        shell: pwsh
         run: |
-          "/c/Program Files/Unity/Hub/Editor/${UNITY_VERSION}/Editor/Unity.exe" \
-            -silent-crashes \
-            -quit \
-            -batchmode \
-            -projectPath ./Samples~ \
-            -executeMethod Editor.BuildEntryPoint.BuildWindows
+          $unityPath = "C:\Program Files\Unity\Hub\Editor\$env:UNITY_VERSION\Editor\Unity.exe"
+          $projectPath = ".\Samples~"
+          $executeMethod = "Editor.BuildEntryPoint.BuildWindows"
+          $arguments = "-silent-crashes", "-quit", "-batchmode", "-projectPath", $projectPath, "-executeMethod", $executeMethod, "-logFile", "-"
+          New-Item -Path ".\Samples~\Logs\" -ItemType Directory -Force
+
+          Start-Process -FilePath $unityPath -ArgumentList $arguments -NoNewWindow -Wait | Tee-Object -FilePath ".\Samples~\Logs\Build.log"
       - name: Dump BuildReport
+        shell: pwsh
         run: |
-          cat ./Samples~/Logs/BuildReport.json
+          Get-Content -Path .\Samples~\Logs\BuildReport.json -Raw
 
   webgl:
     name: WebGL
@@ -182,12 +194,15 @@ jobs:
         env:
           UNITY_VERSION: ${{ needs.get-unity-version.outputs.unity-version }}
         run: |
+          mkdir -p ./Samples~/Logs/ 
+
           /Applications/Unity/Hub/Editor/"${UNITY_VERSION}"/Unity.app/Contents/MacOS/Unity \
             -silent-crashes \
             -quit \
             -batchmode \
+            -logFile - \
             -projectPath ./Samples~ \
-            -executeMethod Editor.BuildEntryPoint.BuildWebGL
+            -executeMethod Editor.BuildEntryPoint.BuildWebGL | tee ./Samples~/Logs/Build.log
       - name: Dump BuildReport
         run: |
           cat ./Samples~/Logs/BuildReport.json
