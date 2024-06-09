@@ -85,8 +85,9 @@ jobs:
             -quit \
             -batchmode \
             -projectPath ./Samples~ \
+            -logFile ./Samples~/Logs/Build.log \
             -buildReporterConfig "Assets/Editor/GhaUnityBuildReporterConfig.asset" \
-            -executeMethod Editor.BuildEntryPoint.BuildAndroid
+            -executeMethod Editor.BuildEntryPoint.BuildAndroid | tee ./Samples~/Logs/Build.log
       - name: Dump BuildReport
         run: |
           cat ./Samples~/Logs/BuildReport.json
@@ -110,9 +111,10 @@ jobs:
             -silent-crashes \
             -quit \
             -batchmode \
+            -logFile ./Samples~/Logs/Build.log \
             -projectPath ./Samples~ \
             -buildReporterConfig "Assets/Editor/GhaUnityBuildReporterConfig.asset" \
-            -executeMethod Editor.BuildEntryPoint.BuildIOS
+            -executeMethod Editor.BuildEntryPoint.BuildIOS | tee ./Samples~/Logs/Build.log
       - name: Dump BuildReport
         run: |
           cat ./Samples~/Logs/BuildReport.json
@@ -136,8 +138,9 @@ jobs:
             -silent-crashes \
             -quit \
             -batchmode \
+            -logFile ./Samples~/Logs/Build.log \
             -projectPath ./Samples~ \
-            -executeMethod Editor.BuildEntryPoint.BuildMacOS
+            -executeMethod Editor.BuildEntryPoint.BuildMacOS | tee ./Samples~/Logs/Build.log
       - name: Dump BuildReport
         run: |
           cat ./Samples~/Logs/BuildReport.json
@@ -188,8 +191,9 @@ jobs:
             -silent-crashes \
             -quit \
             -batchmode \
+            -logFile ./Samples~/Logs/Build.log \
             -projectPath ./Samples~ \
-            -executeMethod Editor.BuildEntryPoint.BuildWebGL
+            -executeMethod Editor.BuildEntryPoint.BuildWebGL | tee ./Samples~/Logs/Build.log
       - name: Dump BuildReport
         run: |
           cat ./Samples~/Logs/BuildReport.json
