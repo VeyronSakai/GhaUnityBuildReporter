@@ -55,7 +55,7 @@ jobs:
 
   test:
     name: Test
-    runs-on: [self-hosted, macOS]
+    runs-on: self-hosted
     needs: [get-unity-version, paths-filter]
     timeout-minutes: 30
     if: ${{ (github.event_name == 'pull_request' && needs.paths-filter.outputs.should-test == 'true') || github.event_name == 'push'}}
@@ -70,10 +70,20 @@ jobs:
       - uses: actions/checkout@v4
         with:
           clean: false
+      - name: Get Unity Path
+        id: get-unity-path
+        run: |
+          if [[ "${RUNNER_OS}" == "macOS" ]]; then
+            echo "unity-path=/Applications/Unity/Hub/Editor/${UNITY_VERSION}/Unity.app/Contents/MacOS/Unity" >> "${GITHUB_OUTPUT}"
+          elif [[ "${RUNNER_OS}" == "Windows" ]]; then
+            printf "unity-path=C:\\\\Program Files\\\\Unity\\\\Hub\\\\Editor\\\\%s\\\\Editor\\\\Unity.exe\n" "${UNITY_VERSION}" >> "${GITHUB_OUTPUT}"
+          fi
       - name: Run EditMode tests
         working-directory: Samples~
+        env:
+          UNITY_PATH: ${{ steps.get-unity-path.outputs.unity-path }}
         run: |
-          "/Applications/Unity/Hub/Editor/${UNITY_VERSION}/Unity.app/Contents/MacOS/Unity" \
+          "${UNITY_PATH}" \
             -silent-crashes \
             -batchmode \
             -projectPath . \
