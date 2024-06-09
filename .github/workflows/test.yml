@@ -9,6 +9,10 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   paths-filter:
     name: Paths Filter
@@ -29,10 +33,30 @@ jobs:
               - Tests/**/*
               - .github/workflows/test.yml
 
+  get-unity-version:
+    name: Get Unity Version
+    needs: paths-filter
+    if: ${{ (github.event_name == 'pull_request' && needs.paths-filter.outputs.should-test == 'true') || github.event_name == 'push'}}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      PROJECT_VERSION_PATH: Samples~/ProjectSettings/ProjectVersion.txt
+    outputs:
+      unity-version: ${{ steps.get-unity-version.outputs.unity-version }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: ${{ env.PROJECT_VERSION_PATH }}
+      - name: Get Unity version
+        id: get-unity-version
+        run: |
+          echo "unity-version=$(grep "m_EditorVersion:" < "${PROJECT_VERSION_PATH}" | cut -d" " -f2)" >> "${GITHUB_OUTPUT}"
+
   test:
     name: Test
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, macOS]
     needs: paths-filter
+    timeout-minutes: 30
     if: ${{ (github.event_name == 'pull_request' && needs.paths-filter.outputs.should-test == 'true') || github.event_name == 'push'}}
     permissions:
       contents: read
@@ -41,19 +65,27 @@ jobs:
       pull-requests: write
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/cache@v4
-        with:
-          path: Samples~/Library
-          key: ${{ runner.os }}-Library
-      - name: Run EditMode and PlayMode Test
-        id: test
-        uses: game-ci/unity-test-runner@v4
-        env:
-          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-        with:
-          projectPath: Samples~
-          githubToken: ${{ secrets.GITHUB_TOKEN }}
-          checkName: "Unity Test Results"
-          testMode: "EditMode"
+      # - uses: actions/cache@v4
+      #   with:
+      #     path: Samples~/Library
+      #     key: ${{ runner.os }}-Library
+      # - name: Run EditMode and PlayMode Test
+      #   id: test
+      #   uses: game-ci/unity-test-runner@v4
+      #   env:
+      #     UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+      #     UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+      #     UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+      #   with:
+      #     projectPath: Samples~
+      #     githubToken: ${{ secrets.GITHUB_TOKEN }}
+      #     checkName: "Unity Test Results"
+      #     testMode: "EditMode"
+      - name: Run EditMode tests
+        run: |
+          /Applications/Unity/Hub/Editor/"${UNITY_VERSION}"/Unity.app/Contents/MacOS/Unity
+            -silent-crashes \
+            -batchmode \
+            -projectPath ./Samples~ \
+            -logFile - \
+            -runTests
