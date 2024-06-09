@@ -70,8 +70,6 @@ jobs:
     runs-on: [self-hosted, macOS]
     timeout-minutes: 30
     steps:
-      - name: Switch workspace
-        uses: DeNA/setup-job-workspace-action@fea4ef4d011492fe235833241acbb4fced82da27
       - uses: actions/checkout@v4
         with:
           clean: "${{ env.CLEAN }}"
@@ -100,8 +98,6 @@ jobs:
     runs-on: [self-hosted, macOS]
     timeout-minutes: 30
     steps:
-      - name: Switch workspace
-        uses: DeNA/setup-job-workspace-action@fea4ef4d011492fe235833241acbb4fced82da27
       - uses: actions/checkout@v4
         with:
           clean: "${{ env.CLEAN }}"
@@ -129,8 +125,6 @@ jobs:
     runs-on: [self-hosted, macOS]
     timeout-minutes: 30
     steps:
-      - name: Switch workspace
-        uses: DeNA/setup-job-workspace-action@fea4ef4d011492fe235833241acbb4fced82da27
       - uses: actions/checkout@v4
         with:
           clean: "${{ env.CLEAN }}"
@@ -157,8 +151,6 @@ jobs:
     runs-on: [self-hosted, Windows]
     timeout-minutes: 30
     steps:
-      - name: Switch workspace
-        uses: DeNA/setup-job-workspace-action@fea4ef4d011492fe235833241acbb4fced82da27
       - uses: actions/checkout@v4
         with:
           clean: "${{ env.CLEAN }}"
@@ -185,8 +177,6 @@ jobs:
     runs-on: [self-hosted, macOS]
     timeout-minutes: 30
     steps:
-      - name: Switch workspace
-        uses: DeNA/setup-job-workspace-action@fea4ef4d011492fe235833241acbb4fced82da27
       - uses: actions/checkout@v4
         with:
           clean: "${{ env.CLEAN }}"

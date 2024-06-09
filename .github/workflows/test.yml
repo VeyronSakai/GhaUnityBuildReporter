@@ -17,6 +17,7 @@ jobs:
   paths-filter:
     name: Paths Filter
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     if: ${{ github.event_name == 'pull_request' }}
     outputs:
       should-test: ${{ steps.filter.outputs.should-test }}
@@ -55,7 +56,7 @@ jobs:
   test:
     name: Test
     runs-on: [self-hosted, macOS]
-    needs: paths-filter
+    needs: [get-unity-version, paths-filter]
     timeout-minutes: 30
     if: ${{ (github.event_name == 'pull_request' && needs.paths-filter.outputs.should-test == 'true') || github.event_name == 'push'}}
     permissions:
@@ -63,29 +64,43 @@ jobs:
       actions: read
       checks: write
       pull-requests: write
+    env:
+      UNITY_VERSION: ${{ needs.get-unity-version.outputs.unity-version }}
     steps:
       - uses: actions/checkout@v4
-      # - uses: actions/cache@v4
-      #   with:
-      #     path: Samples~/Library
-      #     key: ${{ runner.os }}-Library
-      # - name: Run EditMode and PlayMode Test
-      #   id: test
-      #   uses: game-ci/unity-test-runner@v4
-      #   env:
-      #     UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-      #     UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-      #     UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-      #   with:
-      #     projectPath: Samples~
-      #     githubToken: ${{ secrets.GITHUB_TOKEN }}
-      #     checkName: "Unity Test Results"
-      #     testMode: "EditMode"
       - name: Run EditMode tests
+        working-directory: Samples~
         run: |
-          /Applications/Unity/Hub/Editor/"${UNITY_VERSION}"/Unity.app/Contents/MacOS/Unity
+          "/Applications/Unity/Hub/Editor/${UNITY_VERSION}/Unity.app/Contents/MacOS/Unity" \
             -silent-crashes \
             -batchmode \
-            -projectPath ./Samples~ \
+            -projectPath . \
             -logFile - \
-            -runTests
+            -runTests \
+            -testResults TestResults.xml
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v4
+        with:
+          name: UnityTestResults
+          path: ./Samples~/TestResults.xml
+
+  publish-test-results:
+    runs-on: ubuntu-latest
+    needs: [test]
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      actions: read
+      checks: write
+      pull-requests: write
+    steps:
+      - uses: actions/download-artifact@v4
+        id: download
+        with:
+          name: UnityTestResults
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@30eadd5010312f995f0d3b3cff7fe2984f69409e
+        if: success() || failure()
+        with:
+          files: |
+            ${{ steps.download.outputs.download-path }}/TestResults.xml
