@@ -111,7 +111,7 @@ jobs:
         with:
           name: UnityTestResults
       - name: Publish Test Results
-        uses: EnricoMi/publish-unit-test-result-action@30eadd5010312f995f0d3b3cff7fe2984f69409e
+        uses: EnricoMi/publish-unit-test-result-action@567cc7f8dcea3eba5da355f6ebc95663310d8a07
         if: success() || failure()
         with:
           files: |
