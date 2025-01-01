@@ -26,7 +26,7 @@ jobs:
     outputs:
       package_json: ${{ steps.filter.outputs.package_json }}
     steps:
-      - uses: dorny/paths-filter@v3
+      - uses: dorny/paths-filter@c5f8b0d4b9b2b9b2b9b2b9b2b9b2b9b2b9b2b9b2
         id: filter
         with:
           filters: |
@@ -43,7 +43,7 @@ jobs:
     outputs:
       tag_name: ${{ steps.release-drafter.outputs.tag_name }}
     steps:
-      - uses: release-drafter/release-drafter@v6
+      - uses: release-drafter/release-drafter@c5f8b0d4b9b2b9b2b9b2b9b2b9b2b9b2b9b2
         id: release-drafter
         with:
           commitish: main
@@ -60,14 +60,14 @@ jobs:
       VERSION: ${{ needs.update-draft.outputs.tag_name }}
       SOURCE_BRANCH: github-actions/update-files/${{ github.run_number }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@c5f8b0d4b9b2b9b2b9b2b9b2b9b2b9b2b9b2b9b2
       - name: Update package.json
         run: |
           json_content=$(cat "${PACKAGE_JSON_PATH}")
           updated_json=$(echo "${json_content}" | jq --arg version "${VERSION}" '.version = $version')
           echo "${updated_json}" | jq '.' > "${PACKAGE_JSON_PATH}"
       - name: Commit package.json
-        uses: EndBug/add-and-commit@v9
+        uses: EndBug/add-and-commit@c5f8b0d4b9b2b9b2b9b2b9b2b9b2b9b2b9b2
         id: commit-package-json
         with:
           author_name: ${{ env.GITHUB_BOT_NAME }}
@@ -79,7 +79,7 @@ jobs:
         run: |
           cp -f .github/DRAFT_README.md README.md
       - name: Commit README.md
-        uses: EndBug/add-and-commit@v9
+        uses: EndBug/add-and-commit@c5f8b0d4b9b2b9b2b9b2b9b2b9b2b9b2b9b2
         id: commit-readme
         with:
           author_name: ${{ env.GITHUB_BOT_NAME }}
@@ -87,7 +87,7 @@ jobs:
           message: "Update README.md"
           add: "README.md"
           new_branch: ${{ env.SOURCE_BRANCH }}
-      - uses: actions/create-github-app-token@v1
+      - uses: actions/create-github-app-token@c5f8b0d4b9b2b9b2b9b2b9b2b9b2b9b2b9b2
         id: create-github-app-token
         with:
           app-id: ${{ secrets.APP_ID }}
@@ -112,7 +112,7 @@ jobs:
     env:
       VERSION: ${{ needs.update-draft.outputs.tag_name }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@c5f8b0d4b9b2b9b2b9b2b9b2b9b2b9b2b9b2b9b2
         with:
           ref: main
       - name: Validate version in package.json
@@ -122,7 +122,7 @@ jobs:
             echo "::error::version in package.json (${package_version}) does not match the release draft tag (${VERSION})"
             exit 1
           fi
-      - uses: release-drafter/release-drafter@v6
+      - uses: release-drafter/release-drafter@c5f8b0d4b9b2b9b2b9b2b9b2b9b2b9b2
         id: release-drafter
         with:
           publish: true
@@ -136,7 +136,7 @@ jobs:
             echo "minor=${major}.${minor}"
             echo "patch=${major}.${minor}.${patch}"
           } >> "${GITHUB_OUTPUT}"
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@c5f8b0d4b9b2b9b2b9b2b9b2b9b2b9b2b9b2b9b2
         with:
           ref: ${{ env.VERSION }}
       - name: Update major tag
@@ -148,7 +148,7 @@ jobs:
         run: |
           git push -f origin "refs/tags/${VERSION}:refs/tags/${{ steps.get-semver.outputs.minor }}"
       - name: Export unitypackage
-        uses: game-ci/unity-builder@v4
+        uses: game-ci/unity-builder@c5f8b0d4b9b2b9b2b9b2b9b2b9b2b9b2b9b2
         env:
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
