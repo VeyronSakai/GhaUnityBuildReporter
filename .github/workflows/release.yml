@@ -87,7 +87,7 @@ jobs:
           message: "Update README.md"
           add: "README.md"
           new_branch: ${{ env.SOURCE_BRANCH }}
-      - uses: actions/create-github-app-token@v1
+      - uses: actions/create-github-app-token@v2
         id: create-github-app-token
         with:
           app-id: ${{ secrets.APP_ID }}
