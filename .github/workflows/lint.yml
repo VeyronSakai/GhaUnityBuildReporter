@@ -31,7 +31,7 @@ jobs:
     if: ${{ needs.paths-filter.outputs.action == 'true' || github.event_name == 'push'}}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: reviewdog/action-actionlint@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}

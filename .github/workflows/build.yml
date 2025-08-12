@@ -31,7 +31,7 @@ jobs:
     outputs:
       should-build: ${{ steps.filter.outputs.should-build }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         if: ${{ github.event_name == 'pull_request' }}
       - uses: dorny/paths-filter@v3
         id: filter
@@ -55,7 +55,7 @@ jobs:
     outputs:
       unity-version: ${{ steps.get-unity-version.outputs.unity-version }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           sparse-checkout: ${{ env.PROJECT_VERSION_PATH }}
           clean: "${{ env.CLEAN }}"
@@ -70,7 +70,7 @@ jobs:
     runs-on: [self-hosted, macOS]
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           clean: "${{ env.CLEAN }}"
       - name: Android Build
@@ -98,7 +98,7 @@ jobs:
     runs-on: [self-hosted, macOS]
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           clean: "${{ env.CLEAN }}"
       - name: iOS Build
@@ -125,7 +125,7 @@ jobs:
     runs-on: [self-hosted, macOS]
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           clean: "${{ env.CLEAN }}"
       - name: macOS Build
@@ -151,7 +151,7 @@ jobs:
     runs-on: [self-hosted, Windows]
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           clean: "${{ env.CLEAN }}"
       - name: Windows Build
@@ -177,7 +177,7 @@ jobs:
     runs-on: [self-hosted, macOS]
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           clean: "${{ env.CLEAN }}"
       - name: WebGL Build

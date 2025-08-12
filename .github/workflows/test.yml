@@ -22,7 +22,7 @@ jobs:
     outputs:
       should-test: ${{ steps.filter.outputs.should-test }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: dorny/paths-filter@v3
         id: filter
         with:
@@ -45,7 +45,7 @@ jobs:
     outputs:
       unity-version: ${{ steps.get-unity-version.outputs.unity-version }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           sparse-checkout: ${{ env.PROJECT_VERSION_PATH }}
       - name: Get Unity version
@@ -67,7 +67,7 @@ jobs:
     env:
       UNITY_VERSION: ${{ needs.get-unity-version.outputs.unity-version }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           clean: false
       - name: Get Unity Path
