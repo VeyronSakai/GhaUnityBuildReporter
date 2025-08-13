@@ -60,7 +60,7 @@ jobs:
       VERSION: ${{ needs.update-draft.outputs.tag_name }}
       SOURCE_BRANCH: github-actions/update-files/${{ github.run_number }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Update package.json
         run: |
           json_content=$(cat "${PACKAGE_JSON_PATH}")
@@ -112,7 +112,7 @@ jobs:
     env:
       VERSION: ${{ needs.update-draft.outputs.tag_name }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           ref: main
       - name: Validate version in package.json
@@ -136,7 +136,7 @@ jobs:
             echo "minor=${major}.${minor}"
             echo "patch=${major}.${minor}.${patch}"
           } >> "${GITHUB_OUTPUT}"
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           ref: ${{ env.VERSION }}
       - name: Update major tag
