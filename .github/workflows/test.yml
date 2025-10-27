@@ -91,7 +91,7 @@ jobs:
             -runTests \
             -testResults TestResults.xml
       - name: Upload Test Results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: UnityTestResults
           path: ./Samples~/TestResults.xml
