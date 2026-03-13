@@ -23,7 +23,7 @@ jobs:
       should-test: ${{ steps.filter.outputs.should-test }}
     steps:
       - uses: actions/checkout@v5
-      - uses: dorny/paths-filter@v3
+      - uses: dorny/paths-filter@v4
         id: filter
         with:
           filters: |
